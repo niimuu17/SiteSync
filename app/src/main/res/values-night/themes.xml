@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Dark theme for SiteSync -->
+    <style name="Theme.SiteSync" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_secondary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_variant</item>
+        <item name="colorOnPrimary">@color/brand_primary_variant</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorSecondaryVariant">@color/brand_secondary_variant</item>
+        <item name="colorOnSecondary">@color/brand_primary_variant</item>
+        <item name="android:statusBarColor">#0B111A</item>
+        <item name="android:windowBackground">#0F172A</item>
+    </style>
+</resources>

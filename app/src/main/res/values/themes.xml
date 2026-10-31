@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme with NoActionBar for custom headers -->
+    <style name="Theme.SiteSync" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_variant</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorSecondaryVariant">@color/brand_secondary_variant</item>
+        <item name="colorOnSecondary">@color/brand_primary_variant</item>
+        <!-- Status bar and background. -->
+        <item name="android:statusBarColor">@color/brand_primary_variant</item>
+        <item name="android:windowBackground">@color/brand_background</item>
+    </style>
+</resources>

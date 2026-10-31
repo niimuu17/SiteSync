@@ -1,0 +1,37 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+    <!-- Circular Shield Background -->
+    <path
+        android:fillColor="#1A2530"
+        android:pathData="M36,4 C18.33,4 4,18.33 4,36 C4,53.67 18.33,68 36,68 C53.67,68 68,53.67 68,36 C68,18.33 53.67,4 36,4 Z" />
+
+    <!-- Construction Crane / Girder structure -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M22,50 L22,22 L50,22" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M22,34 L38,22" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M22,46 L46,22" />
+
+    <!-- Safety Amber Sync Swirl / Accent -->
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M44,38 C42,34 38,32 34,33 L34,30 L28,35 L34,40 L34,37 C36.5,36.5 39,38 40,40.5 C41.2,43.5 40,47 37,48.5 L39,52 C43.5,49.5 45.5,44 44,38 Z" />
+
+    <!-- Center Hub Dot -->
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M50,22 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+</vector>
