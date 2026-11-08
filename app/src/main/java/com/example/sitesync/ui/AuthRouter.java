@@ -27,7 +27,7 @@ public final class AuthRouter {
         Class<?> targetActivity;
         switch (role) {
             case PROJECT_MANAGER:
-                targetActivity = ManagerDashboardActivity.class;
+                targetActivity = ExecutiveProgressActivity.class;
                 break;
             case SITE_SUPERVISOR:
                 targetActivity = SupervisorDashboardActivity.class;
@@ -36,7 +36,7 @@ public final class AuthRouter {
                 targetActivity = EngineerDashboardActivity.class;
                 break;
             default:
-                targetActivity = MainActivity.class;
+                targetActivity = ExecutiveProgressActivity.class;
                 break;
         }
 

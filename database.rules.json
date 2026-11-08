@@ -1,0 +1,36 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "rfi_threads": {
+      "$issueId": {
+        "comments": {
+          ".read": "auth != null",
+          "$commentId": {
+            ".write": "auth != null",
+            ".validate": "newData.hasChildren(['message', 'authorName', 'timestamp'])"
+          }
+        },
+        "typing": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid"
+          }
+        }
+      }
+    },
+    "presence": {
+      "$projectId": {
+        "$uid": {
+          ".read": "auth != null",
+          ".write": "auth != null && auth.uid === $uid"
+        }
+      }
+    },
+    "kpi": {
+      "$projectId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}

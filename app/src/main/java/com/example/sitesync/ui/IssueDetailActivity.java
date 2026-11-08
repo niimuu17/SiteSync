@@ -16,10 +16,17 @@ import com.example.sitesync.databinding.ActivityIssueDetailBinding;
 import com.example.sitesync.models.IssueComment;
 import com.example.sitesync.models.TechnicalIssue;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Screen displaying full details of an RFI / Technical Issue.
@@ -35,6 +42,9 @@ public class IssueDetailActivity extends AppCompatActivity {
     private String issueId;
     private TechnicalIssue currentIssue;
 
+    private ValueEventListener rtdbCommentsListener;
+    private DatabaseReference rtdbCommentsRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +56,66 @@ public class IssueDetailActivity extends AppCompatActivity {
 
         initViews();
         setupListeners();
+        setupRealtimeDiscussionStream();
+    }
+
+    private void setupRealtimeDiscussionStream() {
+        if (issueId == null) return;
+        try {
+            rtdbCommentsRef = FirebaseDatabase.getInstance()
+                    .getReference("rfi_threads")
+                    .child(issueId)
+                    .child("comments");
+
+            rtdbCommentsListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.exists() && currentIssue != null) {
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            String cId = child.child("commentId").getValue(String.class);
+                            String author = child.child("authorName").getValue(String.class);
+                            String role = child.child("authorRole").getValue(String.class);
+                            String time = child.child("timestamp").getValue(String.class);
+                            String msg = child.child("message").getValue(String.class);
+
+                            if (msg != null && author != null) {
+                                boolean exists = false;
+                                for (IssueComment existing : currentIssue.getComments()) {
+                                    if (cId != null && cId.equals(existing.getCommentId())) {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                                if (!exists) {
+                                    currentIssue.addComment(new IssueComment(cId, author, role, time, msg));
+                                }
+                            }
+                        }
+                        commentAdapter.setComments(currentIssue.getComments());
+                        binding.rvDetailComments.setVisibility(View.VISIBLE);
+                        binding.tvNoCommentsNotice.setVisibility(View.GONE);
+                        int count = currentIssue.getComments().size();
+                        binding.tvDetailCommentsCount.setText(count + (count == 1 ? " reply" : " replies"));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Fall back to local cache gracefully
+                }
+            };
+            rtdbCommentsRef.addValueEventListener(rtdbCommentsListener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (rtdbCommentsRef != null && rtdbCommentsListener != null) {
+            rtdbCommentsRef.removeEventListener(rtdbCommentsListener);
+        }
     }
 
     @Override
@@ -232,6 +302,16 @@ public class IssueDetailActivity extends AppCompatActivity {
 
         boolean success = repository.addCommentToIssue(currentIssue.getId(), newComment);
         if (success) {
+            // Push to Firebase RTDB for sub-second sync across field devices
+            if (rtdbCommentsRef != null) {
+                java.util.Map<String, Object> rtdbPayload = new java.util.HashMap<>();
+                rtdbPayload.put("commentId", commentId);
+                rtdbPayload.put("authorName", newComment.getAuthorName());
+                rtdbPayload.put("authorRole", newComment.getAuthorRole());
+                rtdbPayload.put("timestamp", timestamp);
+                rtdbPayload.put("message", message);
+                rtdbCommentsRef.child(commentId).setValue(rtdbPayload);
+            }
             binding.etNewComment.setText("");
             Toast.makeText(this, "Comment posted", Toast.LENGTH_SHORT).show();
             loadIssueDetails();

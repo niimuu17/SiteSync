@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="28"
+    android:viewportHeight="28">
+  <!-- Left Column Pillar -->
+  <path
+      android:fillColor="#141414"
+      android:pathData="M6,7h4v14H6V7z"/>
+  <!-- Right Crane Girder / Angle -->
+  <path
+      android:fillColor="#141414"
+      android:pathData="M14,7h8v4h-4v6h-4V7z"/>
+  <path
+      android:fillColor="#141414"
+      android:pathData="M18,17h4v4h-4V17z"/>
+</vector>

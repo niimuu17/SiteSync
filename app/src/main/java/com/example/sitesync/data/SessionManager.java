@@ -4,13 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.sitesync.models.User;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * Manages persistent user session and remember-me credentials.
+ * Manages persistent user session, Firebase state, and profile caching.
  */
 public class SessionManager {
     private static final String PREF_NAME = "SiteSyncPrefs";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_UID = "uid";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_FULL_NAME = "fullName";
     private static final String KEY_ROLE = "role";
@@ -31,6 +33,7 @@ public class SessionManager {
 
     public void createLoginSession(User user, boolean rememberMe) {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.putString(KEY_UID, user.getUid());
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_FULL_NAME, user.getFullName());
         editor.putString(KEY_ROLE, user.getRole());
@@ -49,7 +52,7 @@ public class SessionManager {
     }
 
     public boolean isLoggedIn() {
-        return pref.getBoolean(KEY_IS_LOGGED_IN, false);
+        return pref.getBoolean(KEY_IS_LOGGED_IN, false) || FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
     public boolean isRememberMeEnabled() {
@@ -64,19 +67,27 @@ public class SessionManager {
         if (!isLoggedIn()) {
             return null;
         }
-        String username = pref.getString(KEY_USERNAME, "");
-        String fullName = pref.getString(KEY_FULL_NAME, "");
-        String role = pref.getString(KEY_ROLE, "Field Staff");
+        String uid = pref.getString(KEY_UID, "");
+        String username = pref.getString(KEY_USERNAME, "engineer");
+        String fullName = pref.getString(KEY_FULL_NAME, "Field Staff");
+        String role = pref.getString(KEY_ROLE, "ENGINEER");
         String token = pref.getString(KEY_TOKEN, "");
         String email = pref.getString(KEY_EMAIL, "");
         String phone = pref.getString(KEY_PHONE, "");
         String country = pref.getString(KEY_COUNTRY, "");
-        return new User(username, fullName, role, token, email, phone, country);
+
+        User user = new User(username, fullName, role, token, email, phone, country);
+        user.setUid(uid);
+        return user;
     }
 
     public void clearSession() {
-        boolean remember = pref.getBoolean(KEY_REMEMBER_ME, false);
-        String savedUser = pref.getString(KEY_SAVED_USERNAME, "");
+        try {
+            FirebaseAuth.getInstance().signOut();
+        } catch (Exception ignored) {}
+
+        boolean remember = isRememberMeEnabled();
+        String savedUser = getSavedUsername();
 
         editor.clear();
         if (remember) {
