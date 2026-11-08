@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/warm_ash_base"
+    android:clipToPadding="false"
+    android:paddingBottom="100dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ============================================================= -->
+        <!-- EDITORIAL TITLE HEADER (Inspired by Dribbble Reference)        -->
+        <!-- ============================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Centralized Constructi-"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="22sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:text="On Project Progress"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Construction Progress"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.04" />
+        </LinearLayout>
+
+        <!-- ============================================================= -->
+        <!-- SECTION A: Progress Tracking & Metrics Card                   -->
+        <!-- ============================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="18dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Card Header: Title & Action Triggers -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tvWorkProgressTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Work Progress"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/btnProgressCalendar"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_calendar_toggle"
+                        app:tint="@color/oxide_blue_primary"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Calendar Milestone"
+                        android:layout_marginEnd="6dp" />
+
+                    <ImageView
+                        android:id="@+id/btnProgressAnalytics"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_chart_toggle"
+                        app:tint="@color/oxide_blue_primary"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Analytics S-Curve" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!-- Central Percentage Readout (40sp bold Oxide Blue) & Trend Indicator -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/tvProgressPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="68%"
+                    android:textColor="@color/oxide_blue_primary"
+                    android:textSize="44sp"
+                    android:textStyle="bold"
+                    android:includeFontPadding="false" />
+
+                <TextView
+                    android:id="@+id/tvProgressTrend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" +2.23% this week"
+                    android:textColor="@color/color_trend_green"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp" />
+            </LinearLayout>
+
+            <!-- Horizontal Hatched Safety Progress Bar (Hazard Stripes) -->
+            <com.example.sitesync.ui.custom.HatchedProgressBar
+                android:id="@+id/hatchedProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginBottom="14dp"
+                app:barProgress="68"
+                app:barStripeColor="@color/brand_amber"
+                app:barTrackColor="@color/warm_ash_surface"
+                app:delayMarkerText="Delay 126" />
+
+            <!-- Schedule Info Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Date: 11/02/2026"
+                        android:textColor="@color/text_oxide_secondary"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Target Completion: 23/03/2026"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <!-- Status Pill Badge -->
+                <TextView
+                    android:id="@+id/tvScheduleStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status: On Schedule"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_pill_inactive"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============================================================= -->
+        <!-- SECTION A2: Cut And Fill Earthwork Telemetry Card             -->
+        <!-- ============================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="18dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Card Header: Title & Expand Action -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cut And Fill"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12 Feb, 2026 11:03PM"
+                        android:textColor="@color/text_oxide_secondary"
+                        android:textSize="11sp"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_arrow_diagonal"
+                    app:tint="@color/oxide_blue_primary"
+                    android:contentDescription="Expand" />
+            </RelativeLayout>
+
+            <!-- Candlestick Depth Gauge Elevation Chart -->
+            <com.example.sitesync.ui.views.CutAndFillChartView
+                android:id="@+id/cutAndFillChart"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Net Cut/Fill Metric Summary -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Net: 224,400 cu yd"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tolerance: ±0.05 Ft"
+                    android:textColor="@color/text_oxide_secondary"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============================================================= -->
+        <!-- SECTION B: Daily Progress Submission Section                  -->
+        <!-- ============================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="18dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Daily Site Progress"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit daily work notes and volume counts"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="14dp" />
+
+            <!-- Work Summary Notes (Multiline) -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Work Summary Notes"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <EditText
+                android:id="@+id/etWorkSummaryNotes"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="top|start"
+                android:background="@drawable/bg_rounded_input"
+                android:padding="12dp"
+                android:hint="Enter summary of structural work, pours, or trade activities completed today..."
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
+                android:textSize="13sp"
+                android:layout_marginBottom="14dp" />
+
+            <!-- Two-Column Work Volume / Units Completed -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Column 1: Volume -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="6dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Volume / Quantity"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etWorkVolume"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_rounded_input"
+                        android:padding="12dp"
+                        android:hint="e.g. 85 cu yd"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textColorHint="@color/text_oxide_muted"
+                        android:textSize="13sp"
+                        android:inputType="text"
+                        android:maxLines="1" />
+                </LinearLayout>
+
+                <!-- Column 2: Trade Category -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="6dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Trade / Activity"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etTradeCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_rounded_input"
+                        android:padding="12dp"
+                        android:hint="Concrete Pour"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textColorHint="@color/text_oxide_muted"
+                        android:textSize="13sp"
+                        android:inputType="text"
+                        android:maxLines="1" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Submit CTA -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmitProgressEntry"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_primary_oxide"
+                app:backgroundTint="@color/oxide_blue_primary"
+                android:text="Submit Progress Entry"
+                android:textColor="@color/text_on_oxide_white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:cornerRadius="24dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp" />
+        </LinearLayout>
+
+        <!-- ============================================================= -->
+        <!-- SECTION C: Geotagged Site Photo Documentation                 -->
+        <!-- ============================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="18dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Geotagged Site Evidence"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Capture real-time field photos stamped with GPS coordinates."
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="14dp" />
+
+            <!-- Photo Preview Box with Overlay Badge -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="@drawable/bg_rounded_input"
+                android:layout_marginBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/ivSiteEvidencePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Photo Preview" />
+
+                <!-- Empty State Placeholder -->
+                <LinearLayout
+                    android:id="@+id/layoutPhotoPlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:src="@drawable/ic_camera"
+                        app:tint="@color/oxide_blue_primary"
+                        android:contentDescription="Camera" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No evidence photo captured yet"
+                        android:textColor="@color/text_oxide_secondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+
+                <!-- Stamped GPS Badge -->
+                <TextView
+                    android:id="@+id/tvGpsStampBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg_bottom_nav_dock"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="GPS: 40.7128° N, 74.0060° W • Level 3"
+                    android:textColor="@color/text_on_oxide_white"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <!-- Capture Trigger Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCaptureEvidence"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_rounded_input"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/stroke_oxide_blue"
+                app:strokeWidth="1.5dp"
+                android:text="Capture Site Evidence"
+                android:textColor="@color/oxide_blue_primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_camera"
+                app:iconTint="@color/oxide_blue_primary"
+                app:iconSize="18dp"
+                app:cornerRadius="14dp" />
+        </LinearLayout>
+
+        <!-- ============================================================= -->
+        <!-- SECTION D: Report Export (PDF & CSV)                          -->
+        <!-- ============================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Audit &amp; Executive Reports"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generate and share audit-ready progress logs for custom date ranges."
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="14dp" />
+
+            <!-- Date Range Selector Pill -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reporting Period"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:id="@+id/btnSelectDateRange"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_rounded_input"
+                android:gravity="center_vertical"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="16dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_calendar_toggle"
+                    app:tint="@color/oxide_blue_primary"
+                    android:contentDescription="Calendar" />
+
+                <TextView
+                    android:id="@+id/tvDateRangeSelected"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:text="01 Feb 2026 - 12 Feb 2026"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CHANGE"
+                    android:textColor="@color/oxide_blue_light"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Export Buttons (Side-by-side) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Export PDF -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExportPdf"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_primary_oxide"
+                    app:backgroundTint="@color/oxide_blue_primary"
+                    android:text="Export PDF"
+                    android:textColor="@color/text_on_oxide_white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_pdf"
+                    app:iconTint="@color/text_on_oxide_white"
+                    app:iconSize="18dp"
+                    app:cornerRadius="24dp"
+                    android:layout_marginEnd="6dp" />
+
+                <!-- Export CSV -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExportCsv"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_rounded_input"
+                    app:backgroundTint="@color/warm_ash_surface"
+                    app:strokeColor="@color/stroke_oxide_blue"
+                    app:strokeWidth="1.5dp"
+                    android:text="Export CSV"
+                    android:textColor="@color/oxide_blue_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_table"
+                    app:iconTint="@color/oxide_blue_primary"
+                    app:iconSize="18dp"
+                    app:cornerRadius="24dp"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

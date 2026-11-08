@@ -23,6 +23,9 @@
     <color name="telemetry_delta_up">#16394F</color>
     <color name="telemetry_delta_down">#0E2636</color>
     <color name="indicator_pulse_dot">#FFFFFF</color>
+    <color name="status_green">#10B981</color>
+    <color name="status_amber">#F59E0B</color>
+    <color name="status_red">#EF4444</color>
 
     <!-- System & Compatibility Aliases (Warm Ash & Oxide Blue System) -->
     <color name="bg_canvas">#EDE7DF</color>
@@ -33,12 +36,7 @@
     <color name="stroke_card_border">#16394F</color>
     <color name="dark_border">#16394F</color>
 
-    <!-- Accents mapped to Oxide Blue identity -->
-    <color name="accent_safety_yellow">#16394F</color>
-    <color name="accent_safety_amber">#16394F</color>
-    <color name="accent_safety_green">#16394F</color>
-    <color name="accent_telemetry_green">#16394F</color>
-    <color name="accent_hazard_orange">#24526E</color>
+    <!-- Accents -->
     <color name="accent_telemetry_blue">#16394F</color>
     <color name="accent_terracotta">#24526E</color>
     <color name="gauge_track_dark">#D4CDC3</color>
@@ -52,9 +50,16 @@
     <color name="text_on_primary">#FFFFFF</color>
 
     <!-- Brand Aliases -->
-    <color name="brand_amber">#16394F</color>
-    <color name="brand_amber_light">#E5DFD6</color>
-    <color name="brand_amber_dark">#0E2636</color>
+    <color name="brand_amber">#F59E0B</color>
+    <color name="brand_amber_light">#FEF3C7</color>
+    <color name="brand_amber_dark">#D97706</color>
+    <color name="accent_safety_amber">#F59E0B</color>
+    <color name="accent_safety_yellow">#F59E0B</color>
+    <color name="accent_safety_green">#10B981</color>
+    <color name="accent_telemetry_green">#10B981</color>
+    <color name="accent_hazard_orange">#F97316</color>
+    <color name="color_trend_green">#10B981</color>
+    <color name="color_trend_red">#EF4444</color>
     <color name="brand_terracotta">#24526E</color>
     <color name="brand_terracotta_light">#E5DFD6</color>
     <color name="brand_peach">#DBD4CA</color>
@@ -82,11 +87,9 @@
     <color name="chip_bg">#E5DFD6</color>
 
     <!-- Status & Alerts -->
-    <color name="color_success">#16394F</color>
-    <color name="color_error">#0E2636</color>
-    <color name="color_warning">#24526E</color>
-    <color name="color_trend_green">#16394F</color>
-    <color name="color_trend_red">#0E2636</color>
+    <color name="color_success">#10B981</color>
+    <color name="color_error">#EF4444</color>
+    <color name="color_warning">#F59E0B</color>
 
     <!-- Legacy Overrides -->
     <color name="purple_200">#16394F</color>

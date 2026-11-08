@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/warm_ash_base"
+    android:clipToPadding="false"
+    android:paddingBottom="100dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ============================================================= -->
+        <!-- WORK AREAS TELEMETRY GRID (From Dribbble Right Screen)         -->
+        <!-- ============================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="WORK AREAS TELEMETRY"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LIVE"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_pill_inactive"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp" />
+        </LinearLayout>
+
+        <!-- Row 1: Foundation & Structural Work -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <!-- Card 1: Foundation (85% +2.23 ▲) -->
+            <LinearLayout
+                android:id="@+id/cardFoundation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_outlined"
+                android:padding="14dp"
+                android:layout_marginEnd="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Foundation"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/oxide_blue_primary"
+                        android:contentDescription="Expand" />
+                </LinearLayout>
+
+                <com.example.sitesync.ui.custom.SemiCircleGaugeView
+                    android:id="@+id/gaugeFoundation"
+                    android:layout_width="match_parent"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
+                    app:gaugeProgress="85"
+                    app:trendValue="+2.23 ▲"
+                    app:gaugeSweepColor="@color/brand_amber"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
+            </LinearLayout>
+
+            <!-- Card 2: Structural Work (62% +1.23 ▲) -->
+            <LinearLayout
+                android:id="@+id/cardStructural"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_outlined"
+                android:padding="14dp"
+                android:layout_marginStart="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Structural Work"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/oxide_blue_primary"
+                        android:contentDescription="Expand" />
+                </LinearLayout>
+
+                <com.example.sitesync.ui.custom.SemiCircleGaugeView
+                    android:id="@+id/gaugeStructural"
+                    android:layout_width="match_parent"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
+                    app:gaugeProgress="62"
+                    app:trendValue="+1.23 ▲"
+                    app:gaugeSweepColor="@color/brand_amber"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Row 2: Electrical & Finishing -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <!-- Card 3: Electrical (40% +.23 ▲) -->
+            <LinearLayout
+                android:id="@+id/cardElectrical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_outlined"
+                android:padding="14dp"
+                android:layout_marginEnd="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Electrical"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/oxide_blue_primary"
+                        android:contentDescription="Expand" />
+                </LinearLayout>
+
+                <com.example.sitesync.ui.custom.SemiCircleGaugeView
+                    android:id="@+id/gaugeElectrical"
+                    android:layout_width="match_parent"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
+                    app:gaugeProgress="40"
+                    app:trendValue="+.23 ▲"
+                    app:gaugeSweepColor="@color/brand_amber"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
+            </LinearLayout>
+
+            <!-- Card 4: Finishing (18% -1.00 ▼) -->
+            <LinearLayout
+                android:id="@+id/cardFinishing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_outlined"
+                android:padding="14dp"
+                android:layout_marginStart="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Finishing"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/oxide_blue_primary"
+                        android:contentDescription="Expand" />
+                </LinearLayout>
+
+                <com.example.sitesync.ui.custom.SemiCircleGaugeView
+                    android:id="@+id/gaugeFinishing"
+                    android:layout_width="match_parent"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
+                    app:gaugeProgress="18"
+                    app:trendValue="-1.00 ▼"
+                    app:gaugeSweepColor="@color/brand_amber"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============================================================= -->
+        <!-- SECTION 2: ACTIVE SITE TASKS & RFIS                           -->
+        <!-- ============================================================= -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ACTIVE SITE TASKS &amp; RFIS"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Task 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rebar Clearance Verification"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="HIGH PRIORITY"
+                    android:textColor="@color/text_on_oxide_white"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_tab_pill_active"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Level 3 Core Columns • Assigned to Elena Rostova"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCompleteTask1"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_rounded_input"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/stroke_oxide_blue"
+                app:strokeWidth="1.5dp"
+                android:text="Mark As Completed"
+                android:textColor="@color/oxide_blue_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+
+        <!-- Task 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HVAC Ductwork Penetration Sign-Off"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="IN REVIEW"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_pill_inactive"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="West Core Transfer Beam • RFI-2026-042"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewRfiDetails"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/btn_primary_oxide"
+                app:backgroundTint="@color/oxide_blue_primary"
+                android:text="Open RFI Thread"
+                android:textColor="@color/text_on_oxide_white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -57,22 +57,23 @@ public class CutAndFillChartView extends View {
         stemPaint.setStrokeWidth(dpToPx(3.5f));
         capPaint.setStrokeWidth(dpToPx(2.5f));
 
-        labelPaint.setColor(Color.parseColor("#141414"));
+        labelPaint.setColor(Color.parseColor("#16394F"));
         labelPaint.setTextSize(dpToPx(11f));
         labelPaint.setFakeBoldText(true);
         labelPaint.setTextAlign(Paint.Align.CENTER);
 
-        baselinePaint.setColor(Color.parseColor("#F0F0EE"));
+        baselinePaint.setColor(Color.parseColor("#D4CDC3"));
         baselinePaint.setStrokeWidth(dpToPx(1f));
 
-        // Default construction elevation points from reference visual
+        // Default construction elevation points from reference visual:
+        // -15 Ft, -10 Ft, -5.12 Ft, -3.10 Ft, 00 Ft, 14 Ft
         stems = new StemData[]{
                 new StemData("-15 Ft", 0.35f, 0.70f, Color.parseColor("#E0532B"), false),
                 new StemData("-10 Ft", 0.38f, 0.75f, Color.parseColor("#F7A600"), true),
                 new StemData("-5.12 Ft", 0.40f, 0.78f, Color.parseColor("#F28B66"), false),
                 new StemData("-3.10 Ft", 0.38f, 0.72f, Color.parseColor("#F7A600"), true),
-                new StemData("14 Ft", 0.42f, 0.74f, Color.parseColor("#F7A600"), true),
-                new StemData("00 Ft", 0.45f, 0.72f, Color.parseColor("#E0532B"), false)
+                new StemData("00 Ft", 0.45f, 0.72f, Color.parseColor("#E0532B"), false),
+                new StemData("14 Ft", 0.42f, 0.74f, Color.parseColor("#F7A600"), true)
         };
     }
 

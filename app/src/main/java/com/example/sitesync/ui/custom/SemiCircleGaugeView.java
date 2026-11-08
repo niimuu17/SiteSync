@@ -60,7 +60,7 @@ public class SemiCircleGaugeView extends View {
 
     private void init(Context context, @Nullable AttributeSet attrs) {
         trackColor = ContextCompat.getColor(context, R.color.gauge_track_ash);
-        sweepColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
+        sweepColor = ContextCompat.getColor(context, R.color.brand_amber);
         strokeWidth = dpToPx(9);
 
         if (attrs != null) {
@@ -158,9 +158,15 @@ public class SemiCircleGaugeView extends View {
         float centerY = height * 0.70f;
         canvas.drawText(progress + "%", centerX, centerY, textNumberPaint);
 
-        // 5. Trend Indicator below / around number
+        // 5. Trend Indicator below / around number (color-coded according to delta direction)
         if (!trendValue.isEmpty()) {
-            textTrendPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_oxide_secondary));
+            if (trendValue.contains("+") || trendValue.contains("▲")) {
+                textTrendPaint.setColor(ContextCompat.getColor(getContext(), R.color.color_trend_green));
+            } else if (trendValue.contains("-") || trendValue.contains("▼")) {
+                textTrendPaint.setColor(ContextCompat.getColor(getContext(), R.color.color_trend_red));
+            } else {
+                textTrendPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_oxide_secondary));
+            }
             float trendY = height * 0.90f;
             canvas.drawText(trendValue, centerX, trendY, textTrendPaint);
         }

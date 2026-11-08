@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/warm_ash_base"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp">
+
+        <!-- Structural Brand Logo Mark -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_squircle_amber"
+            android:backgroundTint="@color/warm_ash_surface"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_app_brand_symbol"
+                app:tint="@color/oxide_blue_primary"
+                android:contentDescription="SiteSync Logo" />
+        </FrameLayout>
+
+        <!-- Header: Centered bold text -->
+        <TextView
+            android:id="@+id/tvSignUpTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Account"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/tvSignUpSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Join SiteSync to manage site progress and tasks"
+            android:textColor="@color/text_oxide_secondary"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Error Banner -->
+        <TextView
+            android:id="@+id/tvErrorMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_rounded_input"
+            android:backgroundTint="#FEE2E2"
+            android:padding="12dp"
+            android:textColor="@color/status_red"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"
+            tools:visibility="visible"
+            tools:text="Please complete all required fields." />
+
+        <!-- 1. Full Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Full Name"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_rounded_input"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/etFullName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:hint="Full Name"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
+        </FrameLayout>
+
+        <!-- 2. Username or Gmail -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username or Gmail"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_rounded_input"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/etUsernameOrEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:hint="Username or Gmail"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </FrameLayout>
+
+        <!-- 3. Mobile Number -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mobile Number"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_rounded_input"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/etMobileNumber"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:hint="+1 555-0199"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:inputType="phone"
+                android:maxLines="1" />
+        </FrameLayout>
+
+        <!-- 4. Password -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_rounded_input"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@id/ivTogglePassword"
+                android:background="@android:color/transparent"
+                android:hint="Enter your password"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="12dp"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <ImageView
+                android:id="@+id/ivTogglePassword"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="14dp"
+                android:src="@drawable/ic_visibility_eye"
+                app:tint="@color/oxide_blue_primary"
+                android:contentDescription="Toggle Password Visibility" />
+        </RelativeLayout>
+
+        <!-- 5. Confirm Password -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm Password"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_rounded_input"
+            android:layout_marginBottom="24dp">
+
+            <EditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@id/ivToggleConfirmPassword"
+                android:background="@android:color/transparent"
+                android:hint="Re-enter your password"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="12dp"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <ImageView
+                android:id="@+id/ivToggleConfirmPassword"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="14dp"
+                android:src="@drawable/ic_visibility_eye"
+                app:tint="@color/oxide_blue_primary"
+                android:contentDescription="Toggle Confirm Password Visibility" />
+        </RelativeLayout>
+
+        <!-- Action Button: Sign Up -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_primary_oxide"
+                app:backgroundTint="@color/oxide_blue_primary"
+                android:text="Sign Up"
+                android:textColor="@color/text_on_oxide_white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="24dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBarSignUp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/text_on_oxide_white"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <!-- Footer: Already have an account? Log In -->
+        <TextView
+            android:id="@+id/tvFooterLogIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account? Log In"
+            android:textColor="@color/text_oxide_secondary"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_create_project"
+        android:title="Create Project"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_project_details"
+        android:title="Show Project Details"
+        android:icon="@drawable/ic_document"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_log_out"
+        android:title="Log Out"
+        android:icon="@drawable/ic_cancel_circle"
+        app:showAsAction="never" />
+</menu>

@@ -21,6 +21,10 @@
         <attr name="hazardTrackColor" format="color" />
         <attr name="stripeWidth" format="dimension" />
         <attr name="stripeSpacing" format="dimension" />
+        <attr name="barProgress" format="integer" />
+        <attr name="barStripeColor" format="color" />
+        <attr name="barTrackColor" format="color" />
+        <attr name="delayMarkerText" format="string" />
     </declare-styleable>
 
     <declare-styleable name="CutAndFillTelemetryView">

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/warm_ash_base"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingBottom="100dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="APPLICATION &amp; USER PROFILE"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="12dp" />
+
+        <!-- User Profile Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="18dp"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:id="@+id/tvSettingsUserFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Elena Rostova"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSettingsUserRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lead Field Engineer • Metro Central Tower"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="14dp" />
+
+            <TextView
+                android:id="@+id/tvSettingsUserEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="elena@sitesync.com"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvSettingsUserPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="+1 (555) 019-9023"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Sign Out Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSettingsSignOut"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_rounded_input"
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/stroke_oxide_blue"
+            app:strokeWidth="1.5dp"
+            android:text="Sign Out of Session"
+            android:textColor="@color/status_red"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:cornerRadius="14dp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

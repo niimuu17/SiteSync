@@ -32,9 +32,10 @@ public class HatchedProgressBar extends View {
     private int progress = 68; // 0 to 100
     private int stripeColor;
     private int trackColor;
-    private String delayText = "Delay: 12d";
+    private String delayText = "Delay 126";
 
     private Paint trackPaint;
+    private Paint trackStripePaint;
     private Paint borderPaint;
     private Paint stripePaint;
     private Paint pinPaint;
@@ -60,21 +61,33 @@ public class HatchedProgressBar extends View {
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
-        stripeColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
+        stripeColor = ContextCompat.getColor(context, R.color.brand_amber);
         trackColor = ContextCompat.getColor(context, R.color.warm_ash_surface);
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HatchedProgressBar);
-            progress = a.getInt(R.styleable.HatchedProgressBar_hatchedProgress, 68);
-            if (a.hasValue(R.styleable.HatchedProgressBar_hazardStripeColor)) {
+            if (a.hasValue(R.styleable.HatchedProgressBar_barProgress)) {
+                progress = a.getInt(R.styleable.HatchedProgressBar_barProgress, progress);
+            } else {
+                progress = a.getInt(R.styleable.HatchedProgressBar_hatchedProgress, 68);
+            }
+            if (a.hasValue(R.styleable.HatchedProgressBar_barStripeColor)) {
+                stripeColor = a.getColor(R.styleable.HatchedProgressBar_barStripeColor, stripeColor);
+            } else if (a.hasValue(R.styleable.HatchedProgressBar_hazardStripeColor)) {
                 stripeColor = a.getColor(R.styleable.HatchedProgressBar_hazardStripeColor, stripeColor);
             } else if (a.hasValue(R.styleable.HatchedProgressBar_hatchedColor)) {
                 stripeColor = a.getColor(R.styleable.HatchedProgressBar_hatchedColor, stripeColor);
             }
-            if (a.hasValue(R.styleable.HatchedProgressBar_hazardTrackColor)) {
+            if (a.hasValue(R.styleable.HatchedProgressBar_barTrackColor)) {
+                trackColor = a.getColor(R.styleable.HatchedProgressBar_barTrackColor, trackColor);
+            } else if (a.hasValue(R.styleable.HatchedProgressBar_hazardTrackColor)) {
                 trackColor = a.getColor(R.styleable.HatchedProgressBar_hazardTrackColor, trackColor);
             } else if (a.hasValue(R.styleable.HatchedProgressBar_hatchedTrackColor)) {
                 trackColor = a.getColor(R.styleable.HatchedProgressBar_hatchedTrackColor, trackColor);
+            }
+            if (a.hasValue(R.styleable.HatchedProgressBar_delayMarkerText)) {
+                String text = a.getString(R.styleable.HatchedProgressBar_delayMarkerText);
+                if (text != null) delayText = text;
             }
             a.recycle();
         }
@@ -82,6 +95,10 @@ public class HatchedProgressBar extends View {
         trackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         trackPaint.setColor(trackColor);
         trackPaint.setStyle(Paint.Style.FILL);
+
+        trackStripePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        trackStripePaint.setColor(ContextCompat.getColor(context, R.color.warm_ash_surface_alt));
+        trackStripePaint.setStrokeWidth(dpToPx(3f));
 
         borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         borderPaint.setColor(ContextCompat.getColor(context, R.color.stroke_oxide_blue));
@@ -105,13 +122,13 @@ public class HatchedProgressBar extends View {
     }
 
     private void setupStripeShader() {
-        int stripeWidth = (int) dpToPx(8);
+        int stripeWidth = (int) dpToPx(7);
         int tileWidth = stripeWidth * 2;
         Bitmap patternBitmap = Bitmap.createBitmap(tileWidth, tileWidth, Bitmap.Config.ARGB_8888);
         Canvas patternCanvas = new Canvas(patternBitmap);
 
         Paint bgTilePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bgTilePaint.setColor(ContextCompat.getColor(getContext(), R.color.warm_ash_surface_alt));
+        bgTilePaint.setColor(ContextCompat.getColor(getContext(), R.color.brand_amber_light));
         patternCanvas.drawRect(0, 0, tileWidth, tileWidth, bgTilePaint);
 
         Paint tileStripePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -137,11 +154,11 @@ public class HatchedProgressBar extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int desiredHeight = (int) dpToPx(42); // 20dp container + room for delay pin above/below
+        int desiredHeight = (int) dpToPx(44); // 18dp container + 26dp for delay pin & text
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        int height = (heightMode == MeasureSpec.EXACTLY) ? heightSize : desiredHeight;
+        int height = (heightMode == MeasureSpec.EXACTLY && heightSize >= desiredHeight) ? heightSize : desiredHeight;
         setMeasuredDimension(width, height);
     }
 
@@ -150,32 +167,35 @@ public class HatchedProgressBar extends View {
         super.onDraw(canvas);
 
         float width = getWidth();
-        float totalHeight = getHeight();
         float barHeight = dpToPx(20);
-        float barTop = (totalHeight - barHeight) / 2f + dpToPx(6);
+        float barTop = dpToPx(16); // Room for delay pin text above
         float barBottom = barTop + barHeight;
         float radius = barHeight / 2f;
 
         bounds.set(0, barTop, width, barBottom);
 
-        // 1. Draw Inactive Track
+        // 1. Draw Inactive Track with subtle stripes
         canvas.drawRoundRect(bounds, radius, radius, trackPaint);
+
+        clipPath.reset();
+        clipPath.addRoundRect(bounds, radius, radius, Path.Direction.CW);
+        canvas.save();
+        canvas.clipPath(clipPath);
+
+        // Subtle remaining track stripes
+        float stripeSpacing = dpToPx(10);
+        for (float x = -barHeight; x < width + barHeight; x += stripeSpacing) {
+            canvas.drawLine(x, barBottom, x + barHeight, barTop, trackStripePaint);
+        }
 
         // 2. Draw Hatched Progress Fill
         float fillWidth = (Math.max(0, Math.min(100, progress)) / 100f) * width;
         if (fillWidth > 0) {
             fillBounds.set(0, barTop, fillWidth, barBottom);
-
-            clipPath.reset();
-            // Clip to pill container shape
-            clipPath.addRoundRect(bounds, radius, radius, Path.Direction.CW);
-            canvas.save();
-            canvas.clipPath(clipPath);
-
             canvas.drawRect(fillBounds, stripePaint);
-
-            canvas.restore();
         }
+
+        canvas.restore();
 
         // 3. Draw Border Outline
         canvas.drawRoundRect(bounds, radius, radius, borderPaint);
@@ -183,15 +203,13 @@ public class HatchedProgressBar extends View {
         // 4. Draw Vertical Delay Marker Pin at Cutoff Threshold
         if (fillWidth > 0 && fillWidth < width && delayText != null && !delayText.isEmpty()) {
             float pinX = fillWidth;
-            float pinTop = barTop - dpToPx(14);
-            float pinBottom = barBottom + dpToPx(3);
-
-            // Vertical line
-            canvas.drawLine(pinX, pinTop + dpToPx(12), pinX, pinBottom, pinPaint);
+            float textX = Math.max(dpToPx(30), Math.min(width - dpToPx(30), pinX));
 
             // Delay Text Badge above cutoff pin
-            float textX = Math.max(dpToPx(28), Math.min(width - dpToPx(28), pinX));
-            canvas.drawText(delayText, textX, pinTop + dpToPx(9), pinTextPaint);
+            canvas.drawText(delayText, textX, barTop - dpToPx(4), pinTextPaint);
+
+            // Vertical line cutting through progress edge
+            canvas.drawLine(pinX, barTop - dpToPx(2), pinX, barBottom + dpToPx(2), pinPaint);
         }
     }
 
