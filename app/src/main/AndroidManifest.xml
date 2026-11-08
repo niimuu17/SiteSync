@@ -47,6 +47,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Unified Site Command Cockpit (Single-Module Architecture) -->
+        <activity
+            android:name=".ui.cockpit.UnifiedSiteCockpitActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- Role Dashboards -->
         <activity
             android:name=".ui.ManagerDashboardActivity"

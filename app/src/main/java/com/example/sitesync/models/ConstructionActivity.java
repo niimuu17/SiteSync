@@ -18,7 +18,7 @@ public class ConstructionActivity implements Serializable {
     public static final String STATUS_IN_PROGRESS = "In Progress";
     public static final String STATUS_COMPLETED = "Completed";
 
-    private final String id;
+    private String id;
     private String projectName;
     private String activityName;
     private String location;
@@ -29,6 +29,10 @@ public class ConstructionActivity implements Serializable {
     private String latestRemarks;
     private String latestPhotoUri;
     private final List<ProgressLog> progressHistory;
+
+    public ConstructionActivity() {
+        this("ACT-" + System.currentTimeMillis(), "Metro Central Tower", "New Activity", "Level 1", 0, STATUS_IN_PROGRESS, "", "", "", "", new ArrayList<>());
+    }
 
     public ConstructionActivity(String id, String projectName, String activityName,
                                 String location, int progressPercentage, String status,
@@ -49,6 +53,26 @@ public class ConstructionActivity implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return activityName;
+    }
+
+    public void setName(String name) {
+        this.activityName = name;
+    }
+
+    public int getProgress() {
+        return progressPercentage;
+    }
+
+    public void setProgress(int progress) {
+        setProgressPercentage(progress);
     }
 
     public String getProjectName() {

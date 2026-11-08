@@ -14,6 +14,16 @@ import android.view.View;
 public class HapticFeedbackUtil {
 
     /**
+     * Light click pulse for tab selections and quick toggles.
+     */
+    public static void lightClick(Context context, View view) {
+        if (view != null) {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+        }
+        vibrate(context, 20);
+    }
+
+    /**
      * Heavy click pulse for button presses and speech activation.
      */
     public static void heavyClick(Context context, View view) {

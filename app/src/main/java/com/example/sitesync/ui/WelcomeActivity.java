@@ -52,6 +52,16 @@ public class WelcomeActivity extends AppCompatActivity {
         // Field Engineer selection
         binding.cardEngineer.setOnClickListener(v -> selectRole(Role.ENGINEER));
         binding.btnSelectEngineer.setOnClickListener(v -> selectRole(Role.ENGINEER));
+
+        // Quick Direct Access into Unified Cockpit
+        if (binding.tvDirectLogin != null) {
+            binding.tvDirectLogin.setOnClickListener(v -> {
+                User demoUser = new User("engineer", "Elena Rostova", Role.ENGINEER.name(), "TOKEN-DEMO-01", "elena@sitesync.io", "+1-555-0192", "US");
+                sessionManager.createLoginSession(demoUser, true);
+                AuthRouter.routeToDashboard(this, Role.ENGINEER, demoUser);
+                finish();
+            });
+        }
     }
 
     /**

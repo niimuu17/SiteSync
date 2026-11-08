@@ -264,4 +264,14 @@ public class VoiceDictationManager {
     public boolean isListening() {
         return isListening;
     }
+
+    public synchronized void destroy() {
+        stopListening();
+        if (speechRecognizer != null) {
+            try {
+                speechRecognizer.destroy();
+            } catch (Exception ignored) {}
+            speechRecognizer = null;
+        }
+    }
 }

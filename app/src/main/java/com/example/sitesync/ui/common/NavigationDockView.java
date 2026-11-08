@@ -110,10 +110,24 @@ public class NavigationDockView extends FrameLayout {
         }
     }
 
+    public interface OnTabSelectedListener {
+        boolean onTabSelected(int tabIndex);
+    }
+
+    private OnTabSelectedListener onTabSelectedListener;
+
+    public void setOnTabSelectedListener(OnTabSelectedListener listener) {
+        this.onTabSelectedListener = listener;
+    }
+
     private void onTabClicked(int tabIndex) {
         if (tabIndex == activeTab) return;
         HapticFeedbackUtil.heavyClick(getContext(), this);
         setActiveTab(tabIndex);
+
+        if (onTabSelectedListener != null && onTabSelectedListener.onTabSelected(tabIndex)) {
+            return;
+        }
 
         Context ctx = getContext();
         if (!(ctx instanceof Activity)) return;

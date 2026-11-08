@@ -2,13 +2,18 @@
 <resources>
     <!-- Strict Industrial Dark Telemetry System -->
     <color name="bg_canvas">#111317</color>
+    <color name="dark_canvas">#111317</color>
     <color name="bg_surface_elevated">#1A1D24</color>
+    <color name="dark_surface_elevated">#1A1D24</color>
     <color name="bg_surface_card">#222631</color>
     <color name="stroke_card_border">#2E3442</color>
+    <color name="dark_border">#2E3442</color>
 
     <!-- Safety & Telemetry Accents -->
     <color name="accent_safety_yellow">#F59E0B</color>
+    <color name="accent_safety_amber">#F59E0B</color>
     <color name="accent_safety_green">#10B981</color>
+    <color name="accent_telemetry_green">#10B981</color>
     <color name="accent_hazard_orange">#F97316</color>
     <color name="accent_telemetry_blue">#3B82F6</color>
     <color name="accent_terracotta">#E0532B</color>
@@ -19,6 +24,7 @@
     <color name="text_secondary">#94A3B8</color>
     <color name="text_tertiary">#64748B</color>
     <color name="text_hint">#64748B</color>
+    <color name="text_muted">#64748B</color>
     <color name="text_on_primary">#111317</color>
 
     <!-- Aliases for Compatibility with Existing Codebase -->

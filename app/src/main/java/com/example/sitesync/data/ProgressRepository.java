@@ -129,6 +129,20 @@ public class ProgressRepository {
         return true;
     }
 
+    public boolean updateActivityProgress(String activityId, int newProgress, String newStatus, String remarks) {
+        return updateProgress(activityId, newProgress, newStatus, remarks, "Site Engineer", "");
+    }
+
+    public int calculateOverallProgress() {
+        List<ConstructionActivity> list = getAllActivities();
+        if (list == null || list.isEmpty()) return 68;
+        int sum = 0;
+        for (ConstructionActivity a : list) {
+            sum += a.getProgressPercentage();
+        }
+        return sum / list.size();
+    }
+
     public boolean updateProgress(String activityId, int newProgress, String newStatus,
                                   String remarks, String engineerName, String photoUri) {
         ConstructionActivity target = getActivityById(activityId);

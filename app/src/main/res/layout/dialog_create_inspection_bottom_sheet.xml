@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dark_card"
+    android:padding="24dp">
+
+    <!-- Header Drag Handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_pill_inactive"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="QA &amp; SAFETY INSPECTION"
+        android:textColor="@color/accent_safety_amber"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Quality Checklist"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etInspectionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_dark_card"
+        android:padding="12dp"
+        android:hint="Inspection Title (e.g. Rebar Clearance Check)"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_muted"
+        android:textSize="14sp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Discipline Selector -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDiscStructural"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="STRUCT"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/accent_safety_amber"
+            android:textColor="@color/dark_canvas"
+            app:cornerRadius="6dp"
+            android:layout_marginEnd="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDiscArch"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="ARCH"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/dark_surface_elevated"
+            app:strokeColor="@color/dark_border"
+            app:strokeWidth="1dp"
+            android:textColor="@color/text_secondary"
+            app:cornerRadius="6dp"
+            android:layout_marginEnd="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDiscElec"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="ELEC"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/dark_surface_elevated"
+            app:strokeColor="@color/dark_border"
+            app:strokeWidth="1dp"
+            android:textColor="@color/text_secondary"
+            app:cornerRadius="6dp"
+            android:layout_marginEnd="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDiscPlumb"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="PLUMB"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/dark_surface_elevated"
+            app:strokeColor="@color/dark_border"
+            app:strokeWidth="1dp"
+            android:textColor="@color/text_secondary"
+            app:cornerRadius="6dp" />
+    </LinearLayout>
+
+    <!-- Embedded Hardware Tool: Check Level -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_pill_inactive"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PITCH &amp; SLOPE TELEMETRY"
+            android:textColor="@color/accent_safety_amber"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvCapturedSlope"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="No angle measured yet"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCheckLevelTool"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="CHECK LEVEL"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_grid"
+                app:iconSize="16dp"
+                app:backgroundTint="@color/dark_surface_elevated"
+                app:strokeColor="@color/accent_safety_amber"
+                app:strokeWidth="1dp"
+                android:textColor="@color/accent_safety_amber"
+                app:cornerRadius="6dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Inspection Notes -->
+    <EditText
+        android:id="@+id/etInspectionNotes"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="top|start"
+        android:padding="12dp"
+        android:background="@drawable/bg_dark_card"
+        android:hint="Checklist notes, tolerances, or field observations..."
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_muted"
+        android:textSize="13sp"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Create Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSubmitInspection"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="CREATE &amp; DISPATCH CHECKLIST"
+        android:textColor="@color/dark_canvas"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        app:backgroundTint="@color/accent_safety_amber"
+        app:cornerRadius="8dp" />
+
+</LinearLayout>

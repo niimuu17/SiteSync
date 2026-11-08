@@ -19,6 +19,14 @@ public class IssueCommentAdapter extends RecyclerView.Adapter<IssueCommentAdapte
 
     private final List<IssueComment> comments = new ArrayList<>();
 
+    public IssueCommentAdapter() {}
+
+    public IssueCommentAdapter(List<IssueComment> initialComments) {
+        if (initialComments != null) {
+            this.comments.addAll(initialComments);
+        }
+    }
+
     public void setComments(List<IssueComment> list) {
         comments.clear();
         if (list != null) {

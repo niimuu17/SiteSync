@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_canvas"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingBottom="100dp">
+
+        <!-- Discipline Filter Bar -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFilterAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="ALL"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/accent_safety_amber"
+                    android:textColor="@color/dark_canvas"
+                    app:cornerRadius="16dp"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFilterStructural"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="STRUCTURAL"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/dark_surface_elevated"
+                    app:strokeColor="@color/dark_border"
+                    app:strokeWidth="1dp"
+                    android:textColor="@color/text_secondary"
+                    app:cornerRadius="16dp"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFilterArch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="ARCHITECTURAL"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/dark_surface_elevated"
+                    app:strokeColor="@color/dark_border"
+                    app:strokeWidth="1dp"
+                    android:textColor="@color/text_secondary"
+                    app:cornerRadius="16dp"
+                    android:layout_marginEnd="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFilterMep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="ELECTRICAL &amp; PLUMBING"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/dark_surface_elevated"
+                    app:strokeColor="@color/dark_border"
+                    app:strokeWidth="1dp"
+                    android:textColor="@color/text_secondary"
+                    app:cornerRadius="16dp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- CAD Blueprints Section Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="CAD BLUEPRINTS &amp; DRAWINGS"
+                android:textColor="@color/accent_safety_amber"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REV 3.2 APPROVED"
+                android:textColor="@color/accent_telemetry_green"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_pill_inactive"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp" />
+        </LinearLayout>
+
+        <!-- Blueprint Card 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tower Envelope &amp; Curtain Wall"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PDF • 4.8 MB"
+                    android:textColor="@color/text_muted"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drawing # ARC-2026-F14 • Revision: Rev 2.1 (Approved)"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewBlueprint1"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="VIEW CAD BLUEPRINT"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_document"
+                app:iconSize="16dp"
+                app:backgroundTint="@color/dark_surface_elevated"
+                app:strokeColor="@color/accent_safety_amber"
+                app:strokeWidth="1dp"
+                android:textColor="@color/accent_safety_amber"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <!-- Blueprint Card 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Foundation Slab Rebar Details"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PDF • 8.2 MB"
+                    android:textColor="@color/text_muted"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drawing # STR-2026-F01 • Revision: Rev 3.0 (Approved)"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewBlueprint2"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="VIEW CAD BLUEPRINT"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_document"
+                app:iconSize="16dp"
+                app:backgroundTint="@color/dark_surface_elevated"
+                app:strokeColor="@color/accent_safety_amber"
+                app:strokeWidth="1dp"
+                android:textColor="@color/accent_safety_amber"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <!-- Quality & Safety Inspections Section Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="QA CHECKLISTS &amp; TOLERANCE"
+                android:textColor="@color/accent_safety_amber"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNewInspection"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="+ NEW CHECKLIST"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/accent_safety_amber"
+                android:textColor="@color/dark_canvas"
+                app:cornerRadius="6dp" />
+        </LinearLayout>
+
+        <!-- Inspection Item 1: Slab Level & Grade Check -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Slab Level &amp; Grade Plumbness"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvInspectionStatus1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PASS"
+                    android:textColor="@color/accent_telemetry_green"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_pill_inactive"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvMeasuredSlopeResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pitch: +0.2°, Roll: -0.1° (Tolerance &lt; 0.5° PASS)"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Hardware Inclinometer Trigger Button inside Checklist -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCheckLevelInspection"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="MEASURE INCLINATION (CHECK LEVEL)"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_grid"
+                app:iconSize="16dp"
+                app:backgroundTint="@color/dark_surface_elevated"
+                app:strokeColor="@color/accent_safety_amber"
+                app:strokeWidth="1dp"
+                android:textColor="@color/accent_safety_amber"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <!-- Inspection Item 2: Rebar Clearance -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Rebar Clearance &amp; Tie Wire Check"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PENDING"
+                    android:textColor="@color/accent_safety_amber"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_pill_inactive"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Structural Column Grid L-14 • Minimum 50mm clearance"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignOffRebar"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="SIGN-OFF INSPECTION"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/dark_surface_elevated"
+                app:strokeColor="@color/dark_border"
+                app:strokeWidth="1dp"
+                android:textColor="@color/text_primary"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

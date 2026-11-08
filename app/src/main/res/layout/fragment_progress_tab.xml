@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_canvas"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingBottom="100dp">
+
+        <!-- Title Header matching Dribbble Reference -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Centralized Construction"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-light" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Project Progress"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 1. Hero Work Progress Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Work Progress"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/btnProgressCalendar"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_calendar_toggle"
+                    app:tint="@color/text_secondary"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="Calendar" />
+
+                <ImageView
+                    android:id="@+id/btnProgressChart"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_chart_toggle"
+                    app:tint="@color/text_secondary"
+                    android:contentDescription="Chart" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvHeroProgressPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="68 %"
+                android:textColor="@color/text_primary"
+                android:textSize="38sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Hatched Progress Bar with Delay Marker -->
+            <com.example.sitesync.ui.custom.HatchedProgressBar
+                android:id="@+id/hatchedProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Date"
+                        android:textColor="@color/text_muted"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11/02/2026"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="End Date"
+                        android:textColor="@color/text_muted"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23/03/2026"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 2. Cut And Fill Telemetry Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cut And Fill"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_diagonal"
+                    app:tint="@color/text_secondary"
+                    android:contentDescription="Cut &amp; Fill Info" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12 Feb, 2026 11:03PM"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Candlestick Cut & Fill Telemetry View -->
+            <com.example.sitesync.ui.custom.CutAndFillTelemetryView
+                android:id="@+id/cutAndFillView"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginBottom="12dp" />
+        </LinearLayout>
+
+        <!-- 3. Active Milestone Verification & Ghost Camera Matching -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ACTIVE MILESTONES"
+                android:textColor="@color/accent_safety_amber"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUpdateMilestone"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="+ UPDATE"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/accent_safety_amber"
+                android:textColor="@color/dark_canvas"
+                app:cornerRadius="6dp" />
+        </LinearLayout>
+
+        <!-- Milestone 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Foundation Concrete Pour"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="85%"
+                    android:textColor="@color/accent_safety_amber"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Building 2 • Grid Line C-4 to F-9"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMatchAngleFoundation"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="MATCH ANGLE (VERIFY CAD ALIGNMENT)"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_camera"
+                app:iconSize="16dp"
+                app:backgroundTint="@color/dark_surface_elevated"
+                app:strokeColor="@color/dark_border"
+                app:strokeWidth="1dp"
+                android:textColor="@color/text_primary"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <!-- Milestone 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_dark_card"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Level 14 Column Erection"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="62%"
+                    android:textColor="@color/accent_safety_amber"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Building 2 • Level 14 Core"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMatchAngleColumns"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="MATCH ANGLE (VERIFY CAD ALIGNMENT)"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_camera"
+                app:iconSize="16dp"
+                app:backgroundTint="@color/dark_surface_elevated"
+                app:strokeColor="@color/dark_border"
+                app:strokeWidth="1dp"
+                android:textColor="@color/text_primary"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

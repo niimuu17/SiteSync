@@ -5,9 +5,11 @@ import android.content.Intent;
 
 import com.example.sitesync.models.Role;
 import com.example.sitesync.models.User;
+import com.example.sitesync.ui.cockpit.UnifiedSiteCockpitActivity;
 
 /**
- * Modular router utility for handling Role-Based Access Control (RBAC) screen transitions.
+ * Modular router utility for handling screen transitions.
+ * Under Single-Module Architecture, all authenticated roles land directly in UnifiedSiteCockpitActivity.
  */
 public final class AuthRouter {
 
@@ -17,30 +19,14 @@ public final class AuthRouter {
     private AuthRouter() {}
 
     /**
-     * Dispatches user to their dedicated role dashboard based on selected or authenticated Role.
+     * Dispatches user directly to the Unified Command Cockpit.
      */
     public static void routeToDashboard(Context context, Role role, User user) {
         if (role == null) {
-            role = Role.PROJECT_MANAGER;
+            role = Role.ENGINEER;
         }
 
-        Class<?> targetActivity;
-        switch (role) {
-            case PROJECT_MANAGER:
-                targetActivity = ExecutiveProgressActivity.class;
-                break;
-            case SITE_SUPERVISOR:
-                targetActivity = SupervisorDashboardActivity.class;
-                break;
-            case ENGINEER:
-                targetActivity = EngineerDashboardActivity.class;
-                break;
-            default:
-                targetActivity = ExecutiveProgressActivity.class;
-                break;
-        }
-
-        Intent intent = new Intent(context, targetActivity);
+        Intent intent = new Intent(context, UnifiedSiteCockpitActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         if (user != null) {
             intent.putExtra(EXTRA_USER, user);

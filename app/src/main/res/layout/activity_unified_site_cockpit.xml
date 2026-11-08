@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_canvas">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Top App Bar / Brand Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@color/dark_canvas">
+
+            <!-- Brand Symbol Icon -->
+            <FrameLayout
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_squircle_amber"
+                android:layout_marginEnd="12dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_app_brand_symbol"
+                    android:contentDescription="Brand" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SiteSync"
+                    android:textColor="@color/text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvUserRoleClaim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FIELD ENGINEER • FULL ACCESS"
+                    android:textColor="@color/accent_safety_amber"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.06"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Role Badge Pill -->
+            <TextView
+                android:id="@+id/tvActiveRoleBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ENGINEER"
+                android:textColor="@color/dark_canvas"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_tab_pill_active"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:layout_marginEnd="10dp" />
+
+            <!-- More / Context Menu Button -->
+            <ImageView
+                android:id="@+id/btnCockpitMenu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_more_horiz"
+                app:tint="@color/text_primary"
+                android:contentDescription="Menu" />
+        </LinearLayout>
+
+        <!-- Sticky Context Banner with Barometer Floor Detector -->
+        <com.example.sitesync.ui.common.ContextBannerView
+            android:id="@+id/contextBannerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Segmented Horizontal Pill Bar matching Dribbble Reference -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tabPillWorkAreas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="Work Areas"
+                    android:gravity="center"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_tab_pill_active"
+                    android:textColor="@color/dark_canvas"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/tabPillProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="Progress"
+                    android:gravity="center"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_tab_pill_inactive"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/tabPillQaCad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="QA &amp; Blueprints"
+                    android:gravity="center"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_tab_pill_inactive"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/tabPillDaily"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="Daily &amp; Issues"
+                    android:gravity="center"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_tab_pill_inactive"
+                    android:textColor="@color/text_secondary" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- ViewPager2 hosting 4 Cockpit Tab Fragments -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerCockpit"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <!-- Floating Navigation Dock at Bottom -->
+    <com.example.sitesync.ui.common.NavigationDockView
+        android:id="@+id/navigationDock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
