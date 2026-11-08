@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".SiteSyncApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -145,15 +146,15 @@
         <!-- Executive & Industrial Telemetry Screens (Reference UI Redesign) -->
         <activity
             android:name=".ui.ExecutiveProgressActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name=".ui.BuildingPlanActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name=".ui.WorkAreasActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <!-- Legacy Activities -->
         <activity

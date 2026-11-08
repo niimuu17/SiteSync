@@ -52,7 +52,12 @@ public class SessionManager {
     }
 
     public boolean isLoggedIn() {
-        return pref.getBoolean(KEY_IS_LOGGED_IN, false) || FirebaseAuth.getInstance().getCurrentUser() != null;
+        boolean firebaseLoggedIn = false;
+        try {
+            firebaseLoggedIn = FirebaseAuth.getInstance().getCurrentUser() != null;
+        } catch (Exception ignored) {
+        }
+        return pref.getBoolean(KEY_IS_LOGGED_IN, false) || firebaseLoggedIn;
     }
 
     public boolean isRememberMeEnabled() {

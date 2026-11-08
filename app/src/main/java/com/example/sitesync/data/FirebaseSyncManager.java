@@ -29,10 +29,27 @@ public class FirebaseSyncManager {
 
     private FirebaseSyncManager(Context context) {
         if (FirebaseApp.getApps(context).isEmpty()) {
-            FirebaseApp.initializeApp(context);
+            try {
+                FirebaseApp.initializeApp(context);
+            } catch (Exception e) {
+                com.google.firebase.FirebaseOptions options = new com.google.firebase.FirebaseOptions.Builder()
+                        .setApplicationId("1:271128474711:android:0f847b005f552f397d9f12")
+                        .setApiKey("AIzaSyAGgi9yHUzO4CFP-p63O4QMmYe7LcwJ7nc")
+                        .setProjectId("sitesync-5af3b")
+                        .setStorageBucket("sitesync-5af3b.firebasestorage.app")
+                        .setDatabaseUrl("https://sitesync-5af3b-default-rtdb.firebaseio.com")
+                        .build();
+                FirebaseApp.initializeApp(context, options);
+            }
         }
 
-        this.auth = FirebaseAuth.getInstance();
+        FirebaseAuth authInstance;
+        try {
+            authInstance = FirebaseAuth.getInstance();
+        } catch (Exception e) {
+            authInstance = null;
+        }
+        this.auth = authInstance;
 
         // 1. Enable Firestore Offline Persistence
         this.firestore = FirebaseFirestore.getInstance();
