@@ -73,6 +73,34 @@ public class HapticFeedbackUtil {
         }
     }
 
+    /**
+     * Confirmation haptic feedback for save/create actions.
+     */
+    public static void confirm(Context context) {
+        if (context == null) return;
+        try {
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null && vibrator.hasVibrator()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    long[] timings = new long[]{0, 50, 40, 60};
+                    int[] amplitudes = new int[]{0, 200, 0, 255};
+                    VibrationEffect effect = VibrationEffect.createWaveform(timings, amplitudes, -1);
+                    vibrator.vibrate(effect);
+                } else {
+                    vibrator.vibrate(new long[]{0, 50, 40, 60}, -1);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * Continuous vibration buzz for emergency button hold.
+     */
+    public static void continuousBuzz(Context context, long durationMs) {
+        vibrate(context, durationMs);
+    }
+
     private static void vibrate(Context context, long durationMs) {
         if (context == null) return;
         try {

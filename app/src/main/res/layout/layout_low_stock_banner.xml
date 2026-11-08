@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutLowStockBanner"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:backgroundTint="#FFFBEB"
+    android:padding="16dp"
+    android:layout_marginBottom="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="6dp">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_warning_amber"
+            app:tint="@color/brand_amber"
+            android:contentDescription="Warning Hazard" />
+
+        <TextView
+            android:id="@+id/tvLowStockAlertTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="LOW-STOCK ALERT: CEMENT CRITICAL"
+            android:textColor="#92400E"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvLowStockAlertMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Portland Cement (50kg) is at 17% of minimum safety threshold.\nAvailable: 85 Bags | Minimum: 500 Bags"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:lineSpacingExtra="2dp"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnQuickRequisition"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/btn_primary_oxide"
+        app:backgroundTint="@color/oxide_blue_primary"
+        android:text="+ Quick Requisition"
+        android:textColor="@color/text_on_oxide_white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
+
+</LinearLayout>

@@ -260,7 +260,7 @@ public class ProgressFragment extends Fragment {
             document.close();
             fos.close();
 
-            Uri fileUri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".provider", pdfFile);
+            Uri fileUri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", pdfFile);
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
             sendIntent.setType("application/pdf");
             sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
@@ -281,7 +281,7 @@ public class ProgressFragment extends Fragment {
             writer.append("2026-02-10,Alex Chen,\"Formwork stripped and inspected for tolerance compliance\",12 Panels,On Schedule,40.7128,-74.0060\n");
             writer.flush();
 
-            Uri fileUri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".provider", csvFile);
+            Uri fileUri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", csvFile);
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
             sendIntent.setType("text/csv");
             sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);

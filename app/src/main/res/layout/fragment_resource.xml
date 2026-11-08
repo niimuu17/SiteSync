@@ -1,258 +1,249 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/warm_ash_base"
-    android:fillViewport="true">
+    android:background="@color/warm_ash_base">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:paddingBottom="100dp">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="120dp"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SITE WORKFORCE &amp; EQUIPMENT"
-            android:textColor="@color/text_oxide_primary"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.08"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Total Headcount Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_oxide_banner_card"
-            android:padding="18dp"
-            android:layout_marginBottom="14dp">
+            android:padding="16dp">
 
+            <!-- Dynamic Low-Stock Alert Banner -->
+            <include
+                android:id="@+id/layoutLowStockBanner"
+                layout="@layout/layout_low_stock_banner" />
+
+            <!-- Inventory Section Header -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="42 Deployed Field Workers"
-                    android:textColor="@color/text_on_oxide_white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvInventoryHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SITE INVENTORY"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.08" />
+
+                    <TextView
+                        android:id="@+id/tvInventoryCountBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="(4 Items Tracked)"
+                        android:textColor="@color/text_oxide_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/btnAddInventoryItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="SHIFT 1"
-                    android:textColor="@color/oxide_blue_primary"
-                    android:textSize="11sp"
+                    android:layout_centerVertical="true"
+                    android:text="+ Add Item"
+                    android:textColor="@color/oxide_blue_light"
+                    android:textSize="13sp"
                     android:textStyle="bold"
-                    android:background="@drawable/bg_white_pill_badge"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp" />
+                    android:padding="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
             </RelativeLayout>
 
-            <TextView
+            <!-- Inventory Cards RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvInventory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Zero safety incidents reported today • All personnel checked-in"
-                android:textColor="@color/warm_ash_surface"
-                android:textSize="12sp"
-                android:layout_marginTop="6dp" />
-        </LinearLayout>
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="16dp" />
 
-        <!-- Trades Breakdown Card -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="16dp"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Trades Roster"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Steel Fixers: 16 Workers (Level 3 Column Rebar)"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="13sp"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Formwork Carpenters: 14 Workers (Perimeter Slabs)"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="13sp"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Electricians: 8 Workers (Conduit Pulling)"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="13sp"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Tower Crane Riggers: 4 Workers (Crane #2 Operations)"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <!-- ============================================================= -->
-        <!-- BUILDING PLAN & CAD BLUEPRINT CARD (From Dribbble Center Screen) -->
-        <!-- ============================================================= -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ARCHITECTURAL CAD &amp; FLOOR PLAN"
-            android:textColor="@color/text_oxide_primary"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.08"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="12dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="16dp"
-            android:layout_marginBottom="16dp">
-
-            <!-- Card Header: Level & Date Pills -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Building 2 • Level 2"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:layout_marginEnd="6dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12 Feb 2026"
-                    android:textColor="@color/text_oxide_secondary"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:layout_marginStart="6dp" />
-            </LinearLayout>
-
-            <!-- Furnishing Card -->
+            <!-- Recent Consumption Log Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/bg_oxide_banner_card"
-                android:padding="14dp"
-                android:layout_marginBottom="10dp">
+                android:background="@drawable/bg_card_outlined"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
 
+                <!-- Header -->
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Furnishing"
-                        android:textColor="@color/text_on_oxide_white"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="📋 RECENT CONSUMPTION LOG"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.04" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="53 % ↗"
-                        android:textColor="@color/brand_amber"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:layout_centerVertical="true"
+                        android:text="7 DAYS"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_pill_inactive"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp" />
                 </RelativeLayout>
 
-                <TextView
+                <!-- Log Row 1 -->
+                <LinearLayout
+                    android:id="@+id/rowLog1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Schedule: 5 - 23 Feb, 2026"
-                    android:textColor="@color/warm_ash_surface"
-                    android:textSize="11sp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="8dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp">
 
-                <!-- Hatched Progress Indicator -->
-                <com.example.sitesync.ui.custom.HatchedProgressBar
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today 09:30 AM"
+                        android:textColor="@color/text_oxide_secondary"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="-45 Bags Cement"
+                        android:textColor="@color/status_red"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="By: Marco D."
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    app:barProgress="53"
-                    app:barStripeColor="@color/brand_amber"
-                    app:barTrackColor="@color/oxide_blue_dark"
-                    app:delayMarkerText="" />
+                    android:layout_height="1dp"
+                    android:background="@color/gauge_track_ash"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp" />
+
+                <!-- Log Row 2 -->
+                <LinearLayout
+                    android:id="@+id/rowLog2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yesterday 03:15 PM"
+                        android:textColor="@color/text_oxide_secondary"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="-3.2 Tons Rebar"
+                        android:textColor="@color/status_red"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="By: Elena R."
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gauge_track_ash"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp" />
+
+                <!-- Log Row 3 -->
+                <LinearLayout
+                    android:id="@+id/rowLog3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingTop="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="06 Nov 11:20 AM"
+                        android:textColor="@color/text_oxide_secondary"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:text="-120 cft Sand"
+                        android:textColor="@color/status_red"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="By: Crew B"
+                        android:textColor="@color/text_oxide_primary"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- Type 2-32 Breakdown Card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingTop="4dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Type 2-32 • 342 M²"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Finishing: 11/4/2026 ↗"
-                    android:textColor="@color/text_oxide_secondary"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

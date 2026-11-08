@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet_surface"
+    android:padding="24dp">
+
+    <!-- Header Drag Handle -->
+    <View
+        android:layout_width="48dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_bottom_sheet_handle"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CONFIRM EMERGENCY BROADCAST"
+            android:textColor="#EF4444"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.04" />
+
+        <ImageView
+            android:id="@+id/btnCloseDialog"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/text_oxide_secondary"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Close" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This will transmit an immediate high-priority siren alert to all connected field personnel on the jobsite."
+        android:textColor="@color/text_oxide_secondary"
+        android:textSize="12sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Step 1: Select Emergency Hazard Type -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STEP 1: SELECT HAZARD TYPE"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.06"
+        android:layout_marginBottom="8dp" />
+
+    <RadioGroup
+        android:id="@+id/rgEmergencyType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/rbStructural"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Structural Failure Threat / Collapse"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:checked="true"
+            android:buttonTint="#EF4444"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/rbGasChemical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gas / Toxic Chemical Leak"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:buttonTint="#EF4444"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/rbSevereWeather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Severe Weather / Lightning / High Wind"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:buttonTint="#EF4444"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/rbFire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fire / Explosion Hazard"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:buttonTint="#EF4444"
+            android:paddingStart="8dp" />
+    </RadioGroup>
+
+    <!-- Step 2: Hold to confirm progress indicator -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STEP 2: HOLD TO TRANSMIT (2.5 SECONDS)"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.06"
+        android:layout_marginBottom="8dp" />
+
+    <ProgressBar
+        android:id="@+id/pbHoldProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:max="100"
+        android:progress="0"
+        android:progressTint="#EF4444"
+        android:progressBackgroundTint="@color/gauge_track_ash"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Hold to Confirm Button -->
+    <FrameLayout
+        android:id="@+id/btnHoldToConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_btn_emergency"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/tvHoldButtonLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="PRESS &amp; HOLD TO BROADCAST"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05" />
+    </FrameLayout>
+
+</LinearLayout>

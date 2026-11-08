@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <!-- Header: Name & Status Badge -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp">
+
+        <TextView
+            android:id="@+id/tvMaterialName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/tvStockStatusBadge"
+            android:layout_marginEnd="8dp"
+            android:text="Portland Cement (50kg Bags)"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStockStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="CRITICAL"
+            android:textColor="#991B1B"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_badge_urgent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp" />
+    </RelativeLayout>
+
+    <!-- Stock Readout -->
+    <TextView
+        android:id="@+id/tvStockRatio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stock: 85 / 500 Bags min"
+        android:textColor="@color/text_oxide_secondary"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Progress Percentage Indicator -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <ProgressBar
+            android:id="@+id/pbStockLevel"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="17"
+            android:progressTint="@color/brand_amber"
+            android:progressBackgroundTint="@color/gauge_track_ash" />
+
+        <TextView
+            android:id="@+id/tvStockPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="17%"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Action Buttons: Stock In & Stock Out -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStockIn"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_primary_oxide"
+            app:backgroundTint="@color/oxide_blue_primary"
+            android:text="+ Stock In"
+            android:textColor="@color/text_on_oxide_white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:cornerRadius="21dp"
+            android:layout_marginEnd="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStockOut"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_secondary_outline"
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/stroke_oxide_blue"
+            app:strokeWidth="1.5dp"
+            android:text="- Stock Out"
+            android:textColor="@color/oxide_blue_primary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:cornerRadius="21dp"
+            android:layout_marginStart="6dp" />
+    </LinearLayout>
+
+</LinearLayout>

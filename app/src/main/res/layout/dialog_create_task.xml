@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:backgroundTint="@color/warm_ash_base"
+    android:padding="20dp">
+
+    <!-- Handle Bar -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_pill_inactive"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Sheet Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Site Task"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Assign field deliverables, inspections, and trade handoffs"
+        android:textColor="@color/text_oxide_secondary"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Task Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Task Title"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etTaskTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:hint="e.g. Rebar Clearance Inspection - Grid 4B"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
+        android:textSize="14sp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:singleLine="true"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Detailed Description with Speech-to-Text Mic -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detailed Description"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <EditText
+            android:id="@+id/etTaskDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:background="@drawable/bg_rounded_input"
+            android:hint="Provide scope, QA checks, or specific safety precautions..."
+            android:textColor="@color/text_oxide_primary"
+            android:textColorHint="@color/text_oxide_muted"
+            android:textSize="13sp"
+            android:padding="12dp"
+            android:paddingEnd="48dp" />
+
+        <!-- Speech Dictation Button -->
+        <ImageView
+            android:id="@+id/btnMicDictate"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/etTaskDescription"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/btn_drill_down_arrow"
+            android:padding="8dp"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/oxide_blue_primary"
+            android:contentDescription="Voice Dictation" />
+    </RelativeLayout>
+
+    <!-- Target Deadline -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Target Deadline"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <LinearLayout
+        android:id="@+id/layoutPickDeadline"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="12dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_calendar_toggle"
+            app:tint="@color/oxide_blue_primary"
+            android:contentDescription="Calendar" />
+
+        <TextView
+            android:id="@+id/tvSelectedDeadline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="Select target deadline..."
+            android:textColor="@color/text_oxide_secondary"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Priority Selector Pills -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Priority Level"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="14dp">
+
+        <TextView
+            android:id="@+id/pillPriorityLow"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Low"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_pill_inactive"
+            android:layout_marginEnd="4dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/pillPriorityMedium"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Medium"
+            android:textColor="@color/text_on_oxide_white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_tab_pill_active"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/pillPriorityUrgent"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Urgent"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_pill_inactive"
+            android:layout_marginStart="4dp"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+    <!-- Assignee Selector -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Assignee"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <Spinner
+        android:id="@+id/spinnerAssignee"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelCreateTask"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_secondary_outline"
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/stroke_oxide_blue"
+            app:strokeWidth="1.5dp"
+            android:text="Cancel"
+            android:textColor="@color/oxide_blue_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:cornerRadius="24dp"
+            android:layout_marginEnd="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveTask"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.6"
+            android:background="@drawable/btn_primary_oxide"
+            app:backgroundTint="@color/oxide_blue_primary"
+            android:text="Save &amp; Schedule"
+            android:textColor="@color/text_on_oxide_white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:cornerRadius="24dp"
+            android:layout_marginStart="6dp" />
+    </LinearLayout>
+
+</LinearLayout>

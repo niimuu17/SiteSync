@@ -12,13 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.sitesync.R;
 import com.example.sitesync.data.SessionManager;
+import com.example.sitesync.data.local.AppDatabase;
+import com.example.sitesync.data.sync.SyncManager;
 import com.example.sitesync.databinding.ActivityMainBinding;
 import com.example.sitesync.models.User;
 import com.example.sitesync.utils.HapticFeedbackUtil;
+import com.example.sitesync.utils.NetworkMonitor;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private ActivityMainBinding binding;
     private SessionManager sessionManager;
     private String currentProjectTitle = "Metro Central Tower";
+    private int currentPendingCount = 0;
+    private boolean isCurrentlyOnline = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +65,60 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             Toast.makeText(this, "All systems nominal • Zero OSHA safety alerts", Toast.LENGTH_SHORT).show();
         });
 
+        // Cloud Sync Telemetry Indicator
+        setupCloudSyncIndicator();
+
         // 3-Dot Overflow Menu
         binding.ivTopMenu.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(this, v);
             showTopProjectMenu(v);
         });
+    }
+
+    private void setupCloudSyncIndicator() {
+        AppDatabase db = AppDatabase.getDatabase(this);
+        db.pendingSyncDao().getPendingCountLiveData().observe(this, count -> {
+            currentPendingCount = count != null ? count : 0;
+            updateCloudSyncStatusUI();
+        });
+
+        NetworkMonitor.getInstance(this).isOnline().observe(this, online -> {
+            isCurrentlyOnline = Boolean.TRUE.equals(online);
+            updateCloudSyncStatusUI();
+        });
+
+        binding.btnCloudSyncIndicator.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            SyncManager.enqueueOneTimeSync(this);
+            String msg = isCurrentlyOnline ?
+                    (currentPendingCount > 0 ? "Syncing " + currentPendingCount + " pending items..." : "All changes up to date ✓") :
+                    "Device is offline • Queued locally in WAL cache (" + currentPendingCount + " items)";
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void updateCloudSyncStatusUI() {
+        if (!isCurrentlyOnline) {
+            binding.ivCloudSyncStatus.setImageResource(R.drawable.ic_cloud_off);
+            binding.ivCloudSyncStatus.setColorFilter(ContextCompat.getColor(this, R.color.text_oxide_muted));
+            if (currentPendingCount > 0) {
+                binding.tvPendingSyncBadge.setVisibility(android.view.View.VISIBLE);
+                binding.tvPendingSyncBadge.setText(String.valueOf(currentPendingCount));
+            } else {
+                binding.tvPendingSyncBadge.setVisibility(android.view.View.GONE);
+            }
+        } else {
+            if (currentPendingCount == 0) {
+                binding.ivCloudSyncStatus.setImageResource(R.drawable.ic_cloud_done);
+                binding.ivCloudSyncStatus.setColorFilter(ContextCompat.getColor(this, R.color.status_green));
+                binding.tvPendingSyncBadge.setVisibility(android.view.View.GONE);
+            } else {
+                binding.ivCloudSyncStatus.setImageResource(R.drawable.ic_cloud_sync);
+                binding.ivCloudSyncStatus.setColorFilter(ContextCompat.getColor(this, R.color.brand_amber));
+                binding.tvPendingSyncBadge.setVisibility(android.view.View.VISIBLE);
+                binding.tvPendingSyncBadge.setText(String.valueOf(currentPendingCount));
+            }
+        }
     }
 
     private void showTopProjectMenu(android.view.View anchor) {

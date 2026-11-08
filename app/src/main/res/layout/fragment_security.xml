@@ -10,107 +10,170 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
         android:paddingBottom="100dp">
 
+        <!-- Top Section Header -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="JOBSITE COMPLIANCE &amp; 2FA SECURITY"
+            android:text="SITE SAFETY &amp; RELIABILITY PROTOCOLS"
             android:textColor="@color/text_oxide_primary"
             android:textSize="13sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
             android:layout_marginBottom="12dp" />
 
-        <!-- Security Card 1 -->
+        <!-- 1. Emergency Site Broadcast Card -->
+        <include
+            android:id="@+id/incEmergency"
+            layout="@layout/layout_emergency_broadcast" />
+
+        <!-- 2. Site Hazard & Safety Ticketing Feed Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HAZARD TICKETING FEED"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.06" />
+
+                <TextView
+                    android:id="@+id/tvHazardCountBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 OPEN"
+                    android:textColor="#991B1B"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_badge_urgent"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- Report Hazard Action Button -->
+            <TextView
+                android:id="@+id/btnReportHazardHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:text="+ Report Hazard"
+                android:textColor="@color/oxide_blue_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_secondary_outline"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:clickable="true"
+                android:focusable="true" />
+        </RelativeLayout>
+
+        <!-- Hazard Filter Chips -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="16dp"
-            android:layout_marginBottom="14dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Two-Step Verification (MFA)"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="ACTIVE 🔒"
-                    android:textColor="@color/text_on_oxide_white"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/bg_tab_pill_active"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp" />
-            </RelativeLayout>
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Enforced for all engineering sign-offs and structural reports."
+                android:id="@+id/chipHazardsOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:text="Active Hazards"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_tab_pill_active"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginEnd="8dp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/chipHazardsResolved"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:text="Resolved History"
                 android:textColor="@color/text_oxide_secondary"
                 android:textSize="12sp"
-                android:layout_marginTop="4dp" />
+                android:textStyle="bold"
+                android:background="@drawable/bg_pill_inactive"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
 
-        <!-- Security Card 2 -->
+        <!-- Hazard Tickets List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHazardTickets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+        <!-- Empty State View -->
         <LinearLayout
+            android:id="@+id/layoutHazardEmptyState"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
             android:background="@drawable/bg_card_outlined"
-            android:padding="16dp">
+            android:padding="28dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="OSHA Site Safety Standard"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="100% COMPLIANT"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp" />
-            </RelativeLayout>
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_cloud_done"
+                app:tint="@color/status_green"
+                android:layout_marginBottom="8dp" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvEmptyStateText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Daily PPE inspection verified. Perimeter safety nettings certified."
+                android:text="Zero Active Hazards • Site Perimeter Safe"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No open safety tickets on this active project floor."
                 android:textColor="@color/text_oxide_secondary"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp" />
+                android:textSize="11sp"
+                android:layout_marginTop="2dp" />
         </LinearLayout>
+
+        <!-- 3. Offline Cache & Cloud Sync Telemetry Card -->
+        <include
+            android:id="@+id/incSyncTelemetry"
+            layout="@layout/layout_sync_telemetry" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

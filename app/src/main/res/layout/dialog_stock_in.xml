@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:backgroundTint="@color/warm_ash_base"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvStockInTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stock In: Portland Cement"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvStockInCurrent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current Available: 85 Bags (Min: 500 Bags)"
+        android:textColor="@color/text_oxide_secondary"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delivered Quantity"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etStockInQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:inputType="numberDecimal"
+        android:hint="Enter received quantity (e.g. 400)"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
+        android:textSize="14sp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Supplier / Waybill Number"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etStockInSupplier"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:hint="e.g. Holcim Batch #WB-8921"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
+        android:textSize="14sp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Scan Delivery Ticket CTA -->
+    <LinearLayout
+        android:id="@+id/btnScanDeliveryTicket"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/btn_secondary_outline"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_camera"
+            app:tint="@color/oxide_blue_primary"
+            android:contentDescription="Camera Scan" />
+
+        <TextView
+            android:id="@+id/tvScanTicketLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Scan Delivery Ticket"
+            android:textColor="@color/oxide_blue_primary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelStockIn"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_secondary_outline"
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/stroke_oxide_blue"
+            app:strokeWidth="1.5dp"
+            android:text="Cancel"
+            android:textColor="@color/oxide_blue_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:cornerRadius="23dp"
+            android:layout_marginEnd="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirmStockIn"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/btn_primary_oxide"
+            app:backgroundTint="@color/oxide_blue_primary"
+            android:text="Confirm Stock In"
+            android:textColor="@color/text_on_oxide_white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:cornerRadius="23dp"
+            android:layout_marginStart="6dp" />
+    </LinearLayout>
+
+</LinearLayout>

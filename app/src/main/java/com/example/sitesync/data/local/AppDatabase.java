@@ -17,8 +17,13 @@ import java.util.concurrent.Executors;
         DailyReportEntity.class,
         com.example.sitesync.data.local.entities.LocalActivityEntity.class,
         com.example.sitesync.data.local.entities.LocalInspectionEntity.class,
-        com.example.sitesync.data.local.entities.LocalReportEntity.class
-}, version = 2, exportSchema = false)
+        com.example.sitesync.data.local.entities.LocalReportEntity.class,
+        com.example.sitesync.data.local.entities.TaskEntity.class,
+        com.example.sitesync.data.local.entities.InventoryItemEntity.class,
+        com.example.sitesync.data.local.entities.InventoryLogEntity.class,
+        com.example.sitesync.data.local.entities.HazardTicketEntity.class,
+        com.example.sitesync.data.local.entities.PendingSyncEntity.class
+}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ActivityDao activityDao();
@@ -26,6 +31,11 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract DocumentDao documentDao();
     public abstract IssueDao issueDao();
     public abstract DailyReportDao dailyReportDao();
+    public abstract com.example.sitesync.data.local.dao.TaskDao taskDao();
+    public abstract com.example.sitesync.data.local.dao.InventoryDao inventoryDao();
+    public abstract com.example.sitesync.data.local.dao.InventoryLogDao inventoryLogDao();
+    public abstract com.example.sitesync.data.local.dao.HazardTicketDao hazardTicketDao();
+    public abstract com.example.sitesync.data.local.dao.PendingSyncDao pendingSyncDao();
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

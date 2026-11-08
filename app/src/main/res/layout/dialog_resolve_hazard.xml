@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet_surface"
+    android:padding="24dp">
+
+    <!-- Header Drag Handle -->
+    <View
+        android:layout_width="48dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_bottom_sheet_handle"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvResolveDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RESOLVE JOBSITE HAZARD"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.04"
+        android:layout_marginBottom="6dp" />
+
+    <TextView
+        android:id="@+id/tvResolveTargetSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ticket #HAZ-104 • Electrical Hazard"
+        android:textColor="@color/text_oxide_secondary"
+        android:textSize="12sp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CORRECTIVE ACTION TAKEN"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.06"
+        android:layout_marginBottom="6dp" />
+
+    <EditText
+        android:id="@+id/etCorrectiveAction"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:gravity="top|start"
+        android:hint="Detail how this hazard was mitigated or eliminated..."
+        android:background="@drawable/bg_rounded_input"
+        android:padding="14dp"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
+        android:textSize="13sp"
+        android:layout_marginBottom="20dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConfirmResolve"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/bg_pill_primary"
+        app:backgroundTint="@null"
+        android:text="CONFIRM HAZARD RESOLUTION"
+        android:textColor="@color/text_on_oxide_white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.05" />
+
+</LinearLayout>

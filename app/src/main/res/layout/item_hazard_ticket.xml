@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp">
+
+    <!-- Header: Category + Priority Badge -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvHazardCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ELECTRICAL HAZARD"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.04" />
+
+        <TextView
+            android:id="@+id/tvHazardPriorityBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="URGENT"
+            android:textColor="#991B1B"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:background="@drawable/bg_badge_urgent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp" />
+    </RelativeLayout>
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tvHazardDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Unshielded 480V temporary power junction box exposed to water leak near pump station."
+        android:textColor="@color/text_oxide_secondary"
+        android:textSize="12sp"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Meta Details Row: Location & Timestamp -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tvHazardLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="📍 Level 2 Pump Room"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvHazardTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today, 08:30 AM"
+            android:textColor="@color/text_oxide_muted"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- Action / Resolution Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvHazardStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STATUS: OPEN"
+            android:textColor="@color/text_oxide_secondary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/btnResolveHazard"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="MARK RESOLVED"
+            android:textColor="@color/oxide_blue_primary"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/btn_secondary_outline"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+    <!-- Resolution note when resolved -->
+    <TextView
+        android:id="@+id/tvResolutionNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Resolved: Power terminated and sealed in weatherproof enclosure."
+        android:textColor="#065F46"
+        android:textSize="11sp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_badge_optimal"
+        android:padding="8dp"
+        android:visibility="gone" />
+
+</LinearLayout>
