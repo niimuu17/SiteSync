@@ -112,17 +112,17 @@ public class ProgressDetailActivity extends AppCompatActivity {
         binding.tvDetailStatusBadge.setText(status);
 
         if (ConstructionActivity.STATUS_COMPLETED.equalsIgnoreCase(status) || progress == 100) {
-            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#15803D"));
-            binding.pbDetailProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#16A34A")));
+            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#10B981"));
+            binding.pbDetailProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#10B981")));
         } else if (ConstructionActivity.STATUS_IN_PROGRESS.equalsIgnoreCase(status)) {
-            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#B45309"));
-            binding.pbDetailProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#2563EB")));
+            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
+            binding.pbDetailProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#F59E0B")));
         } else {
-            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#F1F5F9"));
-            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#475569"));
-            binding.pbDetailProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#94A3B8")));
+            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#222631"));
+            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#94A3B8"));
+            binding.pbDetailProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#2E3442")));
         }
     }
 }

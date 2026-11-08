@@ -78,12 +78,12 @@ public class DailySiteReportAdapter extends RecyclerView.Adapter<DailySiteReport
             // Status Badge Styling
             if (report.isSubmitted()) {
                 binding.tvReportStatusBadge.setText("Submitted");
-                binding.tvReportStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-                binding.tvReportStatusBadge.setTextColor(Color.parseColor("#16A34A"));
+                binding.tvReportStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+                binding.tvReportStatusBadge.setTextColor(Color.parseColor("#10B981"));
             } else {
                 binding.tvReportStatusBadge.setText("Draft");
-                binding.tvReportStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-                binding.tvReportStatusBadge.setTextColor(Color.parseColor("#D97706"));
+                binding.tvReportStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+                binding.tvReportStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
             }
 
             // Quick Share PDF

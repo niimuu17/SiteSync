@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brand_background"
+    android:background="@color/bg_canvas"
     android:orientation="vertical">
 
     <!-- Top AppBar Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/brand_primary"
+        android:background="@color/bg_canvas"
         android:orientation="vertical"
         android:paddingStart="16dp"
         android:paddingTop="28dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="16dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,16 +27,16 @@
                 android:layout_height="40dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/bg_pill_inactive"
                 android:contentDescription="Back"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@color/white" />
+                app:tint="@color/text_primary" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:layout_toEndOf="@id/btnBackFromCreateInsp"
                 android:orientation="vertical">
 
@@ -44,15 +44,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Site Inspection"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Execute QA/QC audit &amp; compliance verification"
-                    android:textColor="#94A3B8"
+                    android:text="QA/QC audit &amp; compliance verification"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
@@ -70,14 +70,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Project & Location Details -->
+            <!-- Inspection Scope Details -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Inspection Scope"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -86,13 +86,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:hint="Project Name">
+                android:hint="Project Name"
+                app:boxBackgroundColor="@color/bg_surface_elevated"
+                app:boxStrokeColor="@color/stroke_card_border">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCreateInspProject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Metro Tower Phase 2" />
+                    android:text="Metro Central Tower"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -101,13 +104,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:hint="Inspection Location (e.g. Level 5 Column C-12)"
-                app:startIconDrawable="@drawable/ic_location">
+                android:hint="Location (e.g. Building 2 - Level 3 Grid 4-B)"
+                app:boxBackgroundColor="@color/bg_surface_elevated"
+                app:boxStrokeColor="@color/stroke_card_border">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCreateInspLocation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="Building 2 • Level 3 Grid 4-B"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -116,17 +122,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Inspection Type (e.g. Structural Rebar Pre-Pour)"
-                app:startIconDrawable="@drawable/ic_inspection">
+                android:hint="Inspection Title"
+                app:boxBackgroundColor="@color/bg_surface_elevated"
+                app:boxStrokeColor="@color/stroke_card_border">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCreateInspType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Structural Concrete Pre-Pour Quality Audit" />
+                    android:text="Column Plumb &amp; Concrete Quality Audit"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Quality Checklist Section -->
+            <!-- Quality Checklist Section with "Check Level" Tool -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,37 +145,43 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="Quality Control Checklist"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
+                    android:text="Quality Checklist"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvChecklistSummaryNotice"
+                <!-- Feature 2: "Check Level" Slope & Plumb Gauge Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCheckLevelTool"
+                    style="@style/IndustrialButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="Check verified items"
-                    android:textColor="@color/brand_accent"
-                    android:textSize="12sp" />
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Check Level"
+                    android:textSize="11sp"
+                    app:icon="@drawable/ic_construction"
+                    app:iconSize="14dp"
+                    app:iconTint="#111317" />
             </RelativeLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="1dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="12dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvCreateChecklist"
@@ -175,26 +189,25 @@
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false" />
 
-                    <!-- Button to Add Custom Checklist item -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAddCustomCheck"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="match_parent"
-                        android:layout_height="38dp"
-                        android:text="+ Add Custom Verification Point"
-                        android:textColor="@color/brand_accent"
+                        android:layout_height="40dp"
+                        android:text="+ Add Verification Item"
+                        android:textColor="@color/accent_safety_yellow"
                         android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Initial Inspection Status Selection -->
+            <!-- Status Radio Group -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Inspection Status"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <RadioGroup
@@ -202,7 +215,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_chip_role"
+                android:background="@drawable/bg_pill_inactive"
                 android:orientation="horizontal"
                 android:padding="4dp">
 
@@ -211,9 +224,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:buttonTint="@color/accent_safety_green"
                     android:checked="true"
                     android:text="Passed"
-                    android:textColor="#15803D"
+                    android:textColor="@color/accent_safety_green"
                     android:textSize="13sp" />
 
                 <RadioButton
@@ -221,8 +235,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:buttonTint="@color/color_error"
                     android:text="Failed"
-                    android:textColor="#B91C1C"
+                    android:textColor="@color/color_error"
                     android:textSize="13sp" />
 
                 <RadioButton
@@ -230,56 +245,87 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:buttonTint="@color/accent_safety_yellow"
                     android:text="Pending"
-                    android:textColor="#B45309"
+                    android:textColor="@color/accent_safety_yellow"
                     android:textSize="13sp" />
             </RadioGroup>
 
-            <!-- Observations Field -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Observations Field with Speak Note -->
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Site Observations &amp; Findings"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:layout_marginBottom="6dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilCreateObservations"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Observations &amp; Findings"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="Speak Note"
+                    android:textColor="@color/accent_safety_yellow"
+                    android:textSize="11sp" />
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Record physical measurements, tolerances, or visual defects...">
+                android:gravity="top"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etCreateObservations"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCreateObservations"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="top|start"
-                    android:inputType="textMultiLine"
-                    android:lines="3"
-                    android:maxLines="6" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_weight="1"
+                    app:boxBackgroundColor="@color/bg_surface_elevated"
+                    app:boxStrokeColor="@color/stroke_card_border">
 
-            <!-- Remarks & Action Items Field -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Remarks &amp; Corrective Measures"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCreateObservations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:hint="Record physical measurements or visual defects..."
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:maxLines="6"
+                        android:textColor="@color/text_primary" />
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <ImageButton
+                    android:id="@+id/btnDictateObservations"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/btn_mic_dictate"
+                    android:contentDescription="Speak Note"
+                    android:src="@drawable/ic_mic" />
+            </LinearLayout>
+
+            <!-- Remarks & Corrective Measures -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCreateRemarks"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="e.g. Approved for concrete pour / Requires torque re-check...">
+                android:hint="Remarks &amp; Corrective Measures"
+                app:boxBackgroundColor="@color/bg_surface_elevated"
+                app:boxStrokeColor="@color/stroke_card_border">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCreateRemarks"
@@ -288,50 +334,62 @@
                     android:gravity="top|start"
                     android:inputType="textMultiLine"
                     android:lines="2"
-                    android:maxLines="5" />
+                    android:maxLines="5"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Photo Attachment Card -->
+            <!-- Photo Evidence Card with Match Angle -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Inspection Site Photo"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp"
+                android:text="Photo Evidence"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="1dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAttachInspPhoto"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:text="Attach Inspection Photo"
-                        android:textAllCaps="false"
-                        android:textColor="@color/brand_accent"
-                        app:cornerRadius="8dp"
-                        app:icon="@drawable/ic_camera"
-                        app:iconGravity="textStart"
-                        app:iconTint="@color/brand_accent"
-                        app:strokeColor="@color/brand_accent" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                    <!-- Image Preview -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnMatchAngleInsp"
+                            style="@style/IndustrialButton"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:text="Match Angle"
+                            app:icon="@drawable/ic_camera"
+                            app:iconTint="#111317" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAttachInspPhoto"
+                            style="@style/IndustrialButton.Outlined"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Gallery"
+                            app:icon="@drawable/ic_document" />
+                    </LinearLayout>
+
                     <RelativeLayout
                         android:id="@+id/layoutInspPhotoPreview"
                         android:layout_width="match_parent"
@@ -344,7 +402,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
                             android:adjustViewBounds="true"
-                            android:background="#F1F5F9"
+                            android:background="@color/bg_surface_card"
                             android:contentDescription="Inspection Photo Preview"
                             android:scaleType="centerCrop" />
 
@@ -372,21 +430,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/brand_surface"
-        android:elevation="8dp"
+        android:background="@color/bg_surface_elevated"
         android:padding="16dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitInspection"
+            style="@style/IndustrialButton"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:backgroundTint="@color/brand_primary"
-            android:text="Submit Inspection Audit"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:cornerRadius="10dp" />
+            android:layout_height="52dp"
+            android:text="Submit Inspection Audit" />
     </LinearLayout>
 
 </LinearLayout>

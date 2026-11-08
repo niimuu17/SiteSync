@@ -1,24 +1,10 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null",
-    "rfi_threads": {
-      "$issueId": {
-        "comments": {
-          ".read": "auth != null",
-          "$commentId": {
-            ".write": "auth != null",
-            ".validate": "newData.hasChildren(['message', 'authorName', 'timestamp'])"
-          }
-        },
-        "typing": {
-          "$uid": {
-            ".write": "auth != null && auth.uid === $uid"
-          }
-        }
-      }
-    },
     "presence": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === $uid"
+      },
       "$projectId": {
         "$uid": {
           ".read": "auth != null",
@@ -26,7 +12,25 @@
         }
       }
     },
-    "kpi": {
+    "rfis": {
+      "$rfiId": {
+        "comments": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    },
+    "rfi_threads": {
+      "$issueId": {
+        "comments": {
+          ".read": "auth != null",
+          "$commentId": {
+            ".write": "auth != null"
+          }
+        }
+      }
+    },
+    "telemetry": {
       "$projectId": {
         ".read": "auth != null",
         ".write": "auth != null"

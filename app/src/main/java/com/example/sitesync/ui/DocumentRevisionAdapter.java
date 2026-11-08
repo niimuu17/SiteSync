@@ -70,14 +70,14 @@ public class DocumentRevisionAdapter extends RecyclerView.Adapter<DocumentRevisi
 
             if (revision.isApproved()) {
                 binding.tvRevisionStatusBadge.setText("LATEST APPROVED");
-                binding.tvRevisionStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-                binding.tvRevisionStatusBadge.setTextColor(Color.parseColor("#15803D"));
-                binding.viewRevTimelineDot.setBackgroundColor(Color.parseColor("#16A34A"));
+                binding.tvRevisionStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+                binding.tvRevisionStatusBadge.setTextColor(Color.parseColor("#10B981"));
+                binding.viewRevTimelineDot.setBackgroundColor(Color.parseColor("#10B981"));
             } else {
                 binding.tvRevisionStatusBadge.setText("SUPERSEDED");
-                binding.tvRevisionStatusBadge.setBackgroundColor(Color.parseColor("#F1F5F9"));
-                binding.tvRevisionStatusBadge.setTextColor(Color.parseColor("#64748B"));
-                binding.viewRevTimelineDot.setBackgroundColor(Color.parseColor("#94A3B8"));
+                binding.tvRevisionStatusBadge.setBackgroundColor(Color.parseColor("#222631"));
+                binding.tvRevisionStatusBadge.setTextColor(Color.parseColor("#94A3B8"));
+                binding.viewRevTimelineDot.setBackgroundColor(Color.parseColor("#64748B"));
             }
 
             binding.btnRevItemView.setOnClickListener(v -> {

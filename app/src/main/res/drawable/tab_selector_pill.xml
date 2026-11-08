@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/accent_safety_yellow" />
+            <corners android:radius="@dimen/pill_corner_radius" />
+        </shape>
+    </item>
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/accent_safety_yellow" />
+            <corners android:radius="@dimen/pill_corner_radius" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bg_surface_card" />
+            <stroke android:width="1dp" android:color="@color/stroke_card_border" />
+            <corners android:radius="@dimen/pill_corner_radius" />
+        </shape>
+    </item>
+</selector>

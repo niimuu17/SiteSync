@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Modern Industrial Construction Palette (Matching Reference Spec) -->
-    <color name="brand_amber">#F7A600</color>
+    <!-- Strict Industrial Dark Telemetry System -->
+    <color name="bg_canvas">#111317</color>
+    <color name="bg_surface_elevated">#1A1D24</color>
+    <color name="bg_surface_card">#222631</color>
+    <color name="stroke_card_border">#2E3442</color>
+
+    <!-- Safety & Telemetry Accents -->
+    <color name="accent_safety_yellow">#F59E0B</color>
+    <color name="accent_safety_green">#10B981</color>
+    <color name="accent_hazard_orange">#F97316</color>
+    <color name="accent_telemetry_blue">#3B82F6</color>
+    <color name="accent_terracotta">#E0532B</color>
+    <color name="gauge_track_dark">#2C313E</color>
+
+    <!-- High-Contrast Field Typography -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_tertiary">#64748B</color>
+    <color name="text_hint">#64748B</color>
+    <color name="text_on_primary">#111317</color>
+
+    <!-- Aliases for Compatibility with Existing Codebase -->
+    <color name="brand_amber">#F59E0B</color>
     <color name="brand_amber_light">#FFF1D4</color>
     <color name="brand_amber_dark">#D98200</color>
-    
     <color name="brand_terracotta">#E0532B</color>
     <color name="brand_terracotta_light">#FDEEE9</color>
     <color name="brand_peach">#F28B66</color>
-    
-    <!-- Light Mode Surfaces (Executive & Analytics Views) -->
-    <color name="bg_light_alabaster">#F4F4F2</color>
-    <color name="surface_card_light">#FFFFFF</color>
-    <color name="card_stroke_light">#E6E6E2</color>
-    <color name="text_industrial_dark">#141414</color>
-    <color name="text_industrial_muted">#757575</color>
-    <color name="text_industrial_subtle">#9E9E9E</color>
-
-    <!-- Dark Mode & Spatial Overlay Surfaces -->
-    <color name="bg_dark_charcoal">#18191B</color>
-    <color name="surface_dark_card">#202225</color>
-    <color name="surface_dark_glass">#CC222428</color>
+    <color name="brand_primary">#1A1D24</color>
+    <color name="brand_primary_variant">#111317</color>
+    <color name="brand_secondary">#F59E0B</color>
+    <color name="brand_secondary_variant">#D98200</color>
+    <color name="brand_accent">#F59E0B</color>
+    <color name="brand_background">#111317</color>
+    <color name="brand_surface">#1A1D24</color>
+    <color name="card_stroke">#2E3442</color>
+    <color name="card_stroke_light">#2E3442</color>
+    <color name="surface_card_light">#1A1D24</color>
+    <color name="bg_light_alabaster">#111317</color>
+    <color name="text_industrial_dark">#FFFFFF</color>
+    <color name="text_industrial_muted">#94A3B8</color>
+    <color name="text_industrial_subtle">#64748B</color>
+    <color name="bg_dark_charcoal">#111317</color>
+    <color name="surface_dark_card">#1A1D24</color>
+    <color name="surface_dark_glass">#CC1A1D24</color>
     <color name="surface_dark_glass_amber">#D9383226</color>
     <color name="glass_stroke_specular">#26FFFFFF</color>
     <color name="text_dark_primary">#FFFFFF</color>
-    <color name="text_dark_secondary">#9E9E9E</color>
+    <color name="text_dark_secondary">#94A3B8</color>
+    <color name="chip_bg">#222631</color>
 
-    <!-- Brand / Construction Theme Colors (Compatibility) -->
-    <color name="brand_primary">#1A2530</color>
-    <color name="brand_primary_variant">#0F172A</color>
-    <color name="brand_secondary">#F7A600</color>
-    <color name="brand_secondary_variant">#D98200</color>
-    <color name="brand_accent">#F7A600</color>
-    <color name="brand_background">#F4F4F2</color>
-    <color name="brand_surface">#FFFFFF</color>
-    <color name="card_stroke">#E6E6E2</color>
+    <!-- Status & Alerts -->
+    <color name="color_success">#10B981</color>
+    <color name="color_error">#EF4444</color>
+    <color name="color_warning">#F59E0B</color>
+    <color name="color_trend_green">#10B981</color>
+    <color name="color_trend_red">#EF4444</color>
 
-    <color name="text_primary">#141414</color>
-    <color name="text_secondary">#757575</color>
-    <color name="text_hint">#9E9E9E</color>
-    <color name="text_on_primary">#FFFFFF</color>
-
-    <!-- Feedback & Metrics -->
-    <color name="color_success">#16A34A</color>
-    <color name="color_error">#DC2626</color>
-    <color name="color_trend_green">#16A34A</color>
-    <color name="color_trend_red">#E0532B</color>
-    <color name="chip_bg">#EDF2F7</color>
-
-    <!-- Legacy / System Compatibility -->
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#1A2530</color>
-    <color name="purple_700">#0F172A</color>
-    <color name="teal_200">#F7A600</color>
+    <!-- Legacy / System Compatibility (Overridden to Dark/Amber) -->
+    <color name="purple_200">#F59E0B</color>
+    <color name="purple_500">#1A1D24</color>
+    <color name="purple_700">#111317</color>
+    <color name="teal_200">#F59E0B</color>
     <color name="teal_700">#D98200</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

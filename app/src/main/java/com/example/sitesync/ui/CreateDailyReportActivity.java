@@ -1,24 +1,39 @@
 package com.example.sitesync.ui;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.example.sitesync.R;
 import com.example.sitesync.data.DailyReportRepository;
+import com.example.sitesync.data.SessionManager;
 import com.example.sitesync.databinding.ActivityCreateDailyReportBinding;
+import com.example.sitesync.hardware.MatchAngleCameraDialog;
+import com.example.sitesync.hardware.TicketScannerDialog;
+import com.example.sitesync.hardware.TicketScannerManager;
+import com.example.sitesync.hardware.VoiceDictationManager;
 import com.example.sitesync.models.DailySiteReport;
+import com.example.sitesync.models.User;
+import com.example.sitesync.utils.HapticFeedbackUtil;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 /**
- * Screen providing an easy-to-use form to create, edit, save draft, and submit Daily Site Reports.
+ * Screen providing an industrial form to compile 5-section Daily Site Reports (DSR),
+ * featuring ML Kit delivery ticket scanning, "Speak Note" hands-free voice dictation,
+ * and "Match Angle" photo evidence capture.
  */
 public class CreateDailyReportActivity extends AppCompatActivity {
 
@@ -26,9 +41,12 @@ public class CreateDailyReportActivity extends AppCompatActivity {
 
     private ActivityCreateDailyReportBinding binding;
     private DailyReportRepository repository;
+    private SessionManager sessionManager;
     private String existingReportId = null;
     private DailySiteReport existingReport = null;
     private Uri selectedPhotoUri = null;
+
+    private VoiceDictationManager voiceDictationManager;
 
     private final ActivityResultLauncher<String> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
@@ -39,6 +57,33 @@ public class CreateDailyReportActivity extends AppCompatActivity {
                 }
             });
 
+    private final ActivityResultLauncher<String> cameraPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    launchTicketScanner();
+                } else {
+                    Toast.makeText(this, "Camera permission is required to scan tickets", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    private final ActivityResultLauncher<String> matchAnglePermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    launchMatchAngleCamera();
+                } else {
+                    Toast.makeText(this, "Camera permission is required for Match Angle", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    private final ActivityResultLauncher<String> micPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    startDictation();
+                } else {
+                    Toast.makeText(this, "Microphone permission is required to Speak Note", Toast.LENGTH_SHORT).show();
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +91,8 @@ public class CreateDailyReportActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         repository = new DailyReportRepository(this);
+        sessionManager = new SessionManager(this);
+        voiceDictationManager = new VoiceDictationManager(this);
         existingReportId = getIntent().getStringExtra(EXTRA_EDIT_REPORT_ID);
 
         initForm();
@@ -58,7 +105,6 @@ public class CreateDailyReportActivity extends AppCompatActivity {
         }
 
         if (existingReport != null) {
-            // Edit Mode
             binding.tvFormHeaderTitle.setText("Edit Daily Site Report");
             binding.tvFormHeaderSubtitle.setText("Editing log: " + existingReport.getId());
             binding.etReportProject.setText(existingReport.getProjectName());
@@ -81,158 +127,200 @@ public class CreateDailyReportActivity extends AppCompatActivity {
                 }
             }
         } else {
-            // Create New Mode
             String today = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
             binding.etReportDate.setText(today);
+            binding.etManpower.setText("18 Masons, 12 Barbenders, 4 Electricians, 2 Operators");
+            binding.etMaterialsUsed.setText("42.5 m³ C35 Ready-Mix Concrete, 6.2 Tons Rebar #6");
+            binding.etEquipment.setText("1 Tower Crane #2, 1 Concrete Boom Pump, 4 Vibrator Units");
+            binding.etNextDayPlans.setText("Complete Level 4 column pours and begin beam rebar layout.");
         }
     }
 
     private void setupListeners() {
         binding.btnBackFromCreateReport.setOnClickListener(v -> finish());
 
-        // Photo Picker
-        binding.btnAttachReportPhoto.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
+        // Feature 5: [ SCAN DELIVERY TICKET ]
+        binding.btnScanDeliveryTicket.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(this, v);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                launchTicketScanner();
+            } else {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+            }
+        });
 
-        // Remove Photo
+        // Feature 1: "Speak Note" Hands-Free Microphone Dictation
+        binding.btnDictateWork.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(this, v);
+            if (voiceDictationManager.isListening()) {
+                voiceDictationManager.stopListening();
+                setMicUiActive(false);
+            } else {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    startDictation();
+                } else {
+                    micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
+                }
+            }
+        });
+
+        // Feature 3: "Match Angle" Comparison Camera
+        binding.btnMatchAngleReport.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(this, v);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                launchMatchAngleCamera();
+            } else {
+                matchAnglePermissionLauncher.launch(Manifest.permission.CAMERA);
+            }
+        });
+
+        binding.btnAttachReportPhoto.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
         binding.btnRemoveReportPhoto.setOnClickListener(v -> {
             selectedPhotoUri = null;
             binding.ivReportPhotoPreview.setImageURI(null);
             binding.layoutReportPhotoPreview.setVisibility(View.GONE);
         });
 
-        // Save Draft
-        binding.btnSaveDraft.setOnClickListener(v -> saveDailyReport(false));
-
-        // Submit Report
-        binding.btnSubmitReport.setOnClickListener(v -> saveDailyReport(true));
+        binding.btnSaveDraft.setOnClickListener(v -> saveReport(true));
+        binding.btnSubmitReport.setOnClickListener(v -> saveReport(false));
     }
 
-    private void saveDailyReport(boolean isSubmitting) {
-        String project = binding.etReportProject.getText() != null
-                ? binding.etReportProject.getText().toString().trim() : "";
-        String date = binding.etReportDate.getText() != null
-                ? binding.etReportDate.getText().toString().trim() : "";
-        String weather = binding.etReportWeather.getText() != null
-                ? binding.etReportWeather.getText().toString().trim() : "";
-        String completedWork = binding.etCompletedWork.getText() != null
-                ? binding.etCompletedWork.getText().toString().trim() : "";
-        String manpower = binding.etManpower.getText() != null
-                ? binding.etManpower.getText().toString().trim() : "";
-        String materials = binding.etMaterialsUsed.getText() != null
-                ? binding.etMaterialsUsed.getText().toString().trim() : "";
-        String equipment = binding.etEquipment.getText() != null
-                ? binding.etEquipment.getText().toString().trim() : "";
-        String problems = binding.etSiteProblems.getText() != null
-                ? binding.etSiteProblems.getText().toString().trim() : "";
-        String nextPlans = binding.etNextDayPlans.getText() != null
-                ? binding.etNextDayPlans.getText().toString().trim() : "";
+    private void launchTicketScanner() {
+        TicketScannerDialog dialog = TicketScannerDialog.newInstance();
+        dialog.setOnTicketParsedListener(ticket -> {
+            // Auto-populate material fields
+            String current = binding.etMaterialsUsed.getText() != null ? binding.etMaterialsUsed.getText().toString().trim() : "";
+            String ticketSummary = String.format("%s (%s, Slump: %s, Supplier: %s)",
+                    ticket.mixId, ticket.quantity, ticket.slump, ticket.supplierOrSerial);
 
-        // Minimal validation for Drafts
-        if (project.isEmpty()) {
-            binding.tilReportProject.setError("Project name is required");
-            binding.etReportProject.requestFocus();
+            String updated = current.isEmpty() ? ticketSummary : current + "\n• " + ticketSummary;
+            binding.etMaterialsUsed.setText(updated);
+            Toast.makeText(this, "Delivery ticket data auto-populated!", Toast.LENGTH_SHORT).show();
+        });
+        dialog.show(getSupportFragmentManager(), "TicketScannerDialog");
+    }
+
+    private void launchMatchAngleCamera() {
+        User user = sessionManager.getCurrentUser();
+        String engineerName = user != null ? user.getFullName() : "ELENA ROSTOVA (ENG-04)";
+        String location = binding.etReportProject.getText() != null ? binding.etReportProject.getText().toString() : "Metro Central Tower";
+
+        MatchAngleCameraDialog dialog = MatchAngleCameraDialog.newInstance("", engineerName, location);
+        dialog.setOnPhotoVerifiedCallback((photoFile, photoUri) -> {
+            selectedPhotoUri = photoUri;
+            binding.ivReportPhotoPreview.setImageURI(photoUri);
+            binding.layoutReportPhotoPreview.setVisibility(View.VISIBLE);
+        });
+        dialog.show(getSupportFragmentManager(), "MatchAngleDialog");
+    }
+
+    private void startDictation() {
+        setMicUiActive(true);
+        String initialText = binding.etCompletedWork.getText() != null ? binding.etCompletedWork.getText().toString() : "";
+
+        voiceDictationManager.startListening(new VoiceDictationManager.OnDictationListener() {
+            @Override
+            public void onSpeechRmsChanged(float rmsdB) {}
+
+            @Override
+            public void onPartialTranscription(String partialText) {
+                if (binding.etCompletedWork != null) {
+                    String combined = initialText.isEmpty() ? partialText : initialText + " " + partialText;
+                    binding.etCompletedWork.setText(combined);
+                    binding.etCompletedWork.setSelection(combined.length());
+                }
+            }
+
+            @Override
+            public void onFinalTranscription(String finalText, File audioBackupFile) {
+                setMicUiActive(false);
+                if (binding.etCompletedWork != null && !finalText.isEmpty()) {
+                    String combined = initialText.isEmpty() ? finalText : initialText + " " + finalText;
+                    binding.etCompletedWork.setText(combined);
+                    binding.etCompletedWork.setSelection(combined.length());
+                }
+                Toast.makeText(CreateDailyReportActivity.this, "Voice note recorded", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String userFriendlyError) {
+                setMicUiActive(false);
+                Toast.makeText(CreateDailyReportActivity.this, userFriendlyError, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setMicUiActive(boolean active) {
+        if (binding.btnDictateWork == null) return;
+        if (active) {
+            binding.btnDictateWork.setBackgroundResource(R.drawable.btn_mic_dictate_active);
+            binding.btnDictateWork.setImageResource(R.drawable.ic_mic_black);
+        } else {
+            binding.btnDictateWork.setBackgroundResource(R.drawable.btn_mic_dictate);
+            binding.btnDictateWork.setImageResource(R.drawable.ic_mic);
+        }
+    }
+
+    private void saveReport(boolean isDraft) {
+        String project = binding.etReportProject.getText() != null ? binding.etReportProject.getText().toString().trim() : "";
+        String date = binding.etReportDate.getText() != null ? binding.etReportDate.getText().toString().trim() : "";
+        String weather = binding.etReportWeather.getText() != null ? binding.etReportWeather.getText().toString().trim() : "";
+        String completedWork = binding.etCompletedWork.getText() != null ? binding.etCompletedWork.getText().toString().trim() : "";
+        String manpower = binding.etManpower.getText() != null ? binding.etManpower.getText().toString().trim() : "";
+        String materials = binding.etMaterialsUsed.getText() != null ? binding.etMaterialsUsed.getText().toString().trim() : "";
+        String equipment = binding.etEquipment.getText() != null ? binding.etEquipment.getText().toString().trim() : "";
+        String problems = binding.etSiteProblems.getText() != null ? binding.etSiteProblems.getText().toString().trim() : "";
+        String nextDay = binding.etNextDayPlans.getText() != null ? binding.etNextDayPlans.getText().toString().trim() : "";
+
+        if (TextUtils.isEmpty(project)) {
+            binding.tilReportProject.setError("Project Name is required");
             return;
         } else {
             binding.tilReportProject.setError(null);
         }
 
-        if (date.isEmpty()) {
-            binding.tilReportDate.setError("Report date is required");
-            binding.etReportDate.requestFocus();
+        if (TextUtils.isEmpty(date)) {
+            binding.tilReportDate.setError("Date is required");
             return;
         } else {
             binding.tilReportDate.setError(null);
         }
 
-        // Full validation when submitting
-        if (isSubmitting) {
-            if (completedWork.isEmpty()) {
-                binding.tilCompletedWork.setError("Please describe the work completed today");
-                binding.etCompletedWork.requestFocus();
-                return;
-            } else {
-                binding.tilCompletedWork.setError(null);
-            }
-
-            if (manpower.isEmpty()) {
-                binding.tilManpower.setError("Please enter manpower deployment summary");
-                binding.etManpower.requestFocus();
-                return;
-            } else {
-                binding.tilManpower.setError(null);
-            }
-
-            if (materials.isEmpty()) {
-                binding.tilMaterialsUsed.setError("Please enter materials used");
-                binding.etMaterialsUsed.requestFocus();
-                return;
-            } else {
-                binding.tilMaterialsUsed.setError(null);
-            }
-
-            if (equipment.isEmpty()) {
-                binding.tilEquipment.setError("Please list machinery/equipment deployed");
-                binding.etEquipment.requestFocus();
-                return;
-            } else {
-                binding.tilEquipment.setError(null);
-            }
-
-            if (nextPlans.isEmpty()) {
-                binding.tilNextDayPlans.setError("Please record next-day target activities");
-                binding.etNextDayPlans.requestFocus();
-                return;
-            } else {
-                binding.tilNextDayPlans.setError(null);
-            }
-        }
-
-        String reportId;
-        String createdAt;
-        String submittedAt = "";
-
-        if (existingReport != null) {
-            reportId = existingReport.getId();
-            createdAt = existingReport.getCreatedAt();
-            submittedAt = existingReport.getSubmittedAt();
+        if (!isDraft && TextUtils.isEmpty(completedWork)) {
+            binding.tilCompletedWork.setError("Work Completed cannot be empty for official submission");
+            return;
         } else {
-            String dateKey = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-            int count = repository.getAllReports().size() + 1;
-            reportId = "DSR-" + dateKey + "-" + count;
-            createdAt = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(new Date());
+            binding.tilCompletedWork.setError(null);
         }
 
-        String status = isSubmitting ? DailySiteReport.STATUS_SUBMITTED : DailySiteReport.STATUS_DRAFT;
-        if (isSubmitting) {
-            submittedAt = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(new Date());
-        }
+        String reportId = existingReport != null ? existingReport.getId() : "DSR-" + (System.currentTimeMillis() % 100000);
+        String status = isDraft ? DailySiteReport.STATUS_DRAFT : DailySiteReport.STATUS_SUBMITTED;
+        String photoUriString = selectedPhotoUri != null ? selectedPhotoUri.toString() : "";
+
+        User currentUser = sessionManager.getCurrentUser();
+        String preparedBy = currentUser != null ? currentUser.getFullName() : "Lead Site Engineer";
+        String nowStr = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US).format(new Date());
 
         DailySiteReport report = new DailySiteReport(
-                reportId,
-                project,
-                date,
-                "Elena Rostova (PE)",
-                status,
-                weather.isEmpty() ? "Sunny, 28°C" : weather,
-                completedWork,
-                manpower,
-                materials,
-                equipment,
-                problems.isEmpty() ? "None reported." : problems,
-                selectedPhotoUri != null ? selectedPhotoUri.toString() : null,
-                nextPlans,
-                createdAt,
-                submittedAt
+                reportId, project, date, preparedBy,
+                status, weather, completedWork,
+                manpower, materials, equipment, problems,
+                photoUriString, nextDay,
+                existingReport != null ? existingReport.getCreatedAt() : nowStr,
+                !isDraft ? nowStr : ""
         );
 
         repository.saveReport(report);
-
-        if (isSubmitting) {
-            Toast.makeText(this, "Daily Site Report " + reportId + " submitted successfully!", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Daily Site Report draft saved!", Toast.LENGTH_SHORT).show();
-        }
-
+        String msg = isDraft ? "Report saved as Draft (" + reportId + ")" : "Report submitted to PM (" + reportId + ")";
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (voiceDictationManager != null && voiceDictationManager.isListening()) {
+            voiceDictationManager.stopListening();
+        }
     }
 }

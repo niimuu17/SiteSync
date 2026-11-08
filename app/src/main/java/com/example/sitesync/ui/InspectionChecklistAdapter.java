@@ -35,6 +35,13 @@ public class InspectionChecklistAdapter extends RecyclerView.Adapter<InspectionC
         return checklist;
     }
 
+    public void addChecklistItem(InspectionChecklistItem item) {
+        if (item != null) {
+            checklist.add(item);
+            notifyItemInserted(checklist.size() - 1);
+        }
+    }
+
     @NonNull
     @Override
     public ChecklistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

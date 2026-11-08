@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brand_background"
+    android:background="@color/bg_canvas"
     android:orientation="vertical">
 
-    <!-- Top Branding Header -->
+    <!-- Top Branding & Telemetry Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/brand_primary"
+        android:background="@color/bg_canvas"
         android:orientation="vertical"
         android:paddingStart="24dp"
         android:paddingTop="36dp"
         android:paddingEnd="24dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -23,47 +23,59 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_sitesync_logo" />
+            <!-- Minimalist Orange Brand Badge -->
+            <FrameLayout
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_squircle_amber">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_app_brand_symbol" />
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:letterSpacing="0.04"
                 android:text="@string/app_name"
-                android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textColor="@color/text_primary"
+                android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Welcome to SiteSync"
-            android:textColor="@color/white"
-            android:textSize="22sp"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="3dp"
+            android:text="Centralized Construction\nProject Progress"
+            android:textColor="@color/text_primary"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Select your on-site role to access authorized project controls and telemetry."
-            android:textColor="#94A3B8"
-            android:textSize="14sp" />
+            android:layout_marginTop="6dp"
+            android:text="Enterprise Role-Based Access &amp; Spatial Telemetry Gateway"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
     </LinearLayout>
 
-    <!-- Role Selection Container -->
+    <!-- Role Selection Cards -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true"
-        android:padding="20dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,12 +86,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
+                android:letterSpacing="0.08"
                 android:text="SELECT ROLE"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_tertiary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <!-- Role 1: Project Manager -->
+            <!-- Card 1: Project Manager -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardProjectManager"
                 android:layout_width="match_parent"
@@ -88,30 +101,31 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="#DBEAFE"
-                app:strokeWidth="1.5dp">
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="18dp">
+                    android:padding="16dp">
 
                     <FrameLayout
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:background="@drawable/bg_chip_role">
+                        android:background="@drawable/bg_squircle_amber">
 
                         <ImageView
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_gravity="center"
                             android:contentDescription="Project Manager"
-                            android:src="@drawable/ic_manager" />
+                            android:src="@drawable/ic_manager"
+                            app:tint="@color/accent_safety_yellow" />
                     </FrameLayout>
 
                     <LinearLayout
@@ -132,24 +146,28 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Budget, schedule approvals, and milestone sign-offs"
+                            android:layout_marginTop="3dp"
+                            android:text="Executive overview, budgets, schedule approvals &amp; sign-offs"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSelectManager"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select"
-                        android:textColor="@color/brand_accent"
-                        android:textStyle="bold" />
+                        android:layout_height="36dp"
+                        android:backgroundTint="@color/accent_safety_yellow"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="SELECT"
+                        android:textColor="#111317"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="18dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Role 2: Site Supervisor -->
+            <!-- Card 2: Site Supervisor -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSiteSupervisor"
                 android:layout_width="match_parent"
@@ -158,30 +176,31 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="#FEF3C7"
-                app:strokeWidth="1.5dp">
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="18dp">
+                    android:padding="16dp">
 
                     <FrameLayout
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:background="@drawable/bg_chip_role">
+                        android:background="@drawable/bg_squircle_blue">
 
                         <ImageView
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_gravity="center"
                             android:contentDescription="Site Supervisor"
-                            android:src="@drawable/ic_supervisor" />
+                            android:src="@drawable/ic_supervisor"
+                            app:tint="@color/accent_telemetry_blue" />
                     </FrameLayout>
 
                     <LinearLayout
@@ -202,56 +221,61 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Workforce attendance, shift logs, and safety checks"
+                            android:layout_marginTop="3dp"
+                            android:text="Workforce attendance, shifts, logistics &amp; safety checks"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSelectSupervisor"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select"
-                        android:textColor="@color/brand_secondary_variant"
-                        android:textStyle="bold" />
+                        android:layout_height="36dp"
+                        android:backgroundTint="@color/accent_safety_yellow"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="SELECT"
+                        android:textColor="#111317"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="18dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Role 3: Engineer -->
+            <!-- Card 3: Field Engineer -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardEngineer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
+                android:layout_marginBottom="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="#D1FAE5"
-                app:strokeWidth="1.5dp">
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="18dp">
+                    android:padding="16dp">
 
                     <FrameLayout
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:background="@drawable/bg_chip_role">
+                        android:background="@drawable/bg_squircle_amber">
 
                         <ImageView
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_gravity="center"
                             android:contentDescription="Field Engineer"
-                            android:src="@drawable/ic_engineer" />
+                            android:src="@drawable/ic_engineer"
+                            app:tint="@color/accent_safety_yellow" />
                     </FrameLayout>
 
                     <LinearLayout
@@ -264,7 +288,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Engineer"
+                            android:text="Field Engineer"
                             android:textColor="@color/text_primary"
                             android:textSize="17sp"
                             android:textStyle="bold" />
@@ -272,31 +296,41 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Structural telemetry, blueprint sync, and material tests"
+                            android:layout_marginTop="3dp"
+                            android:text="Telemetry, blueprint sync, QA inspections &amp; Daily Site Reports"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSelectEngineer"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select"
-                        android:textColor="#059669"
-                        android:textStyle="bold" />
+                        android:layout_height="36dp"
+                        android:backgroundTint="@color/accent_safety_yellow"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="SELECT"
+                        android:textColor="#111317"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="18dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Direct Login Footer -->
             <TextView
+                android:id="@+id/tvDirectLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="Enterprise SiteSync RBAC v1.0"
-                android:textColor="@color/text_hint"
-                android:textSize="12sp" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:text="Already assigned to a project? Log in directly"
+                android:textColor="@color/accent_safety_yellow"
+                android:textSize="13sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

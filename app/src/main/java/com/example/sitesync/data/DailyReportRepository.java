@@ -1,56 +1,98 @@
 package com.example.sitesync.data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+
+import com.example.sitesync.data.local.AppDatabase;
+import com.example.sitesync.data.local.DailyReportDao;
+import com.example.sitesync.data.local.DailyReportEntity;
 import com.example.sitesync.models.DailySiteReport;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Repository providing offline persistence for Daily Site Reports (DSR).
- * Stores drafts, submitted reports, manpower, materials, equipment, and next-day plans.
+ * Enterprise Single-Source-of-Truth Repository for Daily Site Reports (DSR).
+ * Backed by Room Database local cache and Cloud Firestore real-time snapshot sync.
  */
 public class DailyReportRepository {
 
-    private static final String PREF_NAME = "SiteSync_Daily_Report_Prefs";
-    private static final String KEY_REPORTS = "key_daily_reports";
+    private static final String TAG = "DailyReportRepository";
+    private static final String COLLECTION_REPORTS = "daily_reports";
 
-    private final SharedPreferences preferences;
+    private final DailyReportDao dailyReportDao;
+    private final FirebaseFirestore firestore;
 
     public DailyReportRepository(Context context) {
-        this.preferences = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        AppDatabase db = AppDatabase.getDatabase(context);
+        this.dailyReportDao = db.dailyReportDao();
+        this.firestore = FirebaseSyncManager.getInstance(context).getFirestore();
+
         ensureInitialData();
+        attachFirestoreSnapshotListener();
+    }
+
+    private void attachFirestoreSnapshotListener() {
+        if (firestore == null) return;
+        firestore.collection(COLLECTION_REPORTS)
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Firestore daily reports listen error: " + e.getMessage());
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                            List<DailyReportEntity> remoteEntities = new ArrayList<>();
+                            for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                                String rawJson = doc.getString("rawJson");
+                                if (rawJson != null && !rawJson.isEmpty()) {
+                                    try {
+                                        DailySiteReport report = DailySiteReport.fromJSONObject(new JSONObject(rawJson));
+                                        remoteEntities.add(DailyReportEntity.fromModel(report));
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                            }
+                            if (!remoteEntities.isEmpty()) {
+                                dailyReportDao.insertAll(remoteEntities);
+                            }
+                        });
+                    }
+                });
+    }
+
+    public LiveData<List<DailySiteReport>> getAllReportsLive() {
+        return Transformations.map(dailyReportDao.getAllLive(), entities -> {
+            List<DailySiteReport> list = new ArrayList<>();
+            for (DailyReportEntity e : entities) {
+                list.add(e.toModel());
+            }
+            return list;
+        });
     }
 
     public List<DailySiteReport> getAllReports() {
+        List<DailyReportEntity> entities = dailyReportDao.getAllSync();
         List<DailySiteReport> list = new ArrayList<>();
-        String json = preferences.getString(KEY_REPORTS, null);
-        if (json != null && !json.isEmpty()) {
-            try {
-                JSONArray array = new JSONArray(json);
-                for (int i = 0; i < array.length(); i++) {
-                    list.add(DailySiteReport.fromJSONObject(array.getJSONObject(i)));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        for (DailyReportEntity e : entities) {
+            list.add(e.toModel());
         }
         return list;
     }
 
     public DailySiteReport getReportById(String id) {
         if (id == null) return null;
-        for (DailySiteReport report : getAllReports()) {
-            if (id.equals(report.getId())) {
-                return report;
-            }
-        }
-        return null;
+        DailyReportEntity entity = dailyReportDao.getById(id);
+        return entity != null ? entity.toModel() : null;
     }
 
     public List<DailySiteReport> getReportsByStatus(String status) {
@@ -66,140 +108,93 @@ public class DailyReportRepository {
         return filtered;
     }
 
-    public List<DailySiteReport> searchReports(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return getAllReports();
-        }
-        String lowerQuery = query.toLowerCase().trim();
-        List<DailySiteReport> filtered = new ArrayList<>();
-        for (DailySiteReport report : getAllReports()) {
-            boolean matches = (report.getId() != null && report.getId().toLowerCase().contains(lowerQuery))
-                    || (report.getProjectName() != null && report.getProjectName().toLowerCase().contains(lowerQuery))
-                    || (report.getReportDate() != null && report.getReportDate().toLowerCase().contains(lowerQuery))
-                    || (report.getCompletedWork() != null && report.getCompletedWork().toLowerCase().contains(lowerQuery))
-                    || (report.getManpower() != null && report.getManpower().toLowerCase().contains(lowerQuery))
-                    || (report.getMaterialsUsed() != null && report.getMaterialsUsed().toLowerCase().contains(lowerQuery))
-                    || (report.getEquipment() != null && report.getEquipment().toLowerCase().contains(lowerQuery))
-                    || (report.getStatus() != null && report.getStatus().toLowerCase().contains(lowerQuery));
-            if (matches) {
-                filtered.add(report);
+    public boolean addReport(DailySiteReport report) {
+        if (report == null || report.getId() == null) return false;
+
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dailyReportDao.insertOrUpdate(DailyReportEntity.fromModel(report));
+        });
+
+        if (firestore != null) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("id", report.getId());
+            data.put("projectName", report.getProjectName());
+            data.put("reportDate", report.getReportDate());
+            data.put("preparedBy", report.getPreparedBy());
+            data.put("status", report.getStatus());
+            try {
+                data.put("rawJson", report.toJSONObject().toString());
+            } catch (Exception ignored) {
             }
+            data.put("lastUpdated", System.currentTimeMillis());
+
+            firestore.collection(COLLECTION_REPORTS)
+                    .document(report.getId())
+                    .set(data);
         }
-        return filtered;
+        return true;
     }
 
     public void saveReport(DailySiteReport report) {
-        List<DailySiteReport> list = getAllReports();
-        int existingIndex = -1;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId().equals(report.getId())) {
-                existingIndex = i;
-                break;
-            }
-        }
+        addReport(report);
+    }
 
-        if (existingIndex >= 0) {
-            list.set(existingIndex, report);
-        } else {
-            list.add(0, report); // Newest at top
-        }
+    public boolean updateReport(DailySiteReport report) {
+        return addReport(report);
+    }
 
-        saveAll(list);
+    public boolean submitReport(String reportId, String submittedAt) {
+        DailySiteReport report = getReportById(reportId);
+        if (report == null) return false;
+        report.setStatus(DailySiteReport.STATUS_SUBMITTED);
+        report.setSubmittedAt(submittedAt != null ? submittedAt : "Submitted");
+        return addReport(report);
     }
 
     public boolean deleteReport(String id) {
-        List<DailySiteReport> list = getAllReports();
-        boolean removed = false;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId().equals(id)) {
-                list.remove(i);
-                removed = true;
-                break;
-            }
+        if (id == null) return false;
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dailyReportDao.deleteById(id);
+        });
+        if (firestore != null) {
+            firestore.collection(COLLECTION_REPORTS).document(id).delete();
         }
-        if (removed) {
-            saveAll(list);
-        }
-        return removed;
-    }
-
-    private void saveAll(List<DailySiteReport> list) {
-        JSONArray array = new JSONArray();
-        for (DailySiteReport report : list) {
-            try {
-                array.put(report.toJSONObject());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        preferences.edit().putString(KEY_REPORTS, array.toString()).apply();
+        return true;
     }
 
     private void ensureInitialData() {
-        if (!preferences.contains(KEY_REPORTS)) {
-            List<DailySiteReport> seed = new ArrayList<>();
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            List<DailyReportEntity> existing = dailyReportDao.getAllSync();
+            if (existing == null || existing.isEmpty()) {
+                List<DailyReportEntity> initial = new ArrayList<>();
 
-            // Report 1: Submitted (Nov 06)
-            DailySiteReport r1 = new DailySiteReport(
-                    "DSR-2026-11-06",
-                    "Metro Central Tower",
-                    "Nov 06, 2026",
-                    "Elena Rostova (PE)",
-                    DailySiteReport.STATUS_SUBMITTED,
-                    "Sunny, 28°C / Clear Skies",
-                    "Completed concrete pour for 4th floor suspended slab grid line A1-D6 (45 m³). Continued formwork stripping on level 3 shear walls. MEP conduit layout verified by QA inspector.",
-                    "14 Masons, 10 Rebar Barbenders, 4 Electricians, 2 QA Inspectors, 1 Site Engineer",
-                    "45 m³ C35 Ready-Mix Concrete, 5.8 Tons T20/T25 Rebar, 25L Curing Compound",
-                    "1 Potain Tower Crane, 1 Putzmeister 36m Boom Pump, 3 Concrete Vibrators",
-                    "Minor 30-minute delay waiting for transit mixer batch #3. Pour completed without cold joint.",
-                    null,
-                    "Apply curing burlap to 4th-floor slab, begin column rebar cage tying C-1 to C-8, conduct slump tests for next batch.",
-                    "Nov 06, 2026 17:30",
-                    "Nov 06, 2026 18:00"
-            );
-            seed.add(r1);
+                // Seed 1: DSR-101
+                DailySiteReport r1 = new DailySiteReport(
+                        "DSR-101", "Metro Central Tower", "Nov 06, 2026", "Alex Chen (PE)",
+                        DailySiteReport.STATUS_SUBMITTED, "Clear • 22°C • Wind 8 km/h",
+                        "Completed column alignment on core grid 4-8. Concrete cure test 32 MPa verified.",
+                        "48 On-Site Workers (12 Steel Erectors, 14 Rebar Fixers, 8 Masons, 14 Helpers)",
+                        "Ready-mix C35 concrete: 42 cu m | Grade 60 Rebar: 18 tons",
+                        "1x Tower Crane 50t, 2x Concrete Boom Pumps, 1x Scissor Lift",
+                        "Minor material delivery delay due to gate congestion (30 mins). Resolved.",
+                        "", "Erect scaffolding on Level 15 east facade.", "Nov 06, 2026", "Nov 06, 2026 05:45 PM"
+                );
+                initial.add(DailyReportEntity.fromModel(r1));
 
-            // Report 2: Submitted (Nov 05)
-            DailySiteReport r2 = new DailySiteReport(
-                    "DSR-2026-11-05",
-                    "Metro Central Tower",
-                    "Nov 05, 2026",
-                    "Elena Rostova (PE)",
-                    DailySiteReport.STATUS_SUBMITTED,
-                    "Partly Cloudy, 26°C",
-                    "Finalized bottom and top rebar placement for level 4 slab. Installed electrical conduits and plumbing sleeves. Pre-pour inspection passed with Lead Consultant.",
-                    "12 Barbenders, 6 Formwork Carpenters, 3 Plumbers, 1 Site Engineer",
-                    "8.2 Tons High-Yield Deformed Rebar, 120 PVC Conduit Pipes (25mm)",
-                    "1 Tower Crane, 2 Bar Bending Machines, 1 Mobile Generator",
-                    "None reported. All pre-pour quality checkpoints approved.",
-                    null,
-                    "Mobilize concrete pump team at 07:30 AM for slab pour.",
-                    "Nov 05, 2026 17:15",
-                    "Nov 05, 2026 17:45"
-            );
-            seed.add(r2);
+                // Seed 2: DSR-102
+                DailySiteReport r2 = new DailySiteReport(
+                        "DSR-102", "Metro Central Tower", "Nov 07, 2026", "Alex Chen (PE)",
+                        DailySiteReport.STATUS_DRAFT, "Partly Cloudy • 19°C",
+                        "Sleeve penetrations marked for HVAC riser shafts on levels 1 to 3.",
+                        "36 On-Site Workers", "Galvanized sheet metal ducts, fire collars",
+                        "1x Tower Crane, 2x Core Drill Machines",
+                        "Awaiting final approved revision 4.8.2 before drilling.",
+                        "", "Begin coring once consultant approval is signed.", "Nov 07, 2026", ""
+                );
+                initial.add(DailyReportEntity.fromModel(r2));
 
-            // Report 3: Draft (Nov 07)
-            DailySiteReport r3 = new DailySiteReport(
-                    "DSR-2026-11-07",
-                    "Skyline Business Park",
-                    "Nov 07, 2026",
-                    "Elena Rostova (PE)",
-                    DailySiteReport.STATUS_DRAFT,
-                    "Morning Overcast, 24°C",
-                    "Excavation and blinding concrete completed for Foundation Pit #5.",
-                    "6 Earthwork Operators, 4 General Labors, 1 Site Engineer",
-                    "12 m³ Lean Concrete C15",
-                    "2 Komatsu Excavators, 3 Tipper Trucks, 1 Dewatering Pump",
-                    "Groundwater seepage observed in west corner pit. Dewatering sump pump mobilized.",
-                    null,
-                    "Set up timber shuttering and waterproofing membrane installation.",
-                    "Nov 07, 2026 09:30",
-                    ""
-            );
-            seed.add(r3);
-
-            saveAll(seed);
-        }
+                dailyReportDao.insertAll(initial);
+            }
+        });
     }
 }

@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brand_background"
+    android:background="@color/bg_canvas"
     android:orientation="vertical">
 
     <!-- Top AppBar Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/brand_primary"
+        android:background="@color/bg_canvas"
         android:orientation="vertical"
         android:paddingStart="16dp"
         android:paddingTop="28dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="16dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,16 +27,16 @@
                 android:layout_height="40dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/bg_pill_inactive"
                 android:contentDescription="Back"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@color/white" />
+                app:tint="@color/text_primary" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:layout_toEndOf="@id/btnBackFromCreateReport"
                 android:orientation="vertical">
 
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Daily Site Report"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Capture progress, manpower, materials &amp; hindrances"
-                    android:textColor="#94A3B8"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
@@ -70,17 +70,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="16dp">
 
             <!-- Section 1: General Info Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -102,17 +102,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="12dp"
-                        android:background="@color/card_stroke" />
-
-                    <!-- Project Name -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Project Name *"
-                        android:textColor="@color/text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:background="@color/stroke_card_border" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilReportProject"
@@ -120,83 +110,72 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:hint="e.g. Metro Central Tower">
+                        android:hint="Project Name"
+                        app:boxBackgroundColor="@color/bg_surface_elevated"
+                        app:boxStrokeColor="@color/stroke_card_border">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etReportProject"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textCapWords"
                             android:text="Metro Central Tower"
-                            android:textColor="@color/text_primary"
-                            android:textSize="14sp" />
+                            android:textColor="@color/text_primary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Report Date -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Report Date *"
-                        android:textColor="@color/text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilReportDate"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:hint="e.g. Nov 06, 2026">
+                        android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etReportDate"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilReportDate"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:textColor="@color/text_primary"
-                            android:textSize="14sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            android:hint="Report Date"
+                            app:boxBackgroundColor="@color/bg_surface_elevated"
+                            app:boxStrokeColor="@color/stroke_card_border">
 
-                    <!-- Weather Conditions -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Weather Conditions *"
-                        android:textColor="@color/text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etReportDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_primary" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilReportWeather"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="e.g. Sunny, 28°C / Light Breeze">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etReportWeather"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilReportWeather"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:inputType="textCapSentences"
-                            android:text="Sunny, 28°C"
-                            android:textColor="@color/text_primary"
-                            android:textSize="14sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:hint="Weather"
+                            app:boxBackgroundColor="@color/bg_surface_elevated"
+                            app:boxStrokeColor="@color/stroke_card_border">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etReportWeather"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Clear / 24°C"
+                                android:textColor="@color/text_primary" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Section 2: Completed Work Card -->
+            <!-- Section 2: Work Completed Today with Speak Note -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -205,50 +184,86 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2. Work Completed Today *"
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:text="2. Work Completed Today *"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="Speak Note"
+                            android:textColor="@color/accent_safety_yellow"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="12dp"
-                        android:background="@color/card_stroke" />
+                        android:background="@color/stroke_card_border" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilCompletedWork"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Describe physical activities accomplished across grid lines, slabs, walls...">
+                        android:gravity="top"
+                        android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etCompletedWork"
-                            android:layout_width="match_parent"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilCompletedWork"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="top|start"
-                            android:inputType="textMultiLine"
-                            android:lines="4"
-                            android:textColor="@color/text_primary"
-                            android:textSize="14sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:layout_weight="1"
+                            android:hint="Describe physical activities accomplished across grid lines..."
+                            app:boxBackgroundColor="@color/bg_surface_elevated"
+                            app:boxStrokeColor="@color/stroke_card_border">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etCompletedWork"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top|start"
+                                android:inputType="textMultiLine"
+                                android:lines="3"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ImageButton
+                            android:id="@+id/btnDictateWork"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/btn_mic_dictate"
+                            android:contentDescription="Speak Note"
+                            android:src="@drawable/ic_mic" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Section 3: Resources (Manpower, Materials, Equipment) -->
+            <!-- Section 3: Resources (Manpower, Materials Consumed + Scan Ticket, Equipment) -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -270,7 +285,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="12dp"
-                        android:background="@color/card_stroke" />
+                        android:background="@color/stroke_card_border" />
 
                     <!-- Manpower -->
                     <TextView
@@ -278,7 +293,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6dp"
                         android:text="Manpower Deployment *"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -287,8 +302,10 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:hint="e.g. 14 Masons, 10 Barbenders, 4 Electricians">
+                        android:layout_marginBottom="16dp"
+                        android:hint="e.g. 14 Masons, 10 Barbenders, 4 Electricians"
+                        app:boxBackgroundColor="@color/bg_surface_elevated"
+                        app:boxStrokeColor="@color/stroke_card_border">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etManpower"
@@ -301,23 +318,43 @@
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Materials Used -->
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Materials Consumed with Feature 5: [ SCAN DELIVERY TICKET ] -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Materials Used *"
-                        android:textColor="@color/text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:layout_marginBottom="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:text="Materials Consumed *"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <!-- Feature 5: Wide Yellow Button: [ SCAN DELIVERY TICKET ] -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnScanDeliveryTicket"
+                        style="@style/IndustrialButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Scan Delivery Ticket"
+                        app:icon="@drawable/ic_grid"
+                        app:iconTint="#111317" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilMaterialsUsed"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:hint="e.g. 45 m³ C35 Concrete, 5.8 Tons Rebar">
+                        android:layout_marginBottom="16dp"
+                        android:hint="Batch mix, volume, rebar tonnage..."
+                        app:boxBackgroundColor="@color/bg_surface_elevated"
+                        app:boxStrokeColor="@color/stroke_card_border">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMaterialsUsed"
@@ -335,8 +372,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6dp"
-                        android:text="Equipment &amp; Machinery Deployed *"
-                        android:textColor="@color/text_primary"
+                        android:text="Equipment &amp; Machinery *"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -345,7 +382,9 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="e.g. 1 Tower Crane, 1 Boom Pump, 3 Vibrators">
+                        android:hint="e.g. 1 Tower Crane, 1 Boom Pump, 3 Vibrators"
+                        app:boxBackgroundColor="@color/bg_surface_elevated"
+                        app:boxStrokeColor="@color/stroke_card_border">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etEquipment"
@@ -360,15 +399,15 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Section 4: Site Problems & Next-Day Plans -->
+            <!-- Section 4: Site Delays & Hindrances -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -380,7 +419,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4. Issues &amp; Forward Planning"
+                        android:text="4. Delays, Hindrances &amp; Next-Day Target"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -390,17 +429,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="12dp"
-                        android:background="@color/card_stroke" />
-
-                    <!-- Site Problems -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Site Problems / Delays / Hindrances"
-                        android:textColor="@color/text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:background="@color/stroke_card_border" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilSiteProblems"
@@ -408,7 +437,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:hint="Note weather stoppages, equipment breakdowns, or type 'None'">
+                        android:hint="Delays &amp; Hindrances (or 'None recorded')"
+                        app:boxBackgroundColor="@color/bg_surface_elevated"
+                        app:boxStrokeColor="@color/stroke_card_border">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etSiteProblems"
@@ -417,27 +448,19 @@
                             android:gravity="top|start"
                             android:inputType="textMultiLine"
                             android:lines="2"
-                            android:text="None reported."
+                            android:text="None recorded. Shift completed safely on schedule."
                             android:textColor="@color/text_primary"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <!-- Next-Day Plans -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="6dp"
-                        android:text="Next-Day Scheduled Activities *"
-                        android:textColor="@color/text_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilNextDayPlans"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Key milestones planned for tomorrow...">
+                        android:hint="Tomorrow's Schedule &amp; Target"
+                        app:boxBackgroundColor="@color/bg_surface_elevated"
+                        app:boxStrokeColor="@color/stroke_card_border">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etNextDayPlans"
@@ -445,22 +468,22 @@
                             android:layout_height="wrap_content"
                             android:gravity="top|start"
                             android:inputType="textMultiLine"
-                            android:lines="3"
+                            android:lines="2"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Section 5: Photo Attachment -->
+            <!-- Section 5: Site Photo Evidence with Match Angle -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -472,7 +495,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5. Site Progress Photo (Optional)"
+                        android:text="5. Daily Site Photo Evidence"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -482,23 +505,34 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="12dp"
-                        android:background="@color/card_stroke" />
+                        android:background="@color/stroke_card_border" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAttachReportPhoto"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:text="Attach Daily Site Photo"
-                        android:textAllCaps="false"
-                        android:textColor="@color/brand_accent"
-                        app:cornerRadius="8dp"
-                        app:icon="@drawable/ic_camera"
-                        app:iconGravity="textStart"
-                        app:iconTint="@color/brand_accent"
-                        app:strokeColor="@color/brand_accent" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                    <!-- Image Preview -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnMatchAngleReport"
+                            style="@style/IndustrialButton"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:text="Match Angle"
+                            app:icon="@drawable/ic_camera"
+                            app:iconTint="#111317" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAttachReportPhoto"
+                            style="@style/IndustrialButton.Outlined"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Gallery"
+                            app:icon="@drawable/ic_document" />
+                    </LinearLayout>
+
                     <RelativeLayout
                         android:id="@+id/layoutReportPhotoPreview"
                         android:layout_width="match_parent"
@@ -510,69 +544,56 @@
                             android:id="@+id/ivReportPhotoPreview"
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
-                            android:background="@drawable/bg_chip_role"
-                            android:contentDescription="Daily Site Photo Preview"
+                            android:adjustViewBounds="true"
+                            android:background="@color/bg_surface_card"
+                            android:contentDescription="Photo Preview"
                             android:scaleType="centerCrop" />
 
-                        <ImageButton
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnRemoveReportPhoto"
-                            android:layout_width="36dp"
+                            style="@style/Widget.MaterialComponents.Button"
+                            android:layout_width="wrap_content"
                             android:layout_height="36dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentTop="true"
+                            android:layout_alignParentBottom="true"
                             android:layout_margin="8dp"
-                            android:background="@drawable/bg_header_gradient"
-                            android:contentDescription="Remove Photo"
-                            android:src="@drawable/ic_cancel_circle"
-                            app:tint="@color/white" />
+                            android:backgroundTint="#B91C1C"
+                            android:text="Remove"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            app:cornerRadius="6dp" />
                     </RelativeLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Action Buttons: Save Draft & Submit -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <!-- Save Draft Button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSaveDraft"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:text="Save Draft"
-                    android:textAllCaps="false"
-                    android:textColor="@color/brand_secondary_variant"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="10dp"
-                    app:strokeColor="@color/brand_secondary_variant" />
-
-                <!-- Submit Button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSubmitReport"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/brand_primary"
-                    android:text="Submit Report"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="10dp"
-                    app:icon="@drawable/ic_send"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/white" />
-            </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
+
+    <!-- Bottom Actions: Save Draft vs Submit to PM -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_surface_elevated"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveDraft"
+            style="@style/IndustrialButton.Outlined"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Save Draft" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmitReport"
+            style="@style/IndustrialButton"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1.3"
+            android:text="Submit to PM" />
+    </LinearLayout>
 
 </LinearLayout>

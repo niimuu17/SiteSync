@@ -34,4 +34,11 @@
     <string name="sign_out">Sign Out</string>
     <string name="active_project">Active Project: Metro Tower Phase 2</string>
     <string name="sync_status">Sync Status: Real-time Connected</string>
+
+    <!-- Core Field Worker Tools (Non-Negotiable Zero Jargon) -->
+    <string name="tool_check_level">Check Level</string>
+    <string name="tool_speak_note">Speak Note</string>
+    <string name="tool_match_angle">Match Angle</string>
+    <string name="tool_scan_delivery_ticket">Scan Delivery Ticket</string>
+    <string name="tool_floor_level">Floor Level</string>
 </resources>

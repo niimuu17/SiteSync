@@ -70,14 +70,14 @@ public class ProgressHistoryAdapter extends RecyclerView.Adapter<ProgressHistory
 
             // Status Badge Coloring
             if (ConstructionActivity.STATUS_COMPLETED.equalsIgnoreCase(log.getStatus())) {
-                binding.tvHistoryStatus.setBackgroundColor(Color.parseColor("#DCFCE7"));
-                binding.tvHistoryStatus.setTextColor(Color.parseColor("#15803D"));
+                binding.tvHistoryStatus.setBackgroundColor(Color.parseColor("#123324"));
+                binding.tvHistoryStatus.setTextColor(Color.parseColor("#10B981"));
             } else if (ConstructionActivity.STATUS_IN_PROGRESS.equalsIgnoreCase(log.getStatus())) {
-                binding.tvHistoryStatus.setBackgroundColor(Color.parseColor("#FEF3C7"));
-                binding.tvHistoryStatus.setTextColor(Color.parseColor("#B45309"));
+                binding.tvHistoryStatus.setBackgroundColor(Color.parseColor("#382B14"));
+                binding.tvHistoryStatus.setTextColor(Color.parseColor("#F59E0B"));
             } else {
-                binding.tvHistoryStatus.setBackgroundColor(Color.parseColor("#F1F5F9"));
-                binding.tvHistoryStatus.setTextColor(Color.parseColor("#475569"));
+                binding.tvHistoryStatus.setBackgroundColor(Color.parseColor("#222631"));
+                binding.tvHistoryStatus.setTextColor(Color.parseColor("#94A3B8"));
             }
 
             // Attached Photo Preview

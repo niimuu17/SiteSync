@@ -1,108 +1,68 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Helper functions for Role-Based Access Control (RBAC)
-    function isAuthenticated() {
+    function isAuth() {
       return request.auth != null;
     }
-    
-    function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
     }
-    
-    function hasRole(role) {
-      return isAuthenticated() && getUserData().role == role;
-    }
-    
-    function isManager() {
-      return hasRole('PROJECT_MANAGER');
-    }
-    
-    function isSupervisor() {
-      return hasRole('SITE_SUPERVISOR');
-    }
-    
     function isEngineer() {
-      return hasRole('ENGINEER');
+      return isAuth() && (getUserRole() == 'ENGINEER' || getUserRole() == 'PROJECT_MANAGER');
     }
-    
-    function isStaff() {
-      return isManager() || isSupervisor() || isEngineer();
+    function isManager() {
+      return isAuth() && getUserRole() == 'PROJECT_MANAGER';
     }
-    
-    // User Profiles: Users can read staff profiles; can only update their own profile
+
     match /users/{userId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated() && (request.auth.uid == userId || isManager());
-      allow delete: if isManager();
+      allow read: if isAuth();
+      allow write: if isAuth() && request.auth.uid == userId;
     }
-    
-    // Projects Collection: All authenticated staff can read assigned projects
+
     match /projects/{projectId} {
-      allow read: if isStaff();
-      allow create, update: if isManager() || isSupervisor();
-      allow delete: if isManager();
-      
-      // Sub-collection: Construction Activities & Progress
+      allow read: if isAuth();
+      allow write: if isManager();
+
       match /activities/{activityId} {
-        allow read: if isStaff();
-        allow create, update: if isStaff();
-        allow delete: if isManager();
-        
-        match /history/{historyId} {
-          allow read: if isStaff();
-          allow create: if isStaff();
-          allow update, delete: if isManager();
-        }
+        allow read: if isAuth();
+        allow write: if isEngineer();
       }
-      
-      // Sub-collection: Site Quality Inspections
       match /inspections/{inspectionId} {
-        allow read: if isStaff();
-        allow create, update: if isEngineer() || isSupervisor() || isManager();
-        allow delete: if isManager();
-        
-        match /records/{recordId} {
-          allow read: if isStaff();
-          allow create: if isStaff();
-          allow update, delete: if isManager();
-        }
+        allow read: if isAuth();
+        allow write: if isAuth();
       }
-      
-      // Sub-collection: Drawings & CAD Documents
-      match /documents/{documentId} {
-        allow read: if isStaff();
-        allow create, update: if isEngineer() || isManager();
-        allow delete: if isManager();
-        
-        match /revisions/{revisionId} {
-          allow read: if isStaff();
-          allow create: if isEngineer() || isManager();
-          allow update, delete: if isManager();
-        }
+      match /documents/{docId} {
+        allow read: if isAuth();
+        allow write: if isEngineer();
       }
-      
-      // Sub-collection: Technical Issues / RFIs
-      match /issues/{issueId} {
-        allow read: if isStaff();
-        allow create, update: if isStaff();
-        allow delete: if isManager();
-        
-        match /comments/{commentId} {
-          allow read: if isStaff();
-          allow create: if isStaff();
-          allow update, delete: if request.auth.uid == resource.data.authorId || isManager();
-        }
-      }
-      
-      // Sub-collection: Daily Site Reports (DSR)
       match /daily_reports/{reportId} {
-        allow read: if isStaff();
-        allow create, update: if isEngineer() || isSupervisor() || isManager();
+        allow read: if isAuth();
+        allow create, update: if isEngineer();
         allow delete: if isManager();
       }
+    }
+
+    // Direct root collections fallback for offline and prototype sync
+    match /activities/{activityId} {
+      allow read: if isAuth();
+      allow write: if isEngineer();
+    }
+    match /inspections/{inspectionId} {
+      allow read: if isAuth();
+      allow write: if isAuth();
+    }
+    match /documents/{docId} {
+      allow read: if isAuth();
+      allow write: if isEngineer();
+    }
+    match /issues/{issueId} {
+      allow read: if isAuth();
+      allow write: if isAuth();
+    }
+    match /daily_reports/{reportId} {
+      allow read: if isAuth();
+      allow create, update: if isEngineer();
+      allow delete: if isManager();
     }
   }
 }

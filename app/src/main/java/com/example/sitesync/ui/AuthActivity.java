@@ -230,46 +230,23 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void showTwoFactorVerificationDialog(User pendingUser, String phone) {
-        final android.widget.EditText etOtp = new android.widget.EditText(this);
-        etOtp.setHint("Enter 6-digit verification code");
-        etOtp.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
-        etOtp.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        etOtp.setTextSize(18f);
-
-        android.widget.FrameLayout container = new android.widget.FrameLayout(this);
-        int pad = (int) (20 * getResources().getDisplayMetrics().density);
-        container.setPadding(pad, pad / 2, pad, pad / 2);
-        container.addView(etOtp);
-
         authRepository.sendTwoFactorChallenge(phone, new AuthRepository.OtpCallback() {
             @Override
             public void onOtpSent(String verificationId, String message) {
                 Toast.makeText(AuthActivity.this, message, Toast.LENGTH_LONG).show();
 
-                new com.google.android.material.dialog.MaterialAlertDialogBuilder(AuthActivity.this)
-                        .setTitle("2-Step Verification (2FA)")
-                        .setMessage("A security verification code was dispatched to " + phone + ". Enter the code to authorize access.")
-                        .setView(container)
-                        .setCancelable(false)
-                        .setPositiveButton("Verify & Authorize", (dialog, which) -> {
-                            String code = etOtp.getText().toString().trim();
-                            authRepository.verifyTwoFactorChallenge(verificationId, code, pendingUser, new AuthRepository.AuthCallback() {
-                                @Override
-                                public void onSuccess(User user) {
-                                    sessionManager.createLoginSession(user, true);
-                                    Toast.makeText(AuthActivity.this, "2FA Verified! Welcome " + user.getFullName(), Toast.LENGTH_SHORT).show();
-                                    AuthRouter.routeToDashboard(AuthActivity.this, selectedRole, user);
-                                    finish();
-                                }
+                com.example.sitesync.ui.auth.TwoFactorBottomSheetDialog dialog =
+                        com.example.sitesync.ui.auth.TwoFactorBottomSheetDialog.newInstance(
+                                phone, verificationId, pendingUser, null);
 
-                                @Override
-                                public void onError(String errorMessage) {
-                                    Toast.makeText(AuthActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
+                dialog.setOnVerificationCompleteListener(user -> {
+                    sessionManager.createLoginSession(user, true);
+                    Toast.makeText(AuthActivity.this, "2FA Verified! Welcome " + user.getFullName(), Toast.LENGTH_SHORT).show();
+                    AuthRouter.routeToDashboard(AuthActivity.this, selectedRole, user);
+                    finish();
+                });
+
+                dialog.show(getSupportFragmentManager(), "TwoFactorBottomSheet");
             }
 
             @Override

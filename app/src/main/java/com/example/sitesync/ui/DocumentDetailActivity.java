@@ -111,17 +111,17 @@ public class DocumentDetailActivity extends AppCompatActivity implements Documen
         binding.tvDetailCategoryBadge.setText(category);
 
         if (SiteDocument.CATEGORY_ARCHITECTURAL.equalsIgnoreCase(category)) {
-            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#EDE9FE"));
-            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#6D28D9"));
+            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#231F3D"));
+            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#A78BFA"));
         } else if (SiteDocument.CATEGORY_STRUCTURAL.equalsIgnoreCase(category)) {
-            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#DBEAFE"));
-            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#1D4ED8"));
+            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#1E293B"));
+            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#38BDF8"));
         } else if (SiteDocument.CATEGORY_ELECTRICAL.equalsIgnoreCase(category)) {
-            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#B45309"));
+            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#382B14"));
+            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#F59E0B"));
         } else if (SiteDocument.CATEGORY_PLUMBING.equalsIgnoreCase(category)) {
-            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#CCFBF1"));
-            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#0F766E"));
+            binding.tvDetailCategoryBadge.setBackgroundColor(Color.parseColor("#132E2E"));
+            binding.tvDetailCategoryBadge.setTextColor(Color.parseColor("#2DD4BF"));
         }
     }
 

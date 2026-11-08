@@ -43,6 +43,9 @@ public class SiteSyncApplication extends Application {
             // Pre-warm FirebaseSyncManager for offline persistence and RTDB
             FirebaseSyncManager.getInstance(this);
             Log.d(TAG, "SiteSync Firebase ecosystem initialized with offline persistence.");
+
+            // Schedule WorkManager periodic offline background sync
+            com.example.sitesync.data.sync.SyncManager.schedulePeriodicSync(this);
         } catch (Exception e) {
             Log.e(TAG, "Error initializing Firebase ecosystem: " + e.getMessage(), e);
         }

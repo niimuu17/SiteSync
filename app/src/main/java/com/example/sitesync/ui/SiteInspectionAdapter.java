@@ -98,14 +98,14 @@ public class SiteInspectionAdapter extends RecyclerView.Adapter<SiteInspectionAd
             binding.tvInspCardStatusBadge.setText(status);
 
             if (SiteInspection.STATUS_PASSED.equalsIgnoreCase(status)) {
-                binding.tvInspCardStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-                binding.tvInspCardStatusBadge.setTextColor(Color.parseColor("#15803D"));
+                binding.tvInspCardStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+                binding.tvInspCardStatusBadge.setTextColor(Color.parseColor("#10B981"));
             } else if (SiteInspection.STATUS_FAILED.equalsIgnoreCase(status)) {
-                binding.tvInspCardStatusBadge.setBackgroundColor(Color.parseColor("#FEE2E2"));
-                binding.tvInspCardStatusBadge.setTextColor(Color.parseColor("#B91C1C"));
+                binding.tvInspCardStatusBadge.setBackgroundColor(Color.parseColor("#381E1E"));
+                binding.tvInspCardStatusBadge.setTextColor(Color.parseColor("#EF4444"));
             } else {
-                binding.tvInspCardStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-                binding.tvInspCardStatusBadge.setTextColor(Color.parseColor("#B45309"));
+                binding.tvInspCardStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+                binding.tvInspCardStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
             }
         }
     }

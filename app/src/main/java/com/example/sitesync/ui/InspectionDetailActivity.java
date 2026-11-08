@@ -133,14 +133,14 @@ public class InspectionDetailActivity extends AppCompatActivity {
         binding.tvDetailInspStatusBadge.setText(status);
 
         if (SiteInspection.STATUS_PASSED.equalsIgnoreCase(status)) {
-            binding.tvDetailInspStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-            binding.tvDetailInspStatusBadge.setTextColor(Color.parseColor("#15803D"));
+            binding.tvDetailInspStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+            binding.tvDetailInspStatusBadge.setTextColor(Color.parseColor("#10B981"));
         } else if (SiteInspection.STATUS_FAILED.equalsIgnoreCase(status)) {
-            binding.tvDetailInspStatusBadge.setBackgroundColor(Color.parseColor("#FEE2E2"));
-            binding.tvDetailInspStatusBadge.setTextColor(Color.parseColor("#B91C1C"));
+            binding.tvDetailInspStatusBadge.setBackgroundColor(Color.parseColor("#381E1E"));
+            binding.tvDetailInspStatusBadge.setTextColor(Color.parseColor("#EF4444"));
         } else {
-            binding.tvDetailInspStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-            binding.tvDetailInspStatusBadge.setTextColor(Color.parseColor("#B45309"));
+            binding.tvDetailInspStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+            binding.tvDetailInspStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
         }
     }
 }

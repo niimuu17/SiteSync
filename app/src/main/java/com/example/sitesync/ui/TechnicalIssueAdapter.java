@@ -79,31 +79,31 @@ public class TechnicalIssueAdapter extends RecyclerView.Adapter<TechnicalIssueAd
             String priority = issue.getPriority() != null ? issue.getPriority() : TechnicalIssue.PRIORITY_MEDIUM;
             binding.tvPriorityBadge.setText(priority);
             if (TechnicalIssue.PRIORITY_HIGH.equalsIgnoreCase(priority)) {
-                binding.tvPriorityBadge.setBackgroundColor(Color.parseColor("#FEE2E2"));
-                binding.tvPriorityBadge.setTextColor(Color.parseColor("#DC2626"));
+                binding.tvPriorityBadge.setBackgroundColor(Color.parseColor("#381E1E"));
+                binding.tvPriorityBadge.setTextColor(Color.parseColor("#EF4444"));
             } else if (TechnicalIssue.PRIORITY_LOW.equalsIgnoreCase(priority)) {
-                binding.tvPriorityBadge.setBackgroundColor(Color.parseColor("#DBEAFE"));
-                binding.tvPriorityBadge.setTextColor(Color.parseColor("#2563EB"));
+                binding.tvPriorityBadge.setBackgroundColor(Color.parseColor("#1E293B"));
+                binding.tvPriorityBadge.setTextColor(Color.parseColor("#38BDF8"));
             } else {
-                binding.tvPriorityBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-                binding.tvPriorityBadge.setTextColor(Color.parseColor("#D97706"));
+                binding.tvPriorityBadge.setBackgroundColor(Color.parseColor("#382B14"));
+                binding.tvPriorityBadge.setTextColor(Color.parseColor("#F59E0B"));
             }
 
             // Status Badge Styling
             String status = issue.getStatus() != null ? issue.getStatus() : TechnicalIssue.STATUS_OPEN;
             binding.tvStatusBadge.setText(status);
             if (TechnicalIssue.STATUS_RESOLVED.equalsIgnoreCase(status) || TechnicalIssue.STATUS_CLOSED.equalsIgnoreCase(status)) {
-                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-                binding.tvStatusBadge.setTextColor(Color.parseColor("#16A34A"));
+                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+                binding.tvStatusBadge.setTextColor(Color.parseColor("#10B981"));
             } else if (TechnicalIssue.STATUS_IN_REVIEW.equalsIgnoreCase(status)) {
-                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#E0E7FF"));
-                binding.tvStatusBadge.setTextColor(Color.parseColor("#4F46E5"));
+                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#1E293B"));
+                binding.tvStatusBadge.setTextColor(Color.parseColor("#818CF8"));
             } else if (TechnicalIssue.STATUS_ASSIGNED.equalsIgnoreCase(status)) {
-                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-                binding.tvStatusBadge.setTextColor(Color.parseColor("#D97706"));
+                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+                binding.tvStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
             } else {
-                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#F1F5F9"));
-                binding.tvStatusBadge.setTextColor(Color.parseColor("#475569"));
+                binding.tvStatusBadge.setBackgroundColor(Color.parseColor("#222631"));
+                binding.tvStatusBadge.setTextColor(Color.parseColor("#94A3B8"));
             }
 
             binding.getRoot().setOnClickListener(v -> {

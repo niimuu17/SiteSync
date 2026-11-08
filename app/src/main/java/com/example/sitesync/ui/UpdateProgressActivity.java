@@ -1,5 +1,7 @@
 package com.example.sitesync.ui;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -9,16 +11,24 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.example.sitesync.R;
 import com.example.sitesync.data.ProgressRepository;
 import com.example.sitesync.data.SessionManager;
 import com.example.sitesync.databinding.ActivityUpdateProgressBinding;
+import com.example.sitesync.hardware.MatchAngleCameraDialog;
+import com.example.sitesync.hardware.VoiceDictationManager;
 import com.example.sitesync.models.ConstructionActivity;
 import com.example.sitesync.models.User;
+import com.example.sitesync.utils.HapticFeedbackUtil;
+
+import java.io.File;
 
 /**
  * Screen enabling engineers to update an activity's progress percentage,
- * lifecycle status, field remarks, and attach site verification photos.
+ * lifecycle status, field remarks via "Speak Note" hands-free voice dictation,
+ * and attach site verification photos via "Match Angle" comparison camera.
  */
 public class UpdateProgressActivity extends AppCompatActivity {
 
@@ -28,12 +38,31 @@ public class UpdateProgressActivity extends AppCompatActivity {
     private ConstructionActivity currentActivity;
     private String selectedPhotoUri = "";
 
-    // Photo picker launcher using modern AndroidX Activity Result API
+    private VoiceDictationManager voiceDictationManager;
+
     private final ActivityResultLauncher<String> photoPickerLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     selectedPhotoUri = uri.toString();
                     showPhotoPreview(uri);
+                }
+            });
+
+    private final ActivityResultLauncher<String> micPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    startDictation();
+                } else {
+                    Toast.makeText(this, "Microphone permission is required to Speak Note", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    private final ActivityResultLauncher<String> cameraPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    launchMatchAngleCamera();
+                } else {
+                    Toast.makeText(this, "Camera permission is required for Match Angle", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -45,6 +74,7 @@ public class UpdateProgressActivity extends AppCompatActivity {
 
         repository = new ProgressRepository(this);
         sessionManager = new SessionManager(this);
+        voiceDictationManager = new VoiceDictationManager(this);
 
         String activityId = getIntent().getStringExtra(ProgressMonitoringActivity.EXTRA_ACTIVITY_ID);
         currentActivity = repository.getActivityById(activityId);
@@ -63,12 +93,10 @@ public class UpdateProgressActivity extends AppCompatActivity {
         binding.tvUpdateActivityName.setText(currentActivity.getActivityName());
         binding.tvUpdateLocation.setText(currentActivity.getLocation() + " • " + currentActivity.getProjectName());
 
-        // Set initial percentage
         int progress = currentActivity.getProgressPercentage();
         binding.sbProgress.setProgress(progress);
         binding.tvProgressValueDisplay.setText(progress + "%");
 
-        // Set initial status radio button
         if (ConstructionActivity.STATUS_COMPLETED.equalsIgnoreCase(currentActivity.getStatus())) {
             binding.rbStatusCompleted.setChecked(true);
         } else if (ConstructionActivity.STATUS_PENDING.equalsIgnoreCase(currentActivity.getStatus())) {
@@ -77,12 +105,10 @@ public class UpdateProgressActivity extends AppCompatActivity {
             binding.rbStatusInProgress.setChecked(true);
         }
 
-        // Set initial remarks
         if (currentActivity.getLatestRemarks() != null) {
             binding.etRemarks.setText(currentActivity.getLatestRemarks());
         }
 
-        // Set existing photo if available
         if (currentActivity.getLatestPhotoUri() != null && !currentActivity.getLatestPhotoUri().isEmpty()) {
             selectedPhotoUri = currentActivity.getLatestPhotoUri();
             showPhotoPreview(Uri.parse(selectedPhotoUri));
@@ -92,14 +118,11 @@ public class UpdateProgressActivity extends AppCompatActivity {
     private void setupListeners() {
         binding.btnBackFromUpdate.setOnClickListener(v -> finish());
 
-        // SeekBar listener for percentage changes
         binding.sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 binding.tvProgressValueDisplay.setText(progress + "%");
-
                 if (fromUser) {
-                    // Auto-adjust status recommendation
                     if (progress == 100) {
                         binding.rbStatusCompleted.setChecked(true);
                     } else if (progress == 0) {
@@ -117,18 +140,105 @@ public class UpdateProgressActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // Launch photo picker
+        // Feature 1: "Speak Note" Hands-Free Microphone Dictation
+        binding.btnDictateRemarks.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(this, v);
+            if (voiceDictationManager.isListening()) {
+                voiceDictationManager.stopListening();
+                setMicUiActive(false);
+            } else {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    startDictation();
+                } else {
+                    micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
+                }
+            }
+        });
+
+        // Feature 3: "Match Angle" Comparison Camera
+        binding.btnMatchAngle.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(this, v);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                launchMatchAngleCamera();
+            } else {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+            }
+        });
+
         binding.btnSelectPhoto.setOnClickListener(v -> photoPickerLauncher.launch("image/*"));
 
-        // Remove photo
         binding.btnRemovePhoto.setOnClickListener(v -> {
             selectedPhotoUri = "";
             binding.layoutPhotoPreview.setVisibility(View.GONE);
             binding.ivPhotoPreview.setImageURI(null);
         });
 
-        // Save progress update
         binding.btnSaveProgress.setOnClickListener(v -> saveProgressUpdate());
+    }
+
+    private void startDictation() {
+        setMicUiActive(true);
+        String initialRemarks = binding.etRemarks.getText() != null ? binding.etRemarks.getText().toString() : "";
+
+        voiceDictationManager.startListening(new VoiceDictationManager.OnDictationListener() {
+            @Override
+            public void onSpeechRmsChanged(float rmsdB) {}
+
+            @Override
+            public void onPartialTranscription(String partialText) {
+                if (binding.etRemarks != null) {
+                    String combined = initialRemarks.isEmpty() ? partialText : initialRemarks + " " + partialText;
+                    binding.etRemarks.setText(combined);
+                    binding.etRemarks.setSelection(combined.length());
+                }
+            }
+
+            @Override
+            public void onFinalTranscription(String finalText, File audioBackupFile) {
+                setMicUiActive(false);
+                if (binding.etRemarks != null && !finalText.isEmpty()) {
+                    String combined = initialRemarks.isEmpty() ? finalText : initialRemarks + " " + finalText;
+                    binding.etRemarks.setText(combined);
+                    binding.etRemarks.setSelection(combined.length());
+                }
+                Toast.makeText(UpdateProgressActivity.this, "Note transcribed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String userFriendlyError) {
+                setMicUiActive(false);
+                Toast.makeText(UpdateProgressActivity.this, userFriendlyError, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setMicUiActive(boolean active) {
+        if (binding.btnDictateRemarks == null) return;
+        if (active) {
+            binding.btnDictateRemarks.setBackgroundResource(R.drawable.btn_mic_dictate_active);
+            binding.btnDictateRemarks.setImageResource(R.drawable.ic_mic_black);
+        } else {
+            binding.btnDictateRemarks.setBackgroundResource(R.drawable.btn_mic_dictate);
+            binding.btnDictateRemarks.setImageResource(R.drawable.ic_mic);
+        }
+    }
+
+    private void launchMatchAngleCamera() {
+        User user = sessionManager.getCurrentUser();
+        String engineerName = user != null ? user.getFullName() : "ELENA ROSTOVA (ENG-04)";
+
+        MatchAngleCameraDialog dialog = MatchAngleCameraDialog.newInstance(
+                currentActivity.getLatestPhotoUri(),
+                engineerName,
+                currentActivity.getLocation()
+        );
+
+        dialog.setOnPhotoVerifiedCallback((photoFile, photoUri) -> {
+            selectedPhotoUri = photoUri.toString();
+            showPhotoPreview(photoUri);
+        });
+
+        dialog.show(getSupportFragmentManager(), "MatchAngleDialog");
     }
 
     private void showPhotoPreview(Uri uri) {
@@ -153,7 +263,6 @@ public class UpdateProgressActivity extends AppCompatActivity {
 
         String remarks = binding.etRemarks.getText() != null ? binding.etRemarks.getText().toString().trim() : "";
 
-        // Engineer identity from active session
         User currentUser = sessionManager.getCurrentUser();
         String engineerName = currentUser != null ? currentUser.getFullName() : "Field Engineer";
 
@@ -171,6 +280,14 @@ public class UpdateProgressActivity extends AppCompatActivity {
             finish();
         } else {
             Toast.makeText(this, "Failed to update progress", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (voiceDictationManager != null && voiceDictationManager.isListening()) {
+            voiceDictationManager.stopListening();
         }
     }
 }

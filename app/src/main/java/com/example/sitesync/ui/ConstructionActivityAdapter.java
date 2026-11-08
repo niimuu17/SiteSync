@@ -90,17 +90,17 @@ public class ConstructionActivityAdapter extends RecyclerView.Adapter<Constructi
             binding.tvCardStatusBadge.setText(status);
 
             if (ConstructionActivity.STATUS_COMPLETED.equalsIgnoreCase(status) || progress == 100) {
-                binding.tvCardStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-                binding.tvCardStatusBadge.setTextColor(Color.parseColor("#15803D"));
-                binding.pbCardProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#16A34A")));
+                binding.tvCardStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+                binding.tvCardStatusBadge.setTextColor(Color.parseColor("#10B981"));
+                binding.pbCardProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#10B981")));
             } else if (ConstructionActivity.STATUS_IN_PROGRESS.equalsIgnoreCase(status)) {
-                binding.tvCardStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-                binding.tvCardStatusBadge.setTextColor(Color.parseColor("#B45309"));
-                binding.pbCardProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#2563EB")));
+                binding.tvCardStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+                binding.tvCardStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
+                binding.pbCardProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#F59E0B")));
             } else {
-                binding.tvCardStatusBadge.setBackgroundColor(Color.parseColor("#F1F5F9"));
-                binding.tvCardStatusBadge.setTextColor(Color.parseColor("#475569"));
-                binding.pbCardProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#94A3B8")));
+                binding.tvCardStatusBadge.setBackgroundColor(Color.parseColor("#222631"));
+                binding.tvCardStatusBadge.setTextColor(Color.parseColor("#94A3B8"));
+                binding.pbCardProgress.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#2E3442")));
             }
         }
     }

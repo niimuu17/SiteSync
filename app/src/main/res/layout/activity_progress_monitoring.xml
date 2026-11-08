@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brand_background">
+    android:background="@color/bg_canvas">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,12 +14,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/brand_primary"
+            android:background="@color/bg_canvas"
             android:orientation="vertical"
             android:paddingStart="16dp"
             android:paddingTop="28dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="20dp">
+            android:paddingBottom="12dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -31,24 +31,25 @@
                     android:layout_height="40dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:background="@drawable/bg_pill_inactive"
                     android:contentDescription="Back"
+                    android:padding="10dp"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/white" />
+                    app:tint="@color/text_primary" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/btnBackFromMonitor"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Site Progress Monitor"
-                        android:textColor="@color/white"
+                        android:text="Site Progress &amp; Telemetry"
+                        android:textColor="@color/text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -56,19 +57,81 @@
                         android:id="@+id/tvProjectSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Metro Tower Phase 2 • Field Execution"
-                        android:textColor="#94A3B8"
+                        android:text="Metro Tower Phase 2 • Spatial Progress"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
+
+        <!-- Cut and Fill Earthwork Widget (From Reference Spec) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="16dp"
+            app:cardBackgroundColor="@color/bg_surface_elevated"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/stroke_card_border"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cut And Fill"
+                        android:textColor="@color/text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/bg_pill_inactive"
+                        android:paddingStart="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="2dp"
+                        android:text="Net: 224,400 cu yd"
+                        android:textColor="@color/accent_safety_yellow"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="12 Feb, 2026 • Real-time Volume Delta"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
+
+                <!-- Native Candlestick Elevation Chart -->
+                <com.example.sitesync.ui.custom.CutAndFillTelemetryView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- KPI Metrics Summary Bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal">
 
@@ -78,10 +141,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="1dp"
-                app:strokeColor="@color/card_stroke"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -116,10 +179,10 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="1dp"
-                app:strokeColor="#FEF3C7"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -134,7 +197,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2"
-                        android:textColor="#B45309"
+                        android:textColor="@color/accent_safety_yellow"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -154,10 +217,10 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="1dp"
-                app:strokeColor="#DCFCE7"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -172,7 +235,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1"
-                        android:textColor="#15803D"
+                        android:textColor="#10B981"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -191,10 +254,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@color/brand_surface"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="1dp"
-                app:strokeColor="#DBEAFE"
+                app:cardBackgroundColor="@color/bg_surface_elevated"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/stroke_card_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -208,8 +271,8 @@
                         android:id="@+id/tvKpiAvgProgress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="60%"
-                        android:textColor="@color/brand_accent"
+                        android:text="68%"
+                        android:textColor="@color/accent_safety_yellow"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -244,28 +307,44 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="All Activities" />
+                    android:text="All Activities"
+                    android:textColor="@color/text_primary"
+                    app:chipBackgroundColor="@color/bg_surface_elevated"
+                    app:chipStrokeColor="@color/stroke_card_border"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipFilterInProgress"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="In Progress" />
+                    android:text="In Progress"
+                    android:textColor="@color/text_primary"
+                    app:chipBackgroundColor="@color/bg_surface_elevated"
+                    app:chipStrokeColor="@color/stroke_card_border"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipFilterPending"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pending" />
+                    android:text="Pending"
+                    android:textColor="@color/text_primary"
+                    app:chipBackgroundColor="@color/bg_surface_elevated"
+                    app:chipStrokeColor="@color/stroke_card_border"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipFilterCompleted"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Completed" />
+                    android:text="Completed"
+                    android:textColor="@color/text_primary"
+                    app:chipBackgroundColor="@color/bg_surface_elevated"
+                    app:chipStrokeColor="@color/stroke_card_border"
+                    app:chipStrokeWidth="1dp" />
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
@@ -298,7 +377,7 @@
                     android:layout_height="60dp"
                     android:contentDescription="Empty"
                     android:src="@drawable/ic_construction"
-                    app:tint="@color/text_hint" />
+                    app:tint="@color/text_secondary" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -313,7 +392,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Try selecting another filter or add a new activity."
+                    android:text="Select another filter or add a new activity."
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -327,9 +406,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
-        android:backgroundTint="@color/brand_primary"
+        android:backgroundTint="@color/accent_safety_yellow"
         android:contentDescription="Add New Activity"
         android:src="@drawable/ic_add"
-        app:tint="@color/white" />
+        app:tint="#111317" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

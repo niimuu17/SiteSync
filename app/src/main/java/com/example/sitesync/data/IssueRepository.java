@@ -1,259 +1,201 @@
 package com.example.sitesync.data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+
+import com.example.sitesync.data.local.AppDatabase;
+import com.example.sitesync.data.local.IssueDao;
+import com.example.sitesync.data.local.IssueEntity;
 import com.example.sitesync.models.IssueComment;
 import com.example.sitesync.models.IssueHistoryLog;
 import com.example.sitesync.models.TechnicalIssue;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- * Repository providing local persistence for Technical Issues & RFIs (Request for Information).
- * Uses SharedPreferences with JSON serialization for zero-dependency offline storage.
+ * Enterprise Single-Source-of-Truth Repository for Technical Issues & RFIs.
+ * Backed by Room Database local cache and Cloud Firestore real-time snapshot sync.
  */
 public class IssueRepository {
 
-    private static final String PREF_NAME = "SiteSync_Issue_Prefs";
-    private static final String KEY_ISSUES = "key_technical_issues";
+    private static final String TAG = "IssueRepository";
+    private static final String COLLECTION_ISSUES = "issues";
 
-    private final SharedPreferences preferences;
+    private final IssueDao issueDao;
+    private final FirebaseFirestore firestore;
 
     public IssueRepository(Context context) {
-        this.preferences = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        AppDatabase db = AppDatabase.getDatabase(context);
+        this.issueDao = db.issueDao();
+        this.firestore = FirebaseSyncManager.getInstance(context).getFirestore();
+
         ensureInitialData();
+        attachFirestoreSnapshotListener();
+    }
+
+    private void attachFirestoreSnapshotListener() {
+        if (firestore == null) return;
+        firestore.collection(COLLECTION_ISSUES)
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Firestore issues listen error: " + e.getMessage());
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                            List<IssueEntity> remoteEntities = new ArrayList<>();
+                            for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                                String rawJson = doc.getString("rawJson");
+                                if (rawJson != null && !rawJson.isEmpty()) {
+                                    try {
+                                        TechnicalIssue issue = TechnicalIssue.fromJSONObject(new JSONObject(rawJson));
+                                        remoteEntities.add(IssueEntity.fromModel(issue));
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                            }
+                            if (!remoteEntities.isEmpty()) {
+                                issueDao.insertAll(remoteEntities);
+                            }
+                        });
+                    }
+                });
+    }
+
+    public LiveData<List<TechnicalIssue>> getAllIssuesLive() {
+        return Transformations.map(issueDao.getAllLive(), entities -> {
+            List<TechnicalIssue> list = new ArrayList<>();
+            for (IssueEntity e : entities) {
+                list.add(e.toModel());
+            }
+            return list;
+        });
     }
 
     public List<TechnicalIssue> getAllIssues() {
+        List<IssueEntity> entities = issueDao.getAllSync();
         List<TechnicalIssue> list = new ArrayList<>();
-        String json = preferences.getString(KEY_ISSUES, null);
-        if (json != null && !json.isEmpty()) {
-            try {
-                JSONArray array = new JSONArray(json);
-                for (int i = 0; i < array.length(); i++) {
-                    list.add(TechnicalIssue.fromJSONObject(array.getJSONObject(i)));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        for (IssueEntity e : entities) {
+            list.add(e.toModel());
         }
         return list;
     }
 
     public TechnicalIssue getIssueById(String id) {
         if (id == null) return null;
-        for (TechnicalIssue issue : getAllIssues()) {
-            if (id.equals(issue.getId())) {
-                return issue;
-            }
-        }
-        return null;
+        IssueEntity entity = issueDao.getById(id);
+        return entity != null ? entity.toModel() : null;
     }
 
-    public List<TechnicalIssue> getIssuesByStatus(String status) {
-        if (status == null || status.equalsIgnoreCase("All")) {
-            return getAllIssues();
-        }
-        List<TechnicalIssue> filtered = new ArrayList<>();
-        for (TechnicalIssue issue : getAllIssues()) {
-            if (status.equalsIgnoreCase(issue.getStatus())) {
-                filtered.add(issue);
+    public boolean addIssue(TechnicalIssue issue) {
+        if (issue == null || issue.getId() == null) return false;
+
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            issueDao.insertOrUpdate(IssueEntity.fromModel(issue));
+        });
+
+        if (firestore != null) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("id", issue.getId());
+            data.put("title", issue.getTitle());
+            data.put("projectName", issue.getProjectName());
+            data.put("siteLocation", issue.getSiteLocation());
+            data.put("priority", issue.getPriority());
+            data.put("status", issue.getStatus());
+            data.put("assignedPerson", issue.getAssignedPerson());
+            data.put("createdBy", issue.getCreatedBy());
+            data.put("createdDate", issue.getCreatedDate());
+            try {
+                data.put("rawJson", issue.toJSONObject().toString());
+            } catch (Exception ignored) {
             }
+            data.put("lastUpdated", System.currentTimeMillis());
+
+            firestore.collection(COLLECTION_ISSUES)
+                    .document(issue.getId())
+                    .set(data);
         }
-        return filtered;
+        return true;
     }
 
-    public List<TechnicalIssue> getIssuesByPriority(String priority) {
-        if (priority == null || priority.equalsIgnoreCase("All")) {
-            return getAllIssues();
-        }
-        List<TechnicalIssue> filtered = new ArrayList<>();
-        for (TechnicalIssue issue : getAllIssues()) {
-            if (priority.equalsIgnoreCase(issue.getPriority())) {
-                filtered.add(issue);
-            }
-        }
-        return filtered;
-    }
+    public boolean updateIssueStatus(String issueId, String newStatus, String changedBy, String notes) {
+        TechnicalIssue issue = getIssueById(issueId);
+        if (issue == null) return false;
 
-    public List<TechnicalIssue> searchIssues(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return getAllIssues();
-        }
-        String lowerQuery = query.toLowerCase().trim();
-        List<TechnicalIssue> filtered = new ArrayList<>();
-        for (TechnicalIssue issue : getAllIssues()) {
-            boolean matches = (issue.getId() != null && issue.getId().toLowerCase().contains(lowerQuery))
-                    || (issue.getTitle() != null && issue.getTitle().toLowerCase().contains(lowerQuery))
-                    || (issue.getProjectName() != null && issue.getProjectName().toLowerCase().contains(lowerQuery))
-                    || (issue.getSiteLocation() != null && issue.getSiteLocation().toLowerCase().contains(lowerQuery))
-                    || (issue.getAssignedPerson() != null && issue.getAssignedPerson().toLowerCase().contains(lowerQuery))
-                    || (issue.getPriority() != null && issue.getPriority().toLowerCase().contains(lowerQuery))
-                    || (issue.getStatus() != null && issue.getStatus().toLowerCase().contains(lowerQuery));
-            if (matches) {
-                filtered.add(issue);
-            }
-        }
-        return filtered;
-    }
+        String oldStatus = issue.getStatus();
+        issue.setStatus(newStatus);
+        String timestamp = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(new Date());
 
-    public void addIssue(TechnicalIssue issue) {
-        List<TechnicalIssue> current = getAllIssues();
-        current.add(0, issue); // Add newest at top
-        saveIssues(current);
-    }
+        IssueHistoryLog log = new IssueHistoryLog(
+                "LOG-" + System.currentTimeMillis(),
+                "Status: " + oldStatus + " -> " + newStatus + (notes != null ? " (" + notes + ")" : ""),
+                timestamp,
+                changedBy != null ? changedBy : "Site Engineer"
+        );
+        issue.addHistoryLog(log);
 
-    public boolean updateIssue(TechnicalIssue updatedIssue) {
-        List<TechnicalIssue> current = getAllIssues();
-        for (int i = 0; i < current.size(); i++) {
-            if (current.get(i).getId().equals(updatedIssue.getId())) {
-                current.set(i, updatedIssue);
-                saveIssues(current);
-                return true;
-            }
-        }
-        return false;
+        return addIssue(issue);
     }
 
     public boolean addCommentToIssue(String issueId, IssueComment comment) {
         TechnicalIssue issue = getIssueById(issueId);
-        if (issue != null) {
-            issue.addComment(comment);
-            String now = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(new Date());
-            issue.addHistoryLog(new IssueHistoryLog(
-                    "LOG-" + System.currentTimeMillis(),
-                    "Added comment: \"" + (comment.getMessage().length() > 30 ? comment.getMessage().substring(0, 27) + "..." : comment.getMessage()) + "\"",
-                    now,
-                    comment.getAuthorName()
-            ));
-            return updateIssue(issue);
-        }
-        return false;
+        if (issue == null || comment == null) return false;
+        issue.addComment(comment);
+        return addIssue(issue);
     }
 
-    public boolean updateIssueStatus(String issueId, String newStatus, String performedBy, String note) {
-        TechnicalIssue issue = getIssueById(issueId);
-        if (issue != null) {
-            String oldStatus = issue.getStatus();
-            issue.setStatus(newStatus);
-            String now = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(new Date());
-            String logAction = "Status updated from " + oldStatus + " to " + newStatus;
-            if (note != null && !note.trim().isEmpty()) {
-                logAction += " (" + note.trim() + ")";
-            }
-            issue.addHistoryLog(new IssueHistoryLog(
-                    "LOG-" + System.currentTimeMillis(),
-                    logAction,
-                    now,
-                    performedBy
-            ));
-            return updateIssue(issue);
+    public boolean deleteIssue(String issueId) {
+        if (issueId == null) return false;
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            issueDao.deleteById(issueId);
+        });
+        if (firestore != null) {
+            firestore.collection(COLLECTION_ISSUES).document(issueId).delete();
         }
-        return false;
-    }
-
-    private void saveIssues(List<TechnicalIssue> list) {
-        JSONArray array = new JSONArray();
-        for (TechnicalIssue issue : list) {
-            try {
-                array.put(issue.toJSONObject());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        preferences.edit().putString(KEY_ISSUES, array.toString()).apply();
+        return true;
     }
 
     private void ensureInitialData() {
-        if (!preferences.contains(KEY_ISSUES)) {
-            List<TechnicalIssue> seed = new ArrayList<>();
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            List<IssueEntity> existing = issueDao.getAllSync();
+            if (existing == null || existing.isEmpty()) {
+                List<IssueEntity> initial = new ArrayList<>();
 
-            // Seed Issue 1
-            TechnicalIssue issue1 = new TechnicalIssue(
-                    "RFI-101",
-                    "HVAC Duct Clashing with Transfer Beam Girder",
-                    "300mm chilled water supply duct collides with structural transfer beam TB-04 at Grid Line C-7. Awaiting MEP consultant rerouting revision or beam sleeve structural sign-off.",
-                    "Metro Central Tower",
-                    "Basement Level B2 - Grid Line C-7",
-                    TechnicalIssue.PRIORITY_HIGH,
-                    TechnicalIssue.STATUS_IN_REVIEW,
-                    "Chief MEP Consultant",
-                    "Alex Chen (Site Engineer)",
-                    "Oct 24, 2026",
-                    null
-            );
-            issue1.addComment(new IssueComment(
-                    "C-1",
-                    "David Kim",
-                    "Lead Structural Engineer",
-                    "Oct 24, 2026 14:15",
-                    "Transfer beam coring is strictly prohibited due to post-tension cables. Duct must drop beneath beam soffit."
-            ));
-            issue1.addComment(new IssueComment(
-                    "C-2",
-                    "Alex Chen",
-                    "Site Engineer",
-                    "Oct 24, 2026 16:30",
-                    "Verifying ceiling headroom clearance against NFPA minimum egress standard."
-            ));
-            issue1.addHistoryLog(new IssueHistoryLog("LOG-1", "Created RFI #101", "Oct 24, 2026 10:00", "Alex Chen"));
-            issue1.addHistoryLog(new IssueHistoryLog("LOG-2", "Assigned to Chief MEP Consultant", "Oct 24, 2026 10:30", "Alex Chen"));
-            issue1.addHistoryLog(new IssueHistoryLog("LOG-3", "Status changed from Assigned to In Review", "Oct 24, 2026 14:15", "David Kim"));
-            seed.add(issue1);
+                // Seed 1: RFI-201
+                TechnicalIssue i1 = new TechnicalIssue(
+                        "RFI-201", "Level 14 HVAC Duct Clash with Structural Shear Beam",
+                        "Main supply return duct route collides with shear beam SB-14C at grid intersection 6-D. Requesting mechanical reroute or beam web penetration signoff.",
+                        "Metro Central Tower", "Core Tower - Level 14", TechnicalIssue.PRIORITY_HIGH,
+                        TechnicalIssue.STATUS_IN_REVIEW, "Elena Rostova (PE)", "Alex Chen",
+                        "Nov 06, 2026 - 10:15 AM", ""
+                );
+                initial.add(IssueEntity.fromModel(i1));
 
-            // Seed Issue 2
-            TechnicalIssue issue2 = new TechnicalIssue(
-                    "RFI-102",
-                    "Rebar Spacing Discrepancy on Pile Cap B-4",
-                    "Structural drawing S-104 specifies T25@100mm c/c bottom mat reinforcement, but bar bending schedule BBS-08 calls for T20@150mm. Work halted on cage tying.",
-                    "Skyline Business Park",
-                    "Sector 3 - Foundation Pit #4",
-                    TechnicalIssue.PRIORITY_MEDIUM,
-                    TechnicalIssue.STATUS_ASSIGNED,
-                    "Robert Vance (PMP)",
-                    "Priya Sharma (Field Engineer)",
-                    "Oct 25, 2026",
-                    null
-            );
-            issue2.addHistoryLog(new IssueHistoryLog("LOG-4", "Created RFI #102", "Oct 25, 2026 09:15", "Priya Sharma"));
-            issue2.addHistoryLog(new IssueHistoryLog("LOG-5", "Assigned to Robert Vance (PMP)", "Oct 25, 2026 09:20", "Priya Sharma"));
-            seed.add(issue2);
+                // Seed 2: RFI-202
+                TechnicalIssue i2 = new TechnicalIssue(
+                        "RFI-202", "Basement B2 Waterproofing Membrane Membrane Tears",
+                        "Minor punctures discovered along the southern cold joint retaining wall prior to backfill compaction.",
+                        "Metro Central Tower", "Basement B2 Retaining Wall", TechnicalIssue.PRIORITY_MEDIUM,
+                        TechnicalIssue.STATUS_ASSIGNED, "Waterproofing Subcontractor", "Alex Chen",
+                        "Nov 05, 2026 - 02:40 PM", ""
+                );
+                initial.add(IssueEntity.fromModel(i2));
 
-            // Seed Issue 3
-            TechnicalIssue issue3 = new TechnicalIssue(
-                    "RFI-103",
-                    "Concrete Slump Specification Clarification for Pump Pour",
-                    "Standard specification calls for 120mm +/- 25mm slump, but mobile boom pump operator advises minimum 160mm workability with superplasticizer for high-rise 45m vertical discharge.",
-                    "Riverside Residences",
-                    "Block B - 8th Floor Deck Slab",
-                    TechnicalIssue.PRIORITY_LOW,
-                    TechnicalIssue.STATUS_RESOLVED,
-                    "Elena Rostova (PE)",
-                    "John Doe (Site Engineer)",
-                    "Oct 20, 2026",
-                    null
-            );
-            issue3.addComment(new IssueComment(
-                    "C-3",
-                    "Elena Rostova",
-                    "Structural Consultant",
-                    "Oct 21, 2026 11:00",
-                    "Approved Sikament NN dosage to achieve 160mm target slump without exceeding 0.40 W/C ratio. Test cylinders taken."
-            ));
-            issue3.addHistoryLog(new IssueHistoryLog("LOG-6", "Created RFI #103", "Oct 20, 2026 08:30", "John Doe"));
-            issue3.addHistoryLog(new IssueHistoryLog("LOG-7", "Assigned to Elena Rostova (PE)", "Oct 20, 2026 09:00", "John Doe"));
-            issue3.addHistoryLog(new IssueHistoryLog("LOG-8", "Status updated from In Review to Resolved", "Oct 21, 2026 11:00", "Elena Rostova"));
-            seed.add(issue3);
-
-            saveIssues(seed);
-        }
+                issueDao.insertAll(initial);
+            }
+        });
     }
 }

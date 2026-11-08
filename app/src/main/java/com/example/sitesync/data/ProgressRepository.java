@@ -1,241 +1,219 @@
 package com.example.sitesync.data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+
+import com.example.sitesync.data.local.ActivityDao;
+import com.example.sitesync.data.local.ActivityEntity;
+import com.example.sitesync.data.local.AppDatabase;
 import com.example.sitesync.models.ConstructionActivity;
 import com.example.sitesync.models.ProgressLog;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- * Repository providing local persistence for construction site activities
- * and progress history using SharedPreferences JSON storage.
+ * Enterprise Single-Source-of-Truth Repository for Construction Activities.
+ * Backed by Room Database local cache and Cloud Firestore real-time snapshot sync.
  */
 public class ProgressRepository {
 
-    private static final String PREF_NAME = "SiteSync_Progress_Prefs";
-    private static final String KEY_ACTIVITIES = "key_construction_activities";
+    private static final String TAG = "ProgressRepository";
+    private static final String COLLECTION_ACTIVITIES = "activities";
 
-    private final SharedPreferences preferences;
+    private final ActivityDao activityDao;
+    private final FirebaseFirestore firestore;
 
     public ProgressRepository(Context context) {
-        this.preferences = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        AppDatabase db = AppDatabase.getDatabase(context);
+        this.activityDao = db.activityDao();
+        this.firestore = FirebaseSyncManager.getInstance(context).getFirestore();
+
         ensureInitialData();
+        attachFirestoreSnapshotListener();
     }
 
-    /**
-     * Retrieves all saved construction activities.
-     */
-    public List<ConstructionActivity> getAllActivities() {
-        List<ConstructionActivity> activities = new ArrayList<>();
-        String jsonString = preferences.getString(KEY_ACTIVITIES, null);
+    private void attachFirestoreSnapshotListener() {
+        if (firestore == null) return;
+        firestore.collection(COLLECTION_ACTIVITIES)
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Firestore activities listen error: " + e.getMessage());
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                            List<ActivityEntity> remoteEntities = new ArrayList<>();
+                            for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                                String rawJson = doc.getString("rawJson");
+                                if (rawJson != null && !rawJson.isEmpty()) {
+                                    try {
+                                        ConstructionActivity act = ConstructionActivity.fromJSONObject(new JSONObject(rawJson));
+                                        remoteEntities.add(ActivityEntity.fromModel(act));
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                            }
+                            if (!remoteEntities.isEmpty()) {
+                                activityDao.insertAll(remoteEntities);
+                            }
+                        });
+                    }
+                });
+    }
 
-        if (jsonString != null && !jsonString.isEmpty()) {
-            try {
-                JSONArray jsonArray = new JSONArray(jsonString);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    activities.add(ConstructionActivity.fromJSONObject(obj));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+    public LiveData<List<ConstructionActivity>> getAllActivitiesLive() {
+        return Transformations.map(activityDao.getAllLive(), entities -> {
+            List<ConstructionActivity> list = new ArrayList<>();
+            for (ActivityEntity entity : entities) {
+                list.add(entity.toModel());
             }
+            return list;
+        });
+    }
+
+    public List<ConstructionActivity> getAllActivities() {
+        List<ActivityEntity> entities = activityDao.getAllSync();
+        List<ConstructionActivity> activities = new ArrayList<>();
+        for (ActivityEntity e : entities) {
+            activities.add(e.toModel());
         }
         return activities;
     }
 
-    /**
-     * Retrieves a single activity by unique ID.
-     */
     public ConstructionActivity getActivityById(String activityId) {
         if (activityId == null) return null;
-        for (ConstructionActivity activity : getAllActivities()) {
-            if (activityId.equals(activity.getId())) {
-                return activity;
+        ActivityEntity entity = activityDao.getById(activityId);
+        return entity != null ? entity.toModel() : null;
+    }
+
+    public boolean addActivity(ConstructionActivity activity) {
+        if (activity == null || activity.getId() == null) return false;
+
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            activityDao.insertOrUpdate(ActivityEntity.fromModel(activity));
+        });
+
+        if (firestore != null) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("id", activity.getId());
+            data.put("projectName", activity.getProjectName());
+            data.put("activityName", activity.getActivityName());
+            data.put("location", activity.getLocation());
+            data.put("progressPercentage", activity.getProgressPercentage());
+            data.put("status", activity.getStatus());
+            data.put("remarks", activity.getLatestRemarks());
+            data.put("photoUri", activity.getLatestPhotoUri());
+            try {
+                data.put("rawJson", activity.toJSONObject().toString());
+            } catch (Exception ignored) {
             }
+            data.put("lastUpdated", System.currentTimeMillis());
+
+            firestore.collection(COLLECTION_ACTIVITIES)
+                    .document(activity.getId())
+                    .set(data);
         }
-        return null;
+        return true;
     }
 
-    /**
-     * Updates an activity with a new progress percentage, status, remarks, and optional photo,
-     * while automatically recording an audit log entry in the activity's history.
-     */
-    public boolean updateProgress(String activityId, int newPercentage, String newStatus,
-                                  String remarks, String photoUri, String engineerName) {
-        List<ConstructionActivity> list = getAllActivities();
-        boolean updated = false;
+    public boolean updateProgress(String activityId, int newProgress, String newStatus,
+                                  String remarks, String engineerName, String photoUri) {
+        ConstructionActivity target = getActivityById(activityId);
+        if (target == null) return false;
 
-        String formattedTimestamp = new SimpleDateFormat("MMM dd, yyyy - hh:mm a", Locale.getDefault()).format(new Date());
-
-        for (int i = 0; i < list.size(); i++) {
-            ConstructionActivity act = list.get(i);
-            if (act.getId().equals(activityId)) {
-                act.setProgressPercentage(newPercentage);
-                act.setStatus(newStatus);
-                act.setLastUpdated(formattedTimestamp);
-                act.setUpdatedBy(engineerName);
-                if (remarks != null && !remarks.trim().isEmpty()) {
-                    act.setLatestRemarks(remarks.trim());
-                }
-                if (photoUri != null && !photoUri.trim().isEmpty()) {
-                    act.setLatestPhotoUri(photoUri.trim());
-                }
-
-                // Add to audit history
-                ProgressLog log = new ProgressLog(
-                        "LOG-" + System.currentTimeMillis(),
-                        newPercentage,
-                        newStatus,
-                        remarks,
-                        formattedTimestamp,
-                        engineerName,
-                        photoUri
-                );
-                act.addProgressLog(log);
-
-                list.set(i, act);
-                updated = true;
-                break;
-            }
+        target.setProgressPercentage(newProgress);
+        if (newStatus != null && !newStatus.isEmpty()) {
+            target.setStatus(newStatus);
+        }
+        if (remarks != null && !remarks.isEmpty()) {
+            target.setLatestRemarks(remarks);
+        }
+        if (photoUri != null && !photoUri.isEmpty()) {
+            target.setLatestPhotoUri(photoUri);
         }
 
-        if (updated) {
-            saveActivities(list);
+        String time = new SimpleDateFormat("MMM dd, yyyy - hh:mm a", Locale.getDefault()).format(new Date());
+        target.setLastUpdated(time);
+        target.setUpdatedBy(engineerName != null ? engineerName : "Site Engineer");
+
+        ProgressLog log = new ProgressLog(
+                "LOG-" + System.currentTimeMillis(),
+                newProgress,
+                target.getStatus(),
+                remarks != null ? remarks : "Progress updated",
+                time,
+                engineerName != null ? engineerName : "Site Engineer",
+                photoUri != null ? photoUri : ""
+        );
+        target.addProgressLog(log);
+
+        return addActivity(target);
+    }
+
+    public boolean deleteActivity(String activityId) {
+        if (activityId == null) return false;
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            activityDao.deleteById(activityId);
+        });
+        if (firestore != null) {
+            firestore.collection(COLLECTION_ACTIVITIES).document(activityId).delete();
         }
-        return updated;
+        return true;
     }
 
-    /**
-     * Adds a brand new construction activity.
-     */
-    public void addActivity(ConstructionActivity newActivity) {
-        List<ConstructionActivity> list = getAllActivities();
-        list.add(0, newActivity);
-        saveActivities(list);
-    }
-
-    /**
-     * Persists the activities list to SharedPreferences as a JSON array.
-     */
-    private void saveActivities(List<ConstructionActivity> list) {
-        try {
-            JSONArray jsonArray = new JSONArray();
-            for (ConstructionActivity act : list) {
-                jsonArray.put(act.toJSONObject());
-            }
-            preferences.edit().putString(KEY_ACTIVITIES, jsonArray.toString()).apply();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Pre-populates realistic construction demo data if repository is empty.
-     */
     private void ensureInitialData() {
-        if (!preferences.contains(KEY_ACTIVITIES)) {
-            List<ConstructionActivity> initialList = new ArrayList<>();
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            List<ActivityEntity> existing = activityDao.getAllSync();
+            if (existing == null || existing.isEmpty()) {
+                List<ActivityEntity> initial = new ArrayList<>();
 
-            // 1. Foundation Raft Concrete Pouring
-            List<ProgressLog> history1 = new ArrayList<>();
-            history1.add(new ProgressLog("L-101", 85, ConstructionActivity.STATUS_IN_PROGRESS,
-                    "3rd pour completed. Surface vibrated and curing blankets positioned.",
-                    "Nov 06, 2026 - 11:30 AM", "Elena Rostova (PE)", ""));
-            history1.add(new ProgressLog("L-102", 55, ConstructionActivity.STATUS_IN_PROGRESS,
-                    "Rebar grid inspection signed off by structural surveyor.",
-                    "Nov 04, 2026 - 09:15 AM", "Elena Rostova (PE)", ""));
-            history1.add(new ProgressLog("L-103", 20, ConstructionActivity.STATUS_PENDING,
-                    "Excavation and sub-base blinding completed.",
-                    "Nov 01, 2026 - 08:00 AM", "Elena Rostova (PE)", ""));
+                // Seed 1: Foundation Poured
+                ConstructionActivity act1 = new ConstructionActivity(
+                        "ACT-101", "Metro Central Tower", "Foundation Poured & Curing",
+                        "Sector B - Sub-Basement", 85, ConstructionActivity.STATUS_IN_PROGRESS,
+                        "Nov 06, 2026", "Alex Chen (PE)", "Concrete curing strength 32 MPa verified with Schmidt hammer.", "", new ArrayList<>()
+                );
+                initial.add(ActivityEntity.fromModel(act1));
 
-            initialList.add(new ConstructionActivity(
-                    "ACT-101",
-                    "Metro Tower Phase 2",
-                    "Foundation Raft Concrete Pouring",
-                    "Basement Level - Sector A",
-                    85,
-                    ConstructionActivity.STATUS_IN_PROGRESS,
-                    "Nov 06, 2026 - 11:30 AM",
-                    "Elena Rostova (PE)",
-                    "3rd pour completed. Surface vibrated and curing blankets positioned.",
-                    "",
-                    history1
-            ));
+                // Seed 2: Structural Column
+                ConstructionActivity act2 = new ConstructionActivity(
+                        "ACT-102", "Metro Central Tower", "Structural Steel Column Erection",
+                        "Tower Core Grid 4-8", 62, ConstructionActivity.STATUS_IN_PROGRESS,
+                        "Nov 06, 2026", "Alex Chen (PE)", "8 of 16 columns bolted and plumbed with theodolite.", "", new ArrayList<>()
+                );
+                initial.add(ActivityEntity.fromModel(act2));
 
-            // 2. Structural Steel Column Erection
-            List<ProgressLog> history2 = new ArrayList<>();
-            history2.add(new ProgressLog("L-201", 45, ConstructionActivity.STATUS_IN_PROGRESS,
-                    "8 of 16 columns bolted and plumbed with theodolite.",
-                    "Nov 06, 2026 - 02:45 PM", "Elena Rostova (PE)", ""));
-            history2.add(new ProgressLog("L-202", 15, ConstructionActivity.STATUS_PENDING,
-                    "Cranes rigged and base plate anchor grouting completed.",
-                    "Nov 03, 2026 - 10:00 AM", "Elena Rostova (PE)", ""));
+                // Seed 3: Earth Retention
+                ConstructionActivity act3 = new ConstructionActivity(
+                        "ACT-103", "Metro Central Tower", "Earth Retention & Shoring Wall",
+                        "East Perimeter Boundary", 100, ConstructionActivity.STATUS_COMPLETED,
+                        "Nov 05, 2026", "Alex Chen (PE)", "Tieback anchor tensioning and shotcrete tests fully certified.", "", new ArrayList<>()
+                );
+                initial.add(ActivityEntity.fromModel(act3));
 
-            initialList.add(new ConstructionActivity(
-                    "ACT-102",
-                    "Metro Tower Phase 2",
-                    "Structural Steel Column Erection",
-                    "Level 4 - North Quadrant",
-                    45,
-                    ConstructionActivity.STATUS_IN_PROGRESS,
-                    "Nov 06, 2026 - 02:45 PM",
-                    "Elena Rostova (PE)",
-                    "8 of 16 columns bolted and plumbed with theodolite.",
-                    "",
-                    history2
-            ));
+                // Seed 4: HVAC Electrical
+                ConstructionActivity act4 = new ConstructionActivity(
+                        "ACT-104", "Metro Central Tower", "HVAC & Electrical Risers Rough-In",
+                        "Core Shaft - Levels 1 to 3", 18, ConstructionActivity.STATUS_PENDING,
+                        "Nov 06, 2026", "Alex Chen (PE)", "Awaiting CAD revision 4.8.2 before sleeve drill-outs.", "", new ArrayList<>()
+                );
+                initial.add(ActivityEntity.fromModel(act4));
 
-            // 3. Earth Retention & Shoring Wall
-            List<ProgressLog> history3 = new ArrayList<>();
-            history3.add(new ProgressLog("L-301", 100, ConstructionActivity.STATUS_COMPLETED,
-                    "Tieback anchor tensioning and shotcrete tests fully certified.",
-                    "Nov 05, 2026 - 04:00 PM", "Elena Rostova (PE)", ""));
-
-            initialList.add(new ConstructionActivity(
-                    "ACT-103",
-                    "Metro Tower Phase 2",
-                    "Earth Retention & Shoring Wall",
-                    "East Perimeter Boundary",
-                    100,
-                    ConstructionActivity.STATUS_COMPLETED,
-                    "Nov 05, 2026 - 04:00 PM",
-                    "Elena Rostova (PE)",
-                    "Tieback anchor tensioning and shotcrete tests fully certified.",
-                    "",
-                    history3
-            ));
-
-            // 4. HVAC & Electrical Conduit Rough-In
-            List<ProgressLog> history4 = new ArrayList<>();
-            history4.add(new ProgressLog("L-401", 10, ConstructionActivity.STATUS_PENDING,
-                    "Awaiting CAD revision 4.8.2 before sleeve drill-outs.",
-                    "Nov 06, 2026 - 09:00 AM", "Elena Rostova (PE)", ""));
-
-            initialList.add(new ConstructionActivity(
-                    "ACT-104",
-                    "Metro Tower Phase 2",
-                    "HVAC & Electrical Risers Rough-In",
-                    "Core Shaft - Levels 1 to 3",
-                    10,
-                    ConstructionActivity.STATUS_PENDING,
-                    "Nov 06, 2026 - 09:00 AM",
-                    "Elena Rostova (PE)",
-                    "Awaiting CAD revision 4.8.2 before sleeve drill-outs.",
-                    "",
-                    history4
-            ));
-
-            saveActivities(initialList);
-        }
+                activityDao.insertAll(initial);
+            }
+        });
     }
 }

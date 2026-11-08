@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.sitesync.R;
 import com.example.sitesync.data.IssueRepository;
 import com.example.sitesync.databinding.ActivityIssueDetailBinding;
 import com.example.sitesync.models.IssueComment;
@@ -44,6 +45,16 @@ public class IssueDetailActivity extends AppCompatActivity {
 
     private ValueEventListener rtdbCommentsListener;
     private DatabaseReference rtdbCommentsRef;
+    private com.example.sitesync.hardware.VoiceDictationManager voiceDictationManager;
+
+    private final androidx.activity.result.ActivityResultLauncher<String> micPermissionLauncher =
+            registerForActivityResult(new androidx.activity.result.contract.ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    startDictation();
+                } else {
+                    Toast.makeText(this, "Microphone permission is required to Speak Note", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +65,57 @@ public class IssueDetailActivity extends AppCompatActivity {
         repository = new IssueRepository(this);
         issueId = getIntent().getStringExtra(IssueManagementActivity.EXTRA_ISSUE_ID);
 
+        voiceDictationManager = new com.example.sitesync.hardware.VoiceDictationManager(this);
+
         initViews();
         setupListeners();
         setupRealtimeDiscussionStream();
+    }
+
+    private void startDictation() {
+        setMicUiActive(true);
+        String initialText = binding.etNewComment.getText() != null ? binding.etNewComment.getText().toString() : "";
+
+        voiceDictationManager.startListening(new com.example.sitesync.hardware.VoiceDictationManager.OnDictationListener() {
+            @Override
+            public void onSpeechRmsChanged(float rmsdB) {}
+
+            @Override
+            public void onPartialTranscription(String partialText) {
+                if (binding.etNewComment != null) {
+                    String combined = initialText.isEmpty() ? partialText : initialText + " " + partialText;
+                    binding.etNewComment.setText(combined);
+                    binding.etNewComment.setSelection(combined.length());
+                }
+            }
+
+            @Override
+            public void onFinalTranscription(String finalText, java.io.File audioBackupFile) {
+                setMicUiActive(false);
+                if (binding.etNewComment != null && !finalText.isEmpty()) {
+                    String combined = initialText.isEmpty() ? finalText : initialText + " " + finalText;
+                    binding.etNewComment.setText(combined);
+                    binding.etNewComment.setSelection(combined.length());
+                }
+            }
+
+            @Override
+            public void onError(String userFriendlyError) {
+                setMicUiActive(false);
+                Toast.makeText(IssueDetailActivity.this, userFriendlyError, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setMicUiActive(boolean active) {
+        if (binding.btnDictateComment == null) return;
+        if (active) {
+            binding.btnDictateComment.setBackgroundResource(R.drawable.btn_mic_dictate_active);
+            binding.btnDictateComment.setImageResource(R.drawable.ic_mic_black);
+        } else {
+            binding.btnDictateComment.setBackgroundResource(R.drawable.btn_mic_dictate);
+            binding.btnDictateComment.setImageResource(R.drawable.ic_mic);
+        }
     }
 
     private void setupRealtimeDiscussionStream() {
@@ -144,6 +203,21 @@ public class IssueDetailActivity extends AppCompatActivity {
 
         // Post new comment
         binding.btnSendComment.setOnClickListener(v -> postComment());
+
+        // Speak Note mic button
+        binding.btnDictateComment.setOnClickListener(v -> {
+            com.example.sitesync.utils.HapticFeedbackUtil.heavyClick(this, v);
+            if (voiceDictationManager.isListening()) {
+                voiceDictationManager.stopListening();
+                setMicUiActive(false);
+            } else {
+                if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    startDictation();
+                } else {
+                    micPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO);
+                }
+            }
+        });
     }
 
     private void loadIssueDetails() {
@@ -173,31 +247,31 @@ public class IssueDetailActivity extends AppCompatActivity {
         String priority = currentIssue.getPriority() != null ? currentIssue.getPriority() : TechnicalIssue.PRIORITY_MEDIUM;
         binding.tvDetailPriority.setText(priority + " Priority");
         if (TechnicalIssue.PRIORITY_HIGH.equalsIgnoreCase(priority)) {
-            binding.tvDetailPriority.setBackgroundColor(Color.parseColor("#FEE2E2"));
-            binding.tvDetailPriority.setTextColor(Color.parseColor("#DC2626"));
+            binding.tvDetailPriority.setBackgroundColor(Color.parseColor("#381E1E"));
+            binding.tvDetailPriority.setTextColor(Color.parseColor("#EF4444"));
         } else if (TechnicalIssue.PRIORITY_LOW.equalsIgnoreCase(priority)) {
-            binding.tvDetailPriority.setBackgroundColor(Color.parseColor("#DBEAFE"));
-            binding.tvDetailPriority.setTextColor(Color.parseColor("#2563EB"));
+            binding.tvDetailPriority.setBackgroundColor(Color.parseColor("#1E293B"));
+            binding.tvDetailPriority.setTextColor(Color.parseColor("#38BDF8"));
         } else {
-            binding.tvDetailPriority.setBackgroundColor(Color.parseColor("#FEF3C7"));
-            binding.tvDetailPriority.setTextColor(Color.parseColor("#D97706"));
+            binding.tvDetailPriority.setBackgroundColor(Color.parseColor("#382B14"));
+            binding.tvDetailPriority.setTextColor(Color.parseColor("#F59E0B"));
         }
 
         // Status styling
         String status = currentIssue.getStatus() != null ? currentIssue.getStatus() : TechnicalIssue.STATUS_OPEN;
         binding.tvDetailStatus.setText(status);
         if (TechnicalIssue.STATUS_RESOLVED.equalsIgnoreCase(status) || TechnicalIssue.STATUS_CLOSED.equalsIgnoreCase(status)) {
-            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#DCFCE7"));
-            binding.tvDetailStatus.setTextColor(Color.parseColor("#16A34A"));
+            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#123324"));
+            binding.tvDetailStatus.setTextColor(Color.parseColor("#10B981"));
         } else if (TechnicalIssue.STATUS_IN_REVIEW.equalsIgnoreCase(status)) {
-            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#E0E7FF"));
-            binding.tvDetailStatus.setTextColor(Color.parseColor("#4F46E5"));
+            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#1E293B"));
+            binding.tvDetailStatus.setTextColor(Color.parseColor("#818CF8"));
         } else if (TechnicalIssue.STATUS_ASSIGNED.equalsIgnoreCase(status)) {
-            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#FEF3C7"));
-            binding.tvDetailStatus.setTextColor(Color.parseColor("#D97706"));
+            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#382B14"));
+            binding.tvDetailStatus.setTextColor(Color.parseColor("#F59E0B"));
         } else {
-            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#F1F5F9"));
-            binding.tvDetailStatus.setTextColor(Color.parseColor("#475569"));
+            binding.tvDetailStatus.setBackgroundColor(Color.parseColor("#222631"));
+            binding.tvDetailStatus.setTextColor(Color.parseColor("#94A3B8"));
         }
 
         // Photo Attachment handling

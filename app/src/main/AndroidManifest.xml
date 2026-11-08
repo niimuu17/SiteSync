@@ -5,6 +5,19 @@
     <!-- Network permissions for Firebase & real-time sync -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Hardware Subsystem Permissions -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.barometer" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" />
 
     <application
         android:name=".SiteSyncApplication"
@@ -45,12 +58,12 @@
 
         <activity
             android:name=".ui.EngineerDashboardActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <!-- Engineer Module: Site Progress Monitoring Activities -->
         <activity
             android:name=".ui.ProgressMonitoringActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <activity
             android:name=".ui.ProgressDetailActivity"
@@ -165,6 +178,24 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="false" />
+        <!-- Reorganized Enterprise Subpackage Activities -->
+        <activity android:name=".ui.auth.AuthActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.dashboard.EngineerDashboardActivity" android:exported="false" />
+        <activity android:name=".ui.dashboard.ManagerDashboardActivity" android:exported="false" />
+        <activity android:name=".ui.dashboard.SupervisorDashboardActivity" android:exported="false" />
+        <activity android:name=".ui.progress.ProgressMonitoringActivity" android:exported="false" />
+        <activity android:name=".ui.progress.UpdateProgressActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.inspections.InspectionListActivity" android:exported="false" />
+        <activity android:name=".ui.inspections.CreateInspectionActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.inspections.InspectionDetailActivity" android:exported="false" />
+        <activity android:name=".ui.inspections.ReInspectionActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.documents.DocumentManagementActivity" android:exported="false" />
+        <activity android:name=".ui.documents.PdfViewerActivity" android:exported="false" />
+        <activity android:name=".ui.issues.IssueManagementActivity" android:exported="false" />
+        <activity android:name=".ui.issues.IssueDetailActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.reports.DailyReportListActivity" android:exported="false" />
+        <activity android:name=".ui.reports.CreateDailyReportActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.reports.DailyReportDetailActivity" android:exported="false" />
     </application>
 
 </manifest>

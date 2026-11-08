@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SemiCircleGaugeView">
+        <attr name="gaugeProgress" format="integer" />
+        <attr name="gaugeMax" format="integer" />
+        <attr name="gaugeTrackColor" format="color" />
+        <attr name="gaugeStrokeColor" format="color" />
+        <attr name="gaugeSweepColor" format="color" />
+        <attr name="gaugeStrokeWidth" format="dimension" />
+        <attr name="gaugeStartAngle" format="float" />
+        <attr name="gaugeSweepAngle" format="float" />
+        <attr name="trendValue" format="string" />
+        <attr name="metricTitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="HatchedProgressBar">
+        <attr name="hatchedProgress" format="integer" />
+        <attr name="hatchedColor" format="color" />
+        <attr name="hazardStripeColor" format="color" />
+        <attr name="hatchedTrackColor" format="color" />
+        <attr name="hazardTrackColor" format="color" />
+        <attr name="stripeWidth" format="dimension" />
+        <attr name="stripeSpacing" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="CutAndFillTelemetryView">
+        <attr name="netVolumeText" format="string" />
+        <attr name="cutColor" format="color" />
+        <attr name="fillColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="BarcodeProgressView">
+        <attr name="barcodeProgress" format="integer" />
+    </declare-styleable>
+</resources>

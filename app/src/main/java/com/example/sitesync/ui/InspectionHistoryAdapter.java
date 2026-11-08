@@ -82,16 +82,16 @@ public class InspectionHistoryAdapter extends RecyclerView.Adapter<InspectionHis
 
             // Status Badge Coloring
             if (SiteInspection.STATUS_PASSED.equalsIgnoreCase(record.getStatus())) {
-                binding.tvRecordStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-                binding.tvRecordStatusBadge.setTextColor(Color.parseColor("#15803D"));
-                binding.viewTimelineDot.setBackgroundColor(Color.parseColor("#16A34A"));
+                binding.tvRecordStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+                binding.tvRecordStatusBadge.setTextColor(Color.parseColor("#10B981"));
+                binding.viewTimelineDot.setBackgroundColor(Color.parseColor("#10B981"));
             } else if (SiteInspection.STATUS_FAILED.equalsIgnoreCase(record.getStatus())) {
-                binding.tvRecordStatusBadge.setBackgroundColor(Color.parseColor("#FEE2E2"));
-                binding.tvRecordStatusBadge.setTextColor(Color.parseColor("#B91C1C"));
-                binding.viewTimelineDot.setBackgroundColor(Color.parseColor("#DC2626"));
+                binding.tvRecordStatusBadge.setBackgroundColor(Color.parseColor("#381E1E"));
+                binding.tvRecordStatusBadge.setTextColor(Color.parseColor("#EF4444"));
+                binding.viewTimelineDot.setBackgroundColor(Color.parseColor("#EF4444"));
             } else {
-                binding.tvRecordStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-                binding.tvRecordStatusBadge.setTextColor(Color.parseColor("#B45309"));
+                binding.tvRecordStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+                binding.tvRecordStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
                 binding.viewTimelineDot.setBackgroundColor(Color.parseColor("#F59E0B"));
             }
 

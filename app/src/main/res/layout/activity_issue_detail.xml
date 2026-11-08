@@ -406,15 +406,15 @@
                         android:textSize="12sp"
                         android:visibility="gone" />
 
-                    <!-- Input Box to add reply -->
+                    <!-- Input Box to add reply with Speak Note -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:background="@drawable/bg_chip_role"
+                        android:background="@drawable/bg_pill_inactive"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="4dp">
+                        android:padding="6dp">
 
                         <EditText
                             android:id="@+id/etNewComment"
@@ -423,7 +423,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:hint="Type reply, clarification, or instruction..."
+                            android:hint="Type or Speak Note..."
                             android:inputType="textCapSentences|textMultiLine"
                             android:maxLines="3"
                             android:textColor="@color/text_primary"
@@ -431,13 +431,22 @@
                             android:textSize="13sp" />
 
                         <ImageButton
+                            android:id="@+id/btnDictateComment"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="4dp"
+                            android:background="@drawable/btn_mic_dictate"
+                            android:contentDescription="Speak Note"
+                            android:src="@drawable/ic_mic" />
+
+                        <ImageButton
                             android:id="@+id/btnSendComment"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:background="@drawable/btn_arrow_trigger"
                             android:contentDescription="Send Reply"
                             android:src="@drawable/ic_send"
-                            app:tint="@color/brand_accent" />
+                            app:tint="#111317" />
                     </LinearLayout>
 
                 </LinearLayout>

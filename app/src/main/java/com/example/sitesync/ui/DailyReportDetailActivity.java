@@ -91,12 +91,12 @@ public class DailyReportDetailActivity extends AppCompatActivity {
         // Status badge styling
         if (currentReport.isSubmitted()) {
             binding.tvDetailStatusBadge.setText("Submitted");
-            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#DCFCE7"));
-            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#16A34A"));
+            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#123324"));
+            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#10B981"));
         } else {
             binding.tvDetailStatusBadge.setText("Draft");
-            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#FEF3C7"));
-            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#D97706"));
+            binding.tvDetailStatusBadge.setBackgroundColor(Color.parseColor("#382B14"));
+            binding.tvDetailStatusBadge.setTextColor(Color.parseColor("#F59E0B"));
         }
 
         // Photo Attachment handling
