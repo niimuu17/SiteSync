@@ -15,6 +15,9 @@ public class SessionManager {
     private static final String KEY_FULL_NAME = "fullName";
     private static final String KEY_ROLE = "role";
     private static final String KEY_TOKEN = "token";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_PHONE = "phone";
+    private static final String KEY_COUNTRY = "country";
     private static final String KEY_REMEMBER_ME = "rememberMe";
     private static final String KEY_SAVED_USERNAME = "savedUsername";
 
@@ -32,6 +35,9 @@ public class SessionManager {
         editor.putString(KEY_FULL_NAME, user.getFullName());
         editor.putString(KEY_ROLE, user.getRole());
         editor.putString(KEY_TOKEN, user.getToken());
+        editor.putString(KEY_EMAIL, user.getEmail());
+        editor.putString(KEY_PHONE, user.getPhoneNumber());
+        editor.putString(KEY_COUNTRY, user.getCountry());
         editor.putBoolean(KEY_REMEMBER_ME, rememberMe);
 
         if (rememberMe) {
@@ -62,7 +68,10 @@ public class SessionManager {
         String fullName = pref.getString(KEY_FULL_NAME, "");
         String role = pref.getString(KEY_ROLE, "Field Staff");
         String token = pref.getString(KEY_TOKEN, "");
-        return new User(username, fullName, role, token);
+        String email = pref.getString(KEY_EMAIL, "");
+        String phone = pref.getString(KEY_PHONE, "");
+        String country = pref.getString(KEY_COUNTRY, "");
+        return new User(username, fullName, role, token, email, phone, country);
     }
 
     public void clearSession() {

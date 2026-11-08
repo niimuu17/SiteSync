@@ -13,18 +13,137 @@
         android:theme="@style/Theme.SiteSync"
         tools:targetApi="31">
 
-        <!-- Entry point: LoginActivity -->
+        <!-- RBAC Entry point: WelcomeActivity -->
         <activity
-            android:name=".ui.LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".ui.WelcomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Dashboard: MainActivity -->
+        <!-- RBAC Authentication Screen -->
+        <activity
+            android:name=".ui.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Role Dashboards -->
+        <activity
+            android:name=".ui.ManagerDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.SupervisorDashboardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.EngineerDashboardActivity"
+            android:exported="false" />
+
+        <!-- Engineer Module: Site Progress Monitoring Activities -->
+        <activity
+            android:name=".ui.ProgressMonitoringActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.ProgressDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.UpdateProgressActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.AddActivityActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Engineer Module: Site Inspection & Quality Control Activities -->
+        <activity
+            android:name=".ui.InspectionListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.CreateInspectionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.InspectionDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.ReInspectionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Engineer Module: Drawing & Document Management Activities -->
+        <activity
+            android:name=".ui.DocumentManagementActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.DocumentDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.UploadDocumentActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.PdfViewerActivity"
+            android:exported="false" />
+
+        <!-- Engineer Module: Technical Issue / RFI Management Activities -->
+        <activity
+            android:name=".ui.IssueManagementActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.CreateIssueActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.IssueDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Engineer Module: Daily Site Report Activities -->
+        <activity
+            android:name=".ui.DailyReportListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.CreateDailyReportActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.DailyReportDetailActivity"
+            android:exported="false" />
+
+        <!-- FileProvider for Sharing Generated PDF Reports -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Legacy Activities -->
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="false" />
