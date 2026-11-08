@@ -42,8 +42,8 @@ public class CutAndFillTelemetryView extends View {
 
     private StemPoint[] stems;
     private String netMetric = "Net: 224,400 cu yd";
-    private int cutColor = Color.parseColor("#E0532B");
-    private int fillColor = Color.parseColor("#F59E0B");
+    private int cutColor = Color.parseColor("#24526E");
+    private int fillColor = Color.parseColor("#16394F");
 
     private final Paint stemPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint capPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -67,6 +67,9 @@ public class CutAndFillTelemetryView extends View {
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
+        cutColor = ContextCompat.getColor(context, R.color.oxide_blue_light);
+        fillColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
+
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CutAndFillTelemetryView);
             if (a.hasValue(R.styleable.CutAndFillTelemetryView_netVolumeText)) {
@@ -80,17 +83,17 @@ public class CutAndFillTelemetryView extends View {
         stemPaint.setStrokeWidth(dpToPx(4f));
         capPaint.setStrokeWidth(dpToPx(3f));
 
-        labelPaint.setColor(Color.WHITE);
+        labelPaint.setColor(ContextCompat.getColor(context, R.color.text_oxide_primary));
         labelPaint.setTextSize(spToPx(12));
         labelPaint.setFakeBoldText(true);
         labelPaint.setTextAlign(Paint.Align.CENTER);
 
-        summaryPaint.setColor(ContextCompat.getColor(context, R.color.accent_safety_yellow));
+        summaryPaint.setColor(ContextCompat.getColor(context, R.color.text_oxide_primary));
         summaryPaint.setTextSize(spToPx(13));
         summaryPaint.setFakeBoldText(true);
         summaryPaint.setTextAlign(Paint.Align.CENTER);
 
-        gridLinePaint.setColor(ContextCompat.getColor(context, R.color.stroke_card_border));
+        gridLinePaint.setColor(ContextCompat.getColor(context, R.color.gauge_track_ash));
         gridLinePaint.setStrokeWidth(dpToPx(1f));
 
         // Coordinate labels specified in directive: -15 Ft, -10 Ft, -5.12 Ft, 00 Ft, 14 Ft

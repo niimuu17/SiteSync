@@ -104,20 +104,20 @@ public class CheckLevelDialog extends DialogFragment {
             gaugeLevel.setProgress(progress);
 
             if (isLevel) {
-                gaugeLevel.setSweepColor(ContextCompat.getColor(requireContext(), R.color.accent_safety_green));
+                gaugeLevel.setSweepColor(ContextCompat.getColor(requireContext(), R.color.oxide_blue_primary));
                 gaugeLevel.setTrendValue("TRUE LEVEL ▲");
                 tvLevelStatus.setText("TRUE LEVEL VERIFIED (0.0° ± 0.3°)");
-                tvLevelStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_safety_green));
+                tvLevelStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.oxide_blue_primary));
             } else if (isPipeGrade) {
-                gaugeLevel.setSweepColor(ContextCompat.getColor(requireContext(), R.color.accent_safety_green));
+                gaugeLevel.setSweepColor(ContextCompat.getColor(requireContext(), R.color.oxide_blue_primary));
                 gaugeLevel.setTrendValue("PIPE GRADE ▲");
                 tvLevelStatus.setText("PIPE GRADE VERIFIED (2.0% ± 0.2%)");
-                tvLevelStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_safety_green));
+                tvLevelStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.oxide_blue_primary));
             } else {
-                gaugeLevel.setSweepColor(ContextCompat.getColor(requireContext(), R.color.accent_safety_yellow));
+                gaugeLevel.setSweepColor(ContextCompat.getColor(requireContext(), R.color.oxide_blue_light));
                 gaugeLevel.setTrendValue(String.format(Locale.US, "%+.1f°", pitch));
                 tvLevelStatus.setText("Adjust surface angle to reach tolerance");
-                tvLevelStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_secondary));
+                tvLevelStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_oxide_secondary));
             }
         });
 

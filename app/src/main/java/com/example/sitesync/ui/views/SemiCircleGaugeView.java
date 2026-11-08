@@ -55,9 +55,9 @@ public class SemiCircleGaugeView extends View {
 
     private void init(Context context, @Nullable AttributeSet attrs) {
         // Defaults
-        trackColor = ContextCompat.getColor(context, R.color.gauge_track_dark);
-        strokeColor = ContextCompat.getColor(context, R.color.accent_safety_yellow);
-        strokeWidthPx = dpToPx(8);
+        trackColor = ContextCompat.getColor(context, R.color.gauge_track_ash);
+        strokeColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
+        strokeWidthPx = dpToPx(9);
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SemiCircleGaugeView);
@@ -91,16 +91,16 @@ public class SemiCircleGaugeView extends View {
 
         // Text Paints
         textPercentPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPercentPaint.setColor(Color.WHITE);
+        textPercentPaint.setColor(ContextCompat.getColor(context, R.color.text_oxide_primary));
         textPercentPaint.setTextAlign(Paint.Align.CENTER);
         textPercentPaint.setFakeBoldText(true);
 
         textTrendPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textTrendPaint.setColor(ContextCompat.getColor(context, R.color.text_secondary));
+        textTrendPaint.setColor(ContextCompat.getColor(context, R.color.text_oxide_secondary));
         textTrendPaint.setTextAlign(Paint.Align.CENTER);
 
         textTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textTitlePaint.setColor(ContextCompat.getColor(context, R.color.text_secondary));
+        textTitlePaint.setColor(ContextCompat.getColor(context, R.color.text_oxide_secondary));
         textTitlePaint.setTextAlign(Paint.Align.CENTER);
     }
 

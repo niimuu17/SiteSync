@@ -49,7 +49,7 @@ public class NavigationDockView extends FrameLayout {
     }
 
     private void init(Context context) {
-        setBackgroundResource(R.drawable.bg_floating_dock);
+        setBackgroundResource(R.drawable.bg_floating_bottom_dock);
         int padH = dpToPx(16);
         int padV = dpToPx(8);
         setPadding(padH, padV, padH, padV);
@@ -99,11 +99,13 @@ public class NavigationDockView extends FrameLayout {
         for (int i = 0; i < tabIcons.length; i++) {
             if (tabIcons[i] == null) continue;
             if (i == activeTab) {
-                tabIcons[i].setColorFilter(ContextCompat.getColor(getContext(), R.color.accent_safety_yellow));
+                tabIcons[i].setColorFilter(ContextCompat.getColor(getContext(), R.color.text_on_oxide_white));
+                tabIcons[i].setAlpha(1.0f);
                 tabIcons[i].setScaleX(1.15f);
                 tabIcons[i].setScaleY(1.15f);
             } else {
-                tabIcons[i].setColorFilter(ContextCompat.getColor(getContext(), R.color.text_secondary));
+                tabIcons[i].setColorFilter(ContextCompat.getColor(getContext(), R.color.warm_ash_surface_alt));
+                tabIcons[i].setAlpha(0.70f);
                 tabIcons[i].setScaleX(1.0f);
                 tabIcons[i].setScaleY(1.0f);
             }

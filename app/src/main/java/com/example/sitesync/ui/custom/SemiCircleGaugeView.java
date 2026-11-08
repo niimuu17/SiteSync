@@ -59,9 +59,9 @@ public class SemiCircleGaugeView extends View {
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
-        trackColor = ContextCompat.getColor(context, R.color.gauge_track_dark);
-        sweepColor = ContextCompat.getColor(context, R.color.accent_safety_yellow);
-        strokeWidth = dpToPx(10);
+        trackColor = ContextCompat.getColor(context, R.color.gauge_track_ash);
+        sweepColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
+        strokeWidth = dpToPx(9);
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SemiCircleGaugeView);
@@ -98,19 +98,23 @@ public class SemiCircleGaugeView extends View {
         sweepPaint.setStrokeCap(Paint.Cap.ROUND);
         sweepPaint.setColor(sweepColor);
 
+        int oxidePrimary = ContextCompat.getColor(context, R.color.text_oxide_primary);
+        int oxideSecondary = ContextCompat.getColor(context, R.color.text_oxide_secondary);
+
         textNumberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textNumberPaint.setColor(Color.WHITE);
+        textNumberPaint.setColor(oxidePrimary);
         textNumberPaint.setTextAlign(Paint.Align.CENTER);
         textNumberPaint.setFakeBoldText(true);
-        textNumberPaint.setTextSize(spToPx(40));
+        textNumberPaint.setTextSize(spToPx(34));
 
         textTrendPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textTrendPaint.setTextAlign(Paint.Align.CENTER);
         textTrendPaint.setFakeBoldText(true);
         textTrendPaint.setTextSize(spToPx(13));
+        textTrendPaint.setColor(oxideSecondary);
 
         textTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textTitlePaint.setColor(ContextCompat.getColor(context, R.color.text_secondary));
+        textTitlePaint.setColor(oxideSecondary);
         textTitlePaint.setTextAlign(Paint.Align.CENTER);
         textTitlePaint.setTextSize(spToPx(12));
     }
@@ -156,13 +160,7 @@ public class SemiCircleGaugeView extends View {
 
         // 5. Trend Indicator below / around number
         if (!trendValue.isEmpty()) {
-            if (trendValue.contains("▲") || trendValue.contains("+")) {
-                textTrendPaint.setColor(Color.parseColor("#10B981"));
-            } else if (trendValue.contains("▼") || trendValue.contains("-")) {
-                textTrendPaint.setColor(Color.parseColor("#EF4444"));
-            } else {
-                textTrendPaint.setColor(Color.parseColor("#94A3B8"));
-            }
+            textTrendPaint.setColor(ContextCompat.getColor(getContext(), R.color.text_oxide_secondary));
             float trendY = height * 0.90f;
             canvas.drawText(trendValue, centerX, trendY, textTrendPaint);
         }

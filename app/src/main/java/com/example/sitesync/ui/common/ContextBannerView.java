@@ -58,9 +58,9 @@ public class ContextBannerView extends FrameLayout {
     }
 
     private void init(Context context) {
-        // High-contrast industrial surface
-        setBackgroundResource(R.drawable.bg_dark_card);
-        setPadding(dpToPx(16), dpToPx(10), dpToPx(16), dpToPx(10));
+        // High-contrast Warm Ash Outlined Card Surface
+        setBackgroundResource(R.drawable.bg_card_outlined);
+        setPadding(dpToPx(16), dpToPx(12), dpToPx(16), dpToPx(12));
 
         LinearLayout container = new LinearLayout(context);
         container.setOrientation(LinearLayout.HORIZONTAL);
@@ -69,10 +69,10 @@ public class ContextBannerView extends FrameLayout {
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         container.setLayoutParams(lp);
 
-        // Elevator / Level Icon (Electric Blue)
+        // 4-Square Building Icon (Oxide Blue)
         ivElevatorIcon = new ImageView(context);
         ivElevatorIcon.setImageResource(R.drawable.ic_grid);
-        ivElevatorIcon.setColorFilter(ContextCompat.getColor(context, R.color.accent_telemetry_blue));
+        ivElevatorIcon.setColorFilter(ContextCompat.getColor(context, R.color.oxide_blue_primary));
         LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(dpToPx(24), dpToPx(24));
         iconLp.setMarginEnd(dpToPx(12));
         ivElevatorIcon.setLayoutParams(iconLp);
@@ -86,23 +86,23 @@ public class ContextBannerView extends FrameLayout {
 
         tvLocationTitle = new TextView(context);
         tvLocationTitle.setText(projectName);
-        tvLocationTitle.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
+        tvLocationTitle.setTextColor(ContextCompat.getColor(context, R.color.text_oxide_primary));
         tvLocationTitle.setTextSize(14f);
         tvLocationTitle.setTypeface(null, android.graphics.Typeface.BOLD);
         textGroup.addView(tvLocationTitle);
 
         tvFloorLevel = new TextView(context);
         tvFloorLevel.setText("Floor Level: Level " + currentFloor + " (Auto)");
-        tvFloorLevel.setTextColor(ContextCompat.getColor(context, R.color.text_secondary));
+        tvFloorLevel.setTextColor(ContextCompat.getColor(context, R.color.text_oxide_secondary));
         tvFloorLevel.setTextSize(12f);
         textGroup.addView(tvFloorLevel);
 
         container.addView(textGroup);
 
-        // Chevron / Override trigger
+        // Angled action trigger arrow (Oxide Blue)
         ivChevron = new ImageView(context);
         ivChevron.setImageResource(R.drawable.ic_arrow_diagonal);
-        ivChevron.setColorFilter(ContextCompat.getColor(context, R.color.accent_safety_yellow));
+        ivChevron.setColorFilter(ContextCompat.getColor(context, R.color.oxide_blue_primary));
         LinearLayout.LayoutParams chevLp = new LinearLayout.LayoutParams(dpToPx(20), dpToPx(20));
         ivChevron.setLayoutParams(chevLp);
         container.addView(ivChevron);

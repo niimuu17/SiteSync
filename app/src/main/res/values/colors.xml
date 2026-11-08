@@ -1,75 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Strict Industrial Dark Telemetry System -->
-    <color name="bg_canvas">#111317</color>
-    <color name="dark_canvas">#111317</color>
-    <color name="bg_surface_elevated">#1A1D24</color>
-    <color name="dark_surface_elevated">#1A1D24</color>
-    <color name="bg_surface_card">#222631</color>
-    <color name="stroke_card_border">#2E3442</color>
-    <color name="dark_border">#2E3442</color>
+    <!-- Base Canvas & Card Fills (Tone 1: Warm Ash) -->
+    <color name="warm_ash_base">#EDE7DF</color>
+    <color name="warm_ash_surface">#E5DFD6</color>
+    <color name="warm_ash_surface_alt">#DBD4CA</color>
+    <color name="gauge_track_ash">#D4CDC3</color>
 
-    <!-- Safety & Telemetry Accents -->
-    <color name="accent_safety_yellow">#F59E0B</color>
-    <color name="accent_safety_amber">#F59E0B</color>
-    <color name="accent_safety_green">#10B981</color>
-    <color name="accent_telemetry_green">#10B981</color>
-    <color name="accent_hazard_orange">#F97316</color>
-    <color name="accent_telemetry_blue">#3B82F6</color>
-    <color name="accent_terracotta">#E0532B</color>
-    <color name="gauge_track_dark">#2C313E</color>
+    <!-- Contrast Primary & Outlines (Tone 2: Oxide Blue) -->
+    <color name="oxide_blue_primary">#16394F</color>
+    <color name="oxide_blue_dark">#0E2636</color>
+    <color name="oxide_blue_light">#24526E</color>
+    <color name="stroke_oxide_blue">#16394F</color>
+
+    <!-- Typography Tokens -->
+    <color name="text_oxide_primary">#16394F</color>
+    <color name="text_oxide_secondary">#4D6E82</color>
+    <color name="text_oxide_muted">#7E98A8</color>
+    <color name="text_on_oxide_white">#FFFFFF</color>
+    <color name="text_on_oxide_ash">#EDE7DF</color>
+
+    <!-- Telemetry Status & Deltas -->
+    <color name="telemetry_delta_up">#16394F</color>
+    <color name="telemetry_delta_down">#0E2636</color>
+    <color name="indicator_pulse_dot">#FFFFFF</color>
+
+    <!-- System & Compatibility Aliases (Warm Ash & Oxide Blue System) -->
+    <color name="bg_canvas">#EDE7DF</color>
+    <color name="dark_canvas">#16394F</color>
+    <color name="bg_surface_elevated">#E5DFD6</color>
+    <color name="dark_surface_elevated">#E5DFD6</color>
+    <color name="bg_surface_card">#E5DFD6</color>
+    <color name="stroke_card_border">#16394F</color>
+    <color name="dark_border">#16394F</color>
+
+    <!-- Accents mapped to Oxide Blue identity -->
+    <color name="accent_safety_yellow">#16394F</color>
+    <color name="accent_safety_amber">#16394F</color>
+    <color name="accent_safety_green">#16394F</color>
+    <color name="accent_telemetry_green">#16394F</color>
+    <color name="accent_hazard_orange">#24526E</color>
+    <color name="accent_telemetry_blue">#16394F</color>
+    <color name="accent_terracotta">#24526E</color>
+    <color name="gauge_track_dark">#D4CDC3</color>
 
     <!-- High-Contrast Field Typography -->
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#94A3B8</color>
-    <color name="text_tertiary">#64748B</color>
-    <color name="text_hint">#64748B</color>
-    <color name="text_muted">#64748B</color>
-    <color name="text_on_primary">#111317</color>
+    <color name="text_primary">#16394F</color>
+    <color name="text_secondary">#4D6E82</color>
+    <color name="text_tertiary">#7E98A8</color>
+    <color name="text_hint">#7E98A8</color>
+    <color name="text_muted">#7E98A8</color>
+    <color name="text_on_primary">#FFFFFF</color>
 
-    <!-- Aliases for Compatibility with Existing Codebase -->
-    <color name="brand_amber">#F59E0B</color>
-    <color name="brand_amber_light">#FFF1D4</color>
-    <color name="brand_amber_dark">#D98200</color>
-    <color name="brand_terracotta">#E0532B</color>
-    <color name="brand_terracotta_light">#FDEEE9</color>
-    <color name="brand_peach">#F28B66</color>
-    <color name="brand_primary">#1A1D24</color>
-    <color name="brand_primary_variant">#111317</color>
-    <color name="brand_secondary">#F59E0B</color>
-    <color name="brand_secondary_variant">#D98200</color>
-    <color name="brand_accent">#F59E0B</color>
-    <color name="brand_background">#111317</color>
-    <color name="brand_surface">#1A1D24</color>
-    <color name="card_stroke">#2E3442</color>
-    <color name="card_stroke_light">#2E3442</color>
-    <color name="surface_card_light">#1A1D24</color>
-    <color name="bg_light_alabaster">#111317</color>
-    <color name="text_industrial_dark">#FFFFFF</color>
-    <color name="text_industrial_muted">#94A3B8</color>
-    <color name="text_industrial_subtle">#64748B</color>
-    <color name="bg_dark_charcoal">#111317</color>
-    <color name="surface_dark_card">#1A1D24</color>
-    <color name="surface_dark_glass">#CC1A1D24</color>
-    <color name="surface_dark_glass_amber">#D9383226</color>
-    <color name="glass_stroke_specular">#26FFFFFF</color>
-    <color name="text_dark_primary">#FFFFFF</color>
-    <color name="text_dark_secondary">#94A3B8</color>
-    <color name="chip_bg">#222631</color>
+    <!-- Brand Aliases -->
+    <color name="brand_amber">#16394F</color>
+    <color name="brand_amber_light">#E5DFD6</color>
+    <color name="brand_amber_dark">#0E2636</color>
+    <color name="brand_terracotta">#24526E</color>
+    <color name="brand_terracotta_light">#E5DFD6</color>
+    <color name="brand_peach">#DBD4CA</color>
+    <color name="brand_primary">#16394F</color>
+    <color name="brand_primary_variant">#0E2636</color>
+    <color name="brand_secondary">#16394F</color>
+    <color name="brand_secondary_variant">#0E2636</color>
+    <color name="brand_accent">#16394F</color>
+    <color name="brand_background">#EDE7DF</color>
+    <color name="brand_surface">#E5DFD6</color>
+    <color name="card_stroke">#16394F</color>
+    <color name="card_stroke_light">#16394F</color>
+    <color name="surface_card_light">#E5DFD6</color>
+    <color name="bg_light_alabaster">#EDE7DF</color>
+    <color name="text_industrial_dark">#16394F</color>
+    <color name="text_industrial_muted">#4D6E82</color>
+    <color name="text_industrial_subtle">#7E98A8</color>
+    <color name="bg_dark_charcoal">#EDE7DF</color>
+    <color name="surface_dark_card">#E5DFD6</color>
+    <color name="surface_dark_glass">#EAE4DC</color>
+    <color name="surface_dark_glass_amber">#E5DFD6</color>
+    <color name="glass_stroke_specular">#16394F</color>
+    <color name="text_dark_primary">#16394F</color>
+    <color name="text_dark_secondary">#4D6E82</color>
+    <color name="chip_bg">#E5DFD6</color>
 
     <!-- Status & Alerts -->
-    <color name="color_success">#10B981</color>
-    <color name="color_error">#EF4444</color>
-    <color name="color_warning">#F59E0B</color>
-    <color name="color_trend_green">#10B981</color>
-    <color name="color_trend_red">#EF4444</color>
+    <color name="color_success">#16394F</color>
+    <color name="color_error">#0E2636</color>
+    <color name="color_warning">#24526E</color>
+    <color name="color_trend_green">#16394F</color>
+    <color name="color_trend_red">#0E2636</color>
 
-    <!-- Legacy / System Compatibility (Overridden to Dark/Amber) -->
-    <color name="purple_200">#F59E0B</color>
-    <color name="purple_500">#1A1D24</color>
-    <color name="purple_700">#111317</color>
-    <color name="teal_200">#F59E0B</color>
-    <color name="teal_700">#D98200</color>
-    <color name="black">#FF000000</color>
+    <!-- Legacy Overrides -->
+    <color name="purple_200">#16394F</color>
+    <color name="purple_500">#16394F</color>
+    <color name="purple_700">#0E2636</color>
+    <color name="teal_200">#16394F</color>
+    <color name="teal_700">#0E2636</color>
+    <color name="black">#FF16394F</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

@@ -144,10 +144,10 @@ public class UnifiedSiteCockpitActivity extends AppCompatActivity {
         for (int i = 0; i < pills.length; i++) {
             if (i == position) {
                 pills[i].setBackgroundResource(R.drawable.bg_tab_pill_active);
-                pills[i].setTextColor(ContextCompat.getColor(this, R.color.dark_canvas));
+                pills[i].setTextColor(ContextCompat.getColor(this, R.color.text_on_oxide_white));
             } else {
                 pills[i].setBackgroundResource(R.drawable.bg_tab_pill_inactive);
-                pills[i].setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
+                pills[i].setTextColor(ContextCompat.getColor(this, R.color.text_oxide_primary));
             }
         }
     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_canvas"
+    android:background="@color/warm_ash_base"
     android:fillViewport="true">
 
     <LinearLayout
@@ -13,7 +13,7 @@
         android:padding="16dp"
         android:paddingBottom="100dp">
 
-        <!-- 2x2 Telemetry Grid Header -->
+        <!-- 2x2 Telemetry Grid Header Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,8 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="DISCIPLINE TELEMETRY"
-                android:textColor="@color/accent_safety_amber"
-                android:textSize="12sp"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.08" />
 
@@ -36,17 +36,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="LIVE TELEMETRY"
-                android:textColor="@color/accent_telemetry_green"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="11sp"
                 android:textStyle="bold"
                 android:background="@drawable/bg_pill_inactive"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp" />
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp" />
         </LinearLayout>
 
-        <!-- 2x2 Grid -->
+        <!-- 2x2 Grid (Outlined Warm Ash Cards, 1.5dp Oxide Blue Stroke, 20dp Radius) -->
         <!-- Row 1: Foundation & Structural Work -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@drawable/bg_dark_card"
+                android:background="@drawable/bg_card_outlined"
                 android:padding="14dp"
                 android:layout_marginEnd="6dp">
 
@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Foundation"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_oxide_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -84,18 +84,19 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_arrow_diagonal"
-                        app:tint="@color/text_secondary"
+                        app:tint="@color/oxide_blue_primary"
                         android:contentDescription="Expand" />
                 </LinearLayout>
 
                 <com.example.sitesync.ui.custom.SemiCircleGaugeView
                     android:id="@+id/gaugeFoundation"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
                     app:gaugeProgress="85"
                     app:trendValue="+2.23 ▲"
-                    app:gaugeSweepColor="@color/accent_safety_amber" />
+                    app:gaugeSweepColor="@color/oxide_blue_primary"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
             </LinearLayout>
 
             <!-- Card 2: Structural Work -->
@@ -105,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@drawable/bg_dark_card"
+                android:background="@drawable/bg_card_outlined"
                 android:padding="14dp"
                 android:layout_marginStart="6dp">
 
@@ -120,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Structural Work"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_oxide_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -128,18 +129,19 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_arrow_diagonal"
-                        app:tint="@color/text_secondary"
+                        app:tint="@color/oxide_blue_primary"
                         android:contentDescription="Expand" />
                 </LinearLayout>
 
                 <com.example.sitesync.ui.custom.SemiCircleGaugeView
                     android:id="@+id/gaugeStructural"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
                     app:gaugeProgress="62"
                     app:trendValue="+1.23 ▲"
-                    app:gaugeSweepColor="@color/accent_safety_amber" />
+                    app:gaugeSweepColor="@color/oxide_blue_primary"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
             </LinearLayout>
         </LinearLayout>
 
@@ -157,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@drawable/bg_dark_card"
+                android:background="@drawable/bg_card_outlined"
                 android:padding="14dp"
                 android:layout_marginEnd="6dp">
 
@@ -172,7 +174,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Electrical"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_oxide_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -180,18 +182,19 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_arrow_diagonal"
-                        app:tint="@color/text_secondary"
+                        app:tint="@color/oxide_blue_primary"
                         android:contentDescription="Expand" />
                 </LinearLayout>
 
                 <com.example.sitesync.ui.custom.SemiCircleGaugeView
                     android:id="@+id/gaugeElectrical"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
                     app:gaugeProgress="40"
                     app:trendValue="+.23 ▲"
-                    app:gaugeSweepColor="@color/accent_safety_amber" />
+                    app:gaugeSweepColor="@color/oxide_blue_primary"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
             </LinearLayout>
 
             <!-- Card 4: Finishing -->
@@ -201,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@drawable/bg_dark_card"
+                android:background="@drawable/bg_card_outlined"
                 android:padding="14dp"
                 android:layout_marginStart="6dp">
 
@@ -216,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Finishing"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_oxide_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -224,36 +227,37 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_arrow_diagonal"
-                        app:tint="@color/text_secondary"
+                        app:tint="@color/oxide_blue_primary"
                         android:contentDescription="Expand" />
                 </LinearLayout>
 
                 <com.example.sitesync.ui.custom.SemiCircleGaugeView
                     android:id="@+id/gaugeFinishing"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="104dp"
+                    android:layout_marginTop="6dp"
                     app:gaugeProgress="18"
                     app:trendValue="-1.00 ▼"
-                    app:gaugeSweepColor="@color/accent_terracotta" />
+                    app:gaugeSweepColor="@color/oxide_blue_primary"
+                    app:gaugeTrackColor="@color/gauge_track_ash" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Active Workforce & Site Safety Presence Banner -->
+        <!-- Solid Oxide Blue Presence & Safety Banner -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@drawable/bg_dark_card"
+            android:background="@drawable/bg_oxide_banner_card"
             android:padding="16dp"
             android:gravity="center_vertical"
             android:layout_marginBottom="16dp">
 
+            <!-- White Pulsing Status Dot -->
             <View
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:background="@drawable/bg_tab_pill_active"
-                android:backgroundTint="@color/accent_telemetry_green"
+                android:background="@drawable/indicator_pulse_dot"
                 android:layout_marginEnd="12dp" />
 
             <LinearLayout
@@ -267,39 +271,40 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="42 Active Workers on Site"
-                    android:textColor="@color/text_primary"
-                    android:textSize="15sp"
+                    android:textColor="@color/text_on_oxide_white"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="OSHA 100% Compliant • Zero Hazard Incidents"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
+                    android:textColor="@color/text_on_oxide_ash"
+                    android:textSize="11sp"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
 
+            <!-- White Rounded Pill with Navy Bold Text SHIFT 1 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SHIFT 1"
-                android:textColor="@color/accent_safety_amber"
+                android:textColor="@color/oxide_blue_primary"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:background="@drawable/bg_pill_inactive"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp" />
+                android:background="@drawable/bg_white_pill_badge"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp" />
         </LinearLayout>
 
-        <!-- Quick Hardware Subsystems Launchpad -->
+        <!-- Field Hardware Toolkit Launchpad -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="FIELD HARDWARE TOOLKIT"
-            android:textColor="@color/accent_safety_amber"
+            android:textColor="@color/text_oxide_primary"
             android:textSize="12sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
@@ -320,11 +325,12 @@
                 android:textStyle="bold"
                 app:icon="@drawable/ic_grid"
                 app:iconSize="16dp"
-                app:backgroundTint="@color/dark_surface_elevated"
-                app:strokeColor="@color/accent_safety_amber"
-                app:strokeWidth="1dp"
-                android:textColor="@color/accent_safety_amber"
-                app:cornerRadius="8dp"
+                app:iconTint="@color/oxide_blue_primary"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/stroke_oxide_blue"
+                app:strokeWidth="1.5dp"
+                android:textColor="@color/text_oxide_primary"
+                app:cornerRadius="12dp"
                 android:layout_marginEnd="6dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -337,11 +343,12 @@
                 android:textStyle="bold"
                 app:icon="@drawable/ic_camera"
                 app:iconSize="16dp"
-                app:backgroundTint="@color/dark_surface_elevated"
-                app:strokeColor="@color/dark_border"
-                app:strokeWidth="1dp"
-                android:textColor="@color/text_primary"
-                app:cornerRadius="8dp"
+                app:iconTint="@color/oxide_blue_primary"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/stroke_oxide_blue"
+                app:strokeWidth="1.5dp"
+                android:textColor="@color/text_oxide_primary"
+                app:cornerRadius="12dp"
                 android:layout_marginStart="6dp" />
         </LinearLayout>
 

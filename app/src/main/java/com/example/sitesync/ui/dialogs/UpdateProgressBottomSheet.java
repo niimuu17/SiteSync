@@ -137,19 +137,28 @@ public class UpdateProgressBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void updateStatusButtons() {
-        int amber = ContextCompat.getColor(requireContext(), R.color.accent_safety_amber);
-        int dark = ContextCompat.getColor(requireContext(), R.color.dark_canvas);
-        int surface = ContextCompat.getColor(requireContext(), R.color.dark_surface_elevated);
-        int textSec = ContextCompat.getColor(requireContext(), R.color.text_secondary);
+        int oxideBlue = ContextCompat.getColor(requireContext(), R.color.oxide_blue_primary);
+        int white = ContextCompat.getColor(requireContext(), R.color.text_on_oxide_white);
+        int ashSurface = ContextCompat.getColor(requireContext(), R.color.warm_ash_surface);
+        int textPrimary = ContextCompat.getColor(requireContext(), R.color.text_oxide_primary);
 
-        btnStatusInProgress.setBackgroundColor("IN PROGRESS".equalsIgnoreCase(selectedStatus) ? amber : surface);
-        btnStatusInProgress.setTextColor("IN PROGRESS".equalsIgnoreCase(selectedStatus) ? dark : textSec);
+        boolean isInProgress = "IN PROGRESS".equalsIgnoreCase(selectedStatus);
+        btnStatusInProgress.setBackgroundColor(isInProgress ? oxideBlue : ashSurface);
+        btnStatusInProgress.setTextColor(isInProgress ? white : textPrimary);
+        btnStatusInProgress.setStrokeColorResource(R.color.stroke_oxide_blue);
+        btnStatusInProgress.setStrokeWidth(isInProgress ? 0 : 3);
 
-        btnStatusDelayed.setBackgroundColor("DELAYED".equalsIgnoreCase(selectedStatus) ? amber : surface);
-        btnStatusDelayed.setTextColor("DELAYED".equalsIgnoreCase(selectedStatus) ? dark : textSec);
+        boolean isDelayed = "DELAYED".equalsIgnoreCase(selectedStatus);
+        btnStatusDelayed.setBackgroundColor(isDelayed ? oxideBlue : ashSurface);
+        btnStatusDelayed.setTextColor(isDelayed ? white : textPrimary);
+        btnStatusDelayed.setStrokeColorResource(R.color.stroke_oxide_blue);
+        btnStatusDelayed.setStrokeWidth(isDelayed ? 0 : 3);
 
-        btnStatusCompleted.setBackgroundColor("COMPLETED".equalsIgnoreCase(selectedStatus) ? amber : surface);
-        btnStatusCompleted.setTextColor("COMPLETED".equalsIgnoreCase(selectedStatus) ? dark : textSec);
+        boolean isCompleted = "COMPLETED".equalsIgnoreCase(selectedStatus);
+        btnStatusCompleted.setBackgroundColor(isCompleted ? oxideBlue : ashSurface);
+        btnStatusCompleted.setTextColor(isCompleted ? white : textPrimary);
+        btnStatusCompleted.setStrokeColorResource(R.color.stroke_oxide_blue);
+        btnStatusCompleted.setStrokeWidth(isCompleted ? 0 : 3);
     }
 
     private void setupVoiceDictation() {

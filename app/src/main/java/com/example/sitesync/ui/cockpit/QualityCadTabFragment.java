@@ -103,7 +103,7 @@ public class QualityCadTabFragment extends Fragment {
             CheckLevelDialog dialog = new CheckLevelDialog();
             dialog.setOnMeasurementSavedListener(measurement -> {
                 tvMeasuredSlopeResult.setText("Verified: " + measurement + " (PASSED TOLERANCE)");
-                tvMeasuredSlopeResult.setTextColor(requireContext().getColor(R.color.accent_telemetry_green));
+                tvMeasuredSlopeResult.setTextColor(requireContext().getColor(R.color.oxide_blue_primary));
             });
             dialog.show(getParentFragmentManager(), "CheckLevelDialog");
         });
@@ -135,18 +135,18 @@ public class QualityCadTabFragment extends Fragment {
 
     private void highlightFilter(MaterialButton selected) {
         MaterialButton[] buttons = new MaterialButton[]{btnFilterAll, btnFilterStructural, btnFilterArch, btnFilterMep};
-        int amber = requireContext().getColor(R.color.accent_safety_amber);
-        int dark = requireContext().getColor(R.color.dark_canvas);
-        int surface = requireContext().getColor(R.color.dark_surface_elevated);
-        int textSec = requireContext().getColor(R.color.text_secondary);
+        int oxidePrimary = requireContext().getColor(R.color.oxide_blue_primary);
+        int whiteText = requireContext().getColor(R.color.text_on_oxide_white);
+        int surface = requireContext().getColor(R.color.warm_ash_surface);
+        int oxideText = requireContext().getColor(R.color.text_oxide_primary);
 
         for (MaterialButton btn : buttons) {
             if (btn == selected) {
-                btn.setBackgroundColor(amber);
-                btn.setTextColor(dark);
+                btn.setBackgroundColor(oxidePrimary);
+                btn.setTextColor(whiteText);
             } else {
                 btn.setBackgroundColor(surface);
-                btn.setTextColor(textSec);
+                btn.setTextColor(oxideText);
             }
         }
     }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_canvas"
+    android:background="@color/warm_ash_base"
     android:fillViewport="true">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Centralized Construction"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_oxide_primary"
             android:textSize="22sp"
             android:fontFamily="sans-serif-light" />
 
@@ -26,17 +26,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Project Progress"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_oxide_primary"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <!-- 1. Hero Work Progress Card -->
+        <!-- 1. Hero Work Progress Card (Outlined Warm Ash Card) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_dark_card"
+            android:background="@drawable/bg_card_outlined"
             android:padding="20dp"
             android:layout_marginBottom="16dp">
 
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Work Progress"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_oxide_secondary"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -60,7 +60,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_calendar_toggle"
-                    app:tint="@color/text_secondary"
+                    app:tint="@color/oxide_blue_primary"
                     android:layout_marginEnd="12dp"
                     android:contentDescription="Calendar" />
 
@@ -69,7 +69,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_chart_toggle"
-                    app:tint="@color/text_secondary"
+                    app:tint="@color/oxide_blue_primary"
                     android:contentDescription="Chart" />
             </LinearLayout>
 
@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="68 %"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="38sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
@@ -105,14 +105,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start Date"
-                        android:textColor="@color/text_muted"
+                        android:textColor="@color/text_oxide_muted"
                         android:textSize="11sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="11/02/2026"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@color/text_oxide_secondary"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:layout_marginTop="2dp" />
@@ -128,14 +128,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="End Date"
-                        android:textColor="@color/text_muted"
+                        android:textColor="@color/text_oxide_muted"
                         android:textSize="11sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="23/03/2026"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="@color/text_oxide_secondary"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:layout_marginTop="2dp" />
@@ -148,7 +148,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_dark_card"
+            android:background="@drawable/bg_card_outlined"
             android:padding="20dp"
             android:layout_marginBottom="16dp">
 
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Cut And Fill"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -172,7 +172,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_arrow_diagonal"
-                    app:tint="@color/text_secondary"
+                    app:tint="@color/oxide_blue_primary"
                     android:contentDescription="Cut &amp; Fill Info" />
             </LinearLayout>
 
@@ -180,7 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12 Feb, 2026 11:03PM"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -205,8 +205,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="ACTIVE MILESTONES"
-                android:textColor="@color/accent_safety_amber"
-                android:textSize="12sp"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.08" />
 
@@ -217,9 +217,9 @@
                 android:text="+ UPDATE"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                app:backgroundTint="@color/accent_safety_amber"
-                android:textColor="@color/dark_canvas"
-                app:cornerRadius="6dp" />
+                app:backgroundTint="@color/oxide_blue_primary"
+                android:textColor="@color/text_on_oxide_white"
+                app:cornerRadius="8dp" />
         </LinearLayout>
 
         <!-- Milestone 1 -->
@@ -227,7 +227,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_dark_card"
+            android:background="@drawable/bg_card_outlined"
             android:padding="16dp"
             android:layout_marginBottom="10dp">
 
@@ -243,7 +243,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Foundation Concrete Pour"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -251,8 +251,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="85%"
-                    android:textColor="@color/accent_safety_amber"
-                    android:textSize="14sp"
+                    android:textColor="@color/oxide_blue_primary"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -260,7 +260,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Building 2 • Grid Line C-4 to F-9"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -273,11 +273,12 @@
                 android:textStyle="bold"
                 app:icon="@drawable/ic_camera"
                 app:iconSize="16dp"
-                app:backgroundTint="@color/dark_surface_elevated"
-                app:strokeColor="@color/dark_border"
-                app:strokeWidth="1dp"
-                android:textColor="@color/text_primary"
-                app:cornerRadius="8dp" />
+                app:iconTint="@color/oxide_blue_primary"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/stroke_oxide_blue"
+                app:strokeWidth="1.5dp"
+                android:textColor="@color/text_oxide_primary"
+                app:cornerRadius="10dp" />
         </LinearLayout>
 
         <!-- Milestone 2 -->
@@ -285,7 +286,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_dark_card"
+            android:background="@drawable/bg_card_outlined"
             android:padding="16dp">
 
             <LinearLayout
@@ -300,7 +301,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Level 14 Column Erection"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -308,8 +309,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="62%"
-                    android:textColor="@color/accent_safety_amber"
-                    android:textSize="14sp"
+                    android:textColor="@color/oxide_blue_primary"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -317,7 +318,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Building 2 • Level 14 Core"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -330,11 +331,12 @@
                 android:textStyle="bold"
                 app:icon="@drawable/ic_camera"
                 app:iconSize="16dp"
-                app:backgroundTint="@color/dark_surface_elevated"
-                app:strokeColor="@color/dark_border"
-                app:strokeWidth="1dp"
-                android:textColor="@color/text_primary"
-                app:cornerRadius="8dp" />
+                app:iconTint="@color/oxide_blue_primary"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/stroke_oxide_blue"
+                app:strokeWidth="1.5dp"
+                android:textColor="@color/text_oxide_primary"
+                app:cornerRadius="10dp" />
         </LinearLayout>
 
     </LinearLayout>

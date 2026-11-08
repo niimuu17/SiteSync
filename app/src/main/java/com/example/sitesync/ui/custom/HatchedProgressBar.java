@@ -60,8 +60,8 @@ public class HatchedProgressBar extends View {
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
-        stripeColor = ContextCompat.getColor(context, R.color.accent_safety_yellow);
-        trackColor = ContextCompat.getColor(context, R.color.bg_surface_elevated);
+        stripeColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
+        trackColor = ContextCompat.getColor(context, R.color.warm_ash_surface);
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HatchedProgressBar);
@@ -84,17 +84,19 @@ public class HatchedProgressBar extends View {
         trackPaint.setStyle(Paint.Style.FILL);
 
         borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        borderPaint.setColor(ContextCompat.getColor(context, R.color.stroke_card_border));
+        borderPaint.setColor(ContextCompat.getColor(context, R.color.stroke_oxide_blue));
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setStrokeWidth(dpToPx(1f));
+        borderPaint.setStrokeWidth(dpToPx(1.5f));
+
+        int pinColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
 
         pinPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        pinPaint.setColor(Color.parseColor("#F97316"));
+        pinPaint.setColor(pinColor);
         pinPaint.setStrokeWidth(dpToPx(2f));
         pinPaint.setStyle(Paint.Style.STROKE);
 
         pinTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        pinTextPaint.setColor(Color.parseColor("#F97316"));
+        pinTextPaint.setColor(pinColor);
         pinTextPaint.setTextSize(spToPx(11));
         pinTextPaint.setFakeBoldText(true);
         pinTextPaint.setTextAlign(Paint.Align.CENTER);
@@ -109,7 +111,7 @@ public class HatchedProgressBar extends View {
         Canvas patternCanvas = new Canvas(patternBitmap);
 
         Paint bgTilePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bgTilePaint.setColor(Color.parseColor("#262A33")); // Dark base behind stripes
+        bgTilePaint.setColor(ContextCompat.getColor(getContext(), R.color.warm_ash_surface_alt));
         patternCanvas.drawRect(0, 0, tileWidth, tileWidth, bgTilePaint);
 
         Paint tileStripePaint = new Paint(Paint.ANTI_ALIAS_FLAG);

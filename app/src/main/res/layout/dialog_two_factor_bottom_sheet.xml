@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dark_card"
+    android:background="@drawable/bg_card_outlined"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -13,7 +13,7 @@
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
-        android:background="#2E3442" />
+        android:background="@drawable/bg_pill_inactive" />
 
     <!-- Shield Badge Icon -->
     <ImageView
@@ -22,7 +22,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="12dp"
         android:src="@drawable/ic_check_circle"
-        app:tint="@color/accent_safety_yellow" />
+        app:tint="@color/oxide_blue_primary" />
 
     <!-- Title -->
     <TextView
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="2-Step Verification"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/text_oxide_primary"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -42,7 +42,7 @@
         android:layout_marginTop="6dp"
         android:gravity="center"
         android:text="Enter the 6-digit security code sent to your registered mobile device."
-        android:textColor="@color/text_secondary"
+        android:textColor="@color/text_oxide_secondary"
         android:textSize="13sp" />
 
     <!-- 6-Digit OTP Code Input -->
@@ -50,10 +50,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:boxBackgroundColor="@color/bg_surface_card"
-        app:boxStrokeColor="@color/accent_safety_yellow"
+        app:boxBackgroundColor="@color/warm_ash_surface"
+        app:boxStrokeColor="@color/stroke_oxide_blue"
         app:boxStrokeWidth="1.5dp"
-        app:hintTextColor="@color/accent_safety_yellow">
+        app:hintTextColor="@color/text_oxide_secondary">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_otp_code"
@@ -64,7 +64,7 @@
             android:inputType="number"
             android:letterSpacing="0.4"
             android:maxLength="6"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_oxide_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -77,8 +77,9 @@
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="Didn't receive code? Tap to resend"
-        android:textColor="@color/accent_safety_yellow"
-        android:textSize="12sp" />
+        android:textColor="@color/oxide_blue_primary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <!-- Verify Button -->
     <com.google.android.material.button.MaterialButton
@@ -96,7 +97,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="Field Demo Mode: Enter 123456 to verify instantly"
-        android:textColor="@color/text_tertiary"
+        android:textColor="@color/text_oxide_muted"
         android:textSize="11sp" />
 
 </LinearLayout>

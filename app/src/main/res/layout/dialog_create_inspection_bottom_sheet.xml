@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/bg_dark_card"
+    android:background="@drawable/bg_card_outlined"
     android:padding="24dp">
 
     <!-- Header Drag Handle -->
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="QA &amp; SAFETY INSPECTION"
-        android:textColor="@color/accent_safety_amber"
+        android:textColor="@color/text_oxide_primary"
         android:textSize="12sp"
         android:textStyle="bold"
         android:letterSpacing="0.08" />
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Quality Checklist"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/text_oxide_primary"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="4dp"
@@ -38,11 +38,11 @@
         android:id="@+id/etInspectionTitle"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@drawable/bg_dark_card"
+        android:background="@drawable/bg_pill_inactive"
         android:padding="12dp"
         android:hint="Inspection Title (e.g. Rebar Clearance Check)"
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_muted"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
         android:textSize="14sp"
         android:layout_marginBottom="12dp" />
 
@@ -61,9 +61,9 @@
             android:text="STRUCT"
             android:textSize="10sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/accent_safety_amber"
-            android:textColor="@color/dark_canvas"
-            app:cornerRadius="6dp"
+            app:backgroundTint="@color/oxide_blue_primary"
+            android:textColor="@color/text_on_oxide_white"
+            app:cornerRadius="8dp"
             android:layout_marginEnd="6dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -74,11 +74,11 @@
             android:text="ARCH"
             android:textSize="10sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/dark_surface_elevated"
-            app:strokeColor="@color/dark_border"
-            app:strokeWidth="1dp"
-            android:textColor="@color/text_secondary"
-            app:cornerRadius="6dp"
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/oxide_blue_primary"
+            app:strokeWidth="1.5dp"
+            android:textColor="@color/text_oxide_primary"
+            app:cornerRadius="8dp"
             android:layout_marginEnd="6dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -89,11 +89,11 @@
             android:text="ELEC"
             android:textSize="10sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/dark_surface_elevated"
-            app:strokeColor="@color/dark_border"
-            app:strokeWidth="1dp"
-            android:textColor="@color/text_secondary"
-            app:cornerRadius="6dp"
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/oxide_blue_primary"
+            app:strokeWidth="1.5dp"
+            android:textColor="@color/text_oxide_primary"
+            app:cornerRadius="8dp"
             android:layout_marginEnd="6dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -104,11 +104,11 @@
             android:text="PLUMB"
             android:textSize="10sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/dark_surface_elevated"
-            app:strokeColor="@color/dark_border"
-            app:strokeWidth="1dp"
-            android:textColor="@color/text_secondary"
-            app:cornerRadius="6dp" />
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/oxide_blue_primary"
+            app:strokeWidth="1.5dp"
+            android:textColor="@color/text_oxide_primary"
+            app:cornerRadius="8dp" />
     </LinearLayout>
 
     <!-- Embedded Hardware Tool: Check Level -->
@@ -124,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PITCH &amp; SLOPE TELEMETRY"
-            android:textColor="@color/accent_safety_amber"
+            android:textColor="@color/text_oxide_primary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:layout_marginBottom="6dp" />
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="No angle measured yet"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="13sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -153,11 +153,12 @@
                 android:textStyle="bold"
                 app:icon="@drawable/ic_grid"
                 app:iconSize="16dp"
-                app:backgroundTint="@color/dark_surface_elevated"
-                app:strokeColor="@color/accent_safety_amber"
-                app:strokeWidth="1dp"
-                android:textColor="@color/accent_safety_amber"
-                app:cornerRadius="6dp" />
+                app:iconTint="@color/oxide_blue_primary"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/oxide_blue_primary"
+                app:strokeWidth="1.5dp"
+                android:textColor="@color/oxide_blue_primary"
+                app:cornerRadius="8dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -168,10 +169,10 @@
         android:layout_height="70dp"
         android:gravity="top|start"
         android:padding="12dp"
-        android:background="@drawable/bg_dark_card"
+        android:background="@drawable/bg_pill_inactive"
         android:hint="Checklist notes, tolerances, or field observations..."
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_muted"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
         android:textSize="13sp"
         android:layout_marginBottom="20dp" />
 
@@ -181,10 +182,10 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:text="CREATE &amp; DISPATCH CHECKLIST"
-        android:textColor="@color/dark_canvas"
+        android:textColor="@color/text_on_oxide_white"
         android:textStyle="bold"
         android:textSize="13sp"
-        app:backgroundTint="@color/accent_safety_amber"
-        app:cornerRadius="8dp" />
+        app:backgroundTint="@color/oxide_blue_primary"
+        app:cornerRadius="12dp" />
 
 </LinearLayout>

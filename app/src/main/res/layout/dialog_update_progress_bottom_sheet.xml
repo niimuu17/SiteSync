@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/bg_dark_card"
+    android:background="@drawable/bg_card_outlined"
     android:padding="24dp">
 
     <!-- Header Drag Handle -->
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="UPDATE PROGRESS TELEMETRY"
-        android:textColor="@color/accent_safety_amber"
+        android:textColor="@color/text_oxide_primary"
         android:textSize="12sp"
         android:textStyle="bold"
         android:letterSpacing="0.08" />
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Structural Column Pour L-14"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/text_oxide_primary"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginTop="4dp"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Completion Percentage"
-            android:textColor="@color/text_secondary"
+            android:textColor="@color/text_oxide_secondary"
             android:textSize="14sp" />
 
         <TextView
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="68%"
-            android:textColor="@color/accent_safety_amber"
+            android:textColor="@color/oxide_blue_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -69,9 +69,9 @@
         android:valueTo="100.0"
         android:stepSize="1.0"
         android:value="68.0"
-        app:thumbColor="@color/accent_safety_amber"
-        app:trackColorActive="@color/accent_safety_amber"
-        app:trackColorInactive="@color/gauge_track_dark"
+        app:thumbColor="@color/oxide_blue_primary"
+        app:trackColorActive="@color/oxide_blue_primary"
+        app:trackColorInactive="@color/gauge_track_ash"
         android:layout_marginBottom="16dp" />
 
     <!-- Status Picker Chips -->
@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Work Status"
-        android:textColor="@color/text_secondary"
+        android:textColor="@color/text_oxide_secondary"
         android:textSize="12sp"
         android:layout_marginBottom="8dp" />
 
@@ -97,9 +97,9 @@
             android:text="IN PROGRESS"
             android:textSize="11sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/accent_safety_amber"
-            android:textColor="@color/dark_canvas"
-            app:cornerRadius="8dp"
+            app:backgroundTint="@color/oxide_blue_primary"
+            android:textColor="@color/text_on_oxide_white"
+            app:cornerRadius="10dp"
             android:layout_marginEnd="8dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -110,11 +110,11 @@
             android:text="DELAYED"
             android:textSize="11sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/dark_surface_elevated"
-            app:strokeColor="@color/dark_border"
-            app:strokeWidth="1dp"
-            android:textColor="@color/text_secondary"
-            app:cornerRadius="8dp"
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/oxide_blue_primary"
+            app:strokeWidth="1.5dp"
+            android:textColor="@color/text_oxide_primary"
+            app:cornerRadius="10dp"
             android:layout_marginEnd="8dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -125,11 +125,11 @@
             android:text="COMPLETED"
             android:textSize="11sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/dark_surface_elevated"
-            app:strokeColor="@color/dark_border"
-            app:strokeWidth="1dp"
-            android:textColor="@color/text_secondary"
-            app:cornerRadius="8dp" />
+            app:backgroundTint="@color/warm_ash_surface"
+            app:strokeColor="@color/oxide_blue_primary"
+            app:strokeWidth="1.5dp"
+            android:textColor="@color/text_oxide_primary"
+            app:cornerRadius="10dp" />
     </LinearLayout>
 
     <!-- Remarks Field with Voice Dictation Button -->
@@ -137,7 +137,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Field Observation Notes"
-        android:textColor="@color/text_secondary"
+        android:textColor="@color/text_oxide_secondary"
         android:textSize="12sp"
         android:layout_marginBottom="8dp" />
 
@@ -153,9 +153,9 @@
             android:gravity="top|start"
             android:padding="12dp"
             android:paddingEnd="48dp"
-            android:background="@drawable/bg_dark_card"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_muted"
+            android:background="@drawable/bg_pill_inactive"
+            android:textColor="@color/text_oxide_primary"
+            android:textColorHint="@color/text_oxide_muted"
             android:textSize="13sp"
             android:hint="Log site notes or tap microphone to speak..." />
 
@@ -169,7 +169,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/btn_mic_dictate"
             android:src="@drawable/ic_mic"
-            app:tint="@color/accent_safety_amber"
+            app:tint="@color/oxide_blue_primary"
             android:contentDescription="Speak Note" />
     </RelativeLayout>
 
@@ -179,10 +179,10 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:text="SYNC &amp; SAVE TELEMETRY"
-        android:textColor="@color/dark_canvas"
+        android:textColor="@color/text_on_oxide_white"
         android:textStyle="bold"
         android:textSize="14sp"
-        app:backgroundTint="@color/accent_safety_amber"
-        app:cornerRadius="8dp" />
+        app:backgroundTint="@color/oxide_blue_primary"
+        app:cornerRadius="12dp" />
 
 </LinearLayout>

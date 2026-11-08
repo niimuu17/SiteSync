@@ -3,27 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_canvas">
+    android:background="@color/warm_ash_base">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Top App Bar / Brand Header -->
+        <!-- Top App Bar / Context Header (Warm Ash Canvas) -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="64dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:background="@color/dark_canvas">
+            android:background="@color/warm_ash_base">
 
-            <!-- Brand Symbol Icon -->
+            <!-- Minimalist Structural Brand Mark -->
             <FrameLayout
-                android:layout_width="38dp"
-                android:layout_height="38dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/bg_squircle_amber"
                 android:layout_marginEnd="12dp">
 
@@ -32,6 +32,7 @@
                     android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_app_brand_symbol"
+                    app:tint="@color/oxide_blue_primary"
                     android:contentDescription="Brand" />
             </FrameLayout>
 
@@ -45,58 +46,58 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SiteSync"
-                    android:textColor="@color/text_primary"
-                    android:textSize="17sp"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvUserRoleClaim"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FIELD ENGINEER • FULL ACCESS"
-                    android:textColor="@color/accent_safety_amber"
-                    android:textSize="10sp"
-                    android:letterSpacing="0.06"
+                    android:text="ELENA ROSTOVA • ENGINEER"
+                    android:textColor="@color/text_oxide_secondary"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.04"
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Role Badge Pill -->
+            <!-- Solid Role Pill (Oxide Blue) -->
             <TextView
                 android:id="@+id/tvActiveRoleBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ENGINEER"
-                android:textColor="@color/dark_canvas"
-                android:textSize="10sp"
+                android:textColor="@color/text_on_oxide_white"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:background="@drawable/bg_tab_pill_active"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:layout_marginEnd="10dp" />
 
-            <!-- More / Context Menu Button -->
+            <!-- Three-Dot Options Menu -->
             <ImageView
                 android:id="@+id/btnCockpitMenu"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_more_horiz"
-                app:tint="@color/text_primary"
-                android:contentDescription="Menu" />
+                app:tint="@color/text_oxide_primary"
+                android:contentDescription="Options Menu" />
         </LinearLayout>
 
-        <!-- Sticky Context Banner with Barometer Floor Detector -->
+        <!-- Context Location Banner (Outlined Warm Ash Surface with 4-Square Icon & Trigger) -->
         <com.example.sitesync.ui.common.ContextBannerView
             android:id="@+id/contextBannerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="12dp" />
 
-        <!-- Segmented Horizontal Pill Bar matching Dribbble Reference -->
+        <!-- Segmented Horizontal Pill Tab Bar -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,57 +114,57 @@
                 <TextView
                     android:id="@+id/tabPillWorkAreas"
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
+                    android:layout_height="40dp"
                     android:text="Work Areas"
                     android:gravity="center"
-                    android:paddingStart="18dp"
-                    android:paddingEnd="18dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:background="@drawable/bg_tab_pill_active"
-                    android:textColor="@color/dark_canvas"
+                    android:textColor="@color/text_on_oxide_white"
                     android:layout_marginEnd="8dp" />
 
                 <TextView
                     android:id="@+id/tabPillProgress"
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
+                    android:layout_height="40dp"
                     android:text="Progress"
                     android:gravity="center"
-                    android:paddingStart="18dp"
-                    android:paddingEnd="18dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:background="@drawable/bg_tab_pill_inactive"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_oxide_primary"
                     android:layout_marginEnd="8dp" />
 
                 <TextView
                     android:id="@+id/tabPillQaCad"
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
+                    android:layout_height="40dp"
                     android:text="QA &amp; Blueprints"
                     android:gravity="center"
-                    android:paddingStart="18dp"
-                    android:paddingEnd="18dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:background="@drawable/bg_tab_pill_inactive"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="@color/text_oxide_primary"
                     android:layout_marginEnd="8dp" />
 
                 <TextView
                     android:id="@+id/tabPillDaily"
                     android:layout_width="wrap_content"
-                    android:layout_height="38dp"
+                    android:layout_height="40dp"
                     android:text="Daily &amp; Issues"
                     android:gravity="center"
-                    android:paddingStart="18dp"
-                    android:paddingEnd="18dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:background="@drawable/bg_tab_pill_inactive"
-                    android:textColor="@color/text_secondary" />
+                    android:textColor="@color/text_oxide_primary" />
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -176,7 +177,7 @@
 
     </LinearLayout>
 
-    <!-- Floating Navigation Dock at Bottom -->
+    <!-- Floating Navigation Dock at Bottom (Solid Oxide Blue Pill) -->
     <com.example.sitesync.ui.common.NavigationDockView
         android:id="@+id/navigationDock"
         android:layout_width="match_parent"

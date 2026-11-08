@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_canvas"
+    android:background="@color/warm_ash_base"
     android:fillViewport="true">
 
     <LinearLayout
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="DAILY SITE REPORT (5-SECTION)"
-                android:textColor="@color/accent_safety_amber"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.08" />
@@ -36,14 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12 FEB 2026"
-                android:textColor="@color/accent_safety_amber"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:background="@drawable/bg_pill_inactive"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp" />
+                android:background="@drawable/bg_tab_pill_inactive"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp" />
         </LinearLayout>
 
         <!-- Form Card Container -->
@@ -51,8 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_dark_card"
-            android:padding="16dp"
+            android:background="@drawable/bg_card_outlined"
+            android:padding="18dp"
             android:layout_marginBottom="20dp">
 
             <!-- Section 1: Weather & Site Conditions -->
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1. Weather &amp; Ambient Conditions"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -72,7 +72,8 @@
                 android:background="@drawable/bg_pill_inactive"
                 android:padding="10dp"
                 android:text="Clear Sky • 24°C • Wind: 8 km/h NW • Humidity: 45%"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
                 android:textSize="12sp"
                 android:layout_marginBottom="14dp" />
 
@@ -89,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="2. Completed Work &amp; Structural Notes"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -99,7 +100,7 @@
                     android:layout_height="36dp"
                     android:background="@drawable/btn_mic_dictate"
                     android:src="@drawable/ic_mic"
-                    app:tint="@color/accent_safety_amber"
+                    app:tint="@color/oxide_blue_primary"
                     android:contentDescription="Speak Note" />
             </LinearLayout>
 
@@ -111,7 +112,8 @@
                 android:background="@drawable/bg_pill_inactive"
                 android:padding="10dp"
                 android:text="Completed rebar cage installation on Level 14 columns 1 through 8. Ready for concrete slump test."
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
                 android:textSize="12sp"
                 android:layout_marginBottom="14dp" />
 
@@ -120,7 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="3. Deployed Trades &amp; Manpower"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -132,11 +134,12 @@
                 android:background="@drawable/bg_pill_inactive"
                 android:padding="10dp"
                 android:text="42 Field Workers: 16 Steel Fixers, 14 Carpenters, 8 Electricians, 4 Riggers"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
                 android:textSize="12sp"
                 android:layout_marginBottom="14dp" />
 
-            <!-- Section 4: Materials Used & "Scan Delivery Ticket" ML Kit Integration -->
+            <!-- Section 4: Materials Used & "Scan Delivery Ticket" Integration -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -149,24 +152,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="4. Materials Consumed"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnScanTicketMaterials"
                     android:layout_width="wrap_content"
-                    android:layout_height="34dp"
+                    android:layout_height="36dp"
                     android:text="SCAN TICKET"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     app:icon="@drawable/ic_camera"
                     app:iconSize="14dp"
-                    app:backgroundTint="@color/dark_surface_elevated"
-                    app:strokeColor="@color/accent_safety_amber"
-                    app:strokeWidth="1dp"
-                    android:textColor="@color/accent_safety_amber"
-                    app:cornerRadius="6dp" />
+                    app:iconTint="@color/oxide_blue_primary"
+                    app:backgroundTint="@color/warm_ash_surface"
+                    app:strokeColor="@color/oxide_blue_primary"
+                    app:strokeWidth="1.5dp"
+                    android:textColor="@color/oxide_blue_primary"
+                    app:cornerRadius="8dp" />
             </LinearLayout>
 
             <EditText
@@ -177,7 +181,8 @@
                 android:background="@drawable/bg_pill_inactive"
                 android:padding="10dp"
                 android:text="C35 Ready-Mix Concrete: 85 cu yd (Ticket #40289), Rebar #6 Grade 60: 4.2 Tons"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
                 android:textSize="12sp"
                 android:layout_marginBottom="14dp" />
 
@@ -186,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="5. Equipment &amp; Incident Logs"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
@@ -198,7 +203,8 @@
                 android:background="@drawable/bg_pill_inactive"
                 android:padding="10dp"
                 android:text="Tower Crane #2 operational (8 hrs). 1 Scissor lift hydraulic line inspected."
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
+                android:textColorHint="@color/text_oxide_muted"
                 android:textSize="12sp"
                 android:layout_marginBottom="18dp" />
 
@@ -216,11 +222,11 @@
                     android:text="SAVE DRAFT"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    app:backgroundTint="@color/dark_surface_elevated"
-                    app:strokeColor="@color/dark_border"
-                    app:strokeWidth="1dp"
-                    android:textColor="@color/text_primary"
-                    app:cornerRadius="8dp"
+                    app:backgroundTint="@color/warm_ash_surface"
+                    app:strokeColor="@color/oxide_blue_primary"
+                    app:strokeWidth="1.5dp"
+                    android:textColor="@color/oxide_blue_primary"
+                    app:cornerRadius="12dp"
                     android:layout_marginEnd="6dp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -231,9 +237,9 @@
                     android:text="SUBMIT &amp; SHARE PDF"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    app:backgroundTint="@color/accent_safety_amber"
-                    android:textColor="@color/dark_canvas"
-                    app:cornerRadius="8dp"
+                    app:backgroundTint="@color/oxide_blue_primary"
+                    android:textColor="@color/text_on_oxide_white"
+                    app:cornerRadius="12dp"
                     android:layout_marginStart="6dp" />
             </LinearLayout>
         </LinearLayout>
@@ -251,7 +257,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="TECHNICAL ISSUES &amp; RFI STREAM"
-                android:textColor="@color/accent_safety_amber"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.08" />
@@ -260,14 +266,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3 ACTIVE RFIS"
-                android:textColor="@color/accent_safety_amber"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:background="@drawable/bg_pill_inactive"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp" />
+                android:background="@drawable/bg_tab_pill_inactive"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp" />
         </LinearLayout>
 
         <!-- RFI Card 1 -->
@@ -275,7 +281,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_dark_card"
+            android:background="@drawable/bg_card_outlined"
             android:padding="16dp"
             android:layout_marginBottom="12dp">
 
@@ -291,7 +297,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="HVAC Duct Clash with Beam B-4"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -299,21 +305,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="HIGH PRIORITY"
-                    android:textColor="@color/accent_terracotta"
+                    android:textColor="@color/text_on_oxide_white"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp" />
+                    android:background="@drawable/bg_tab_pill_active"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Building 2 • Level 14 Core • Status: OPEN"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -326,11 +332,12 @@
                 android:textStyle="bold"
                 app:icon="@drawable/ic_comment"
                 app:iconSize="16dp"
-                app:backgroundTint="@color/dark_surface_elevated"
-                app:strokeColor="@color/accent_safety_amber"
-                app:strokeWidth="1dp"
-                android:textColor="@color/accent_safety_amber"
-                app:cornerRadius="8dp" />
+                app:iconTint="@color/oxide_blue_primary"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/oxide_blue_primary"
+                app:strokeWidth="1.5dp"
+                android:textColor="@color/oxide_blue_primary"
+                app:cornerRadius="12dp" />
         </LinearLayout>
 
         <!-- RFI Card 2 -->
@@ -338,7 +345,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_dark_card"
+            android:background="@drawable/bg_card_outlined"
             android:padding="16dp">
 
             <LinearLayout
@@ -353,7 +360,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Curtain Wall Anchor Embed Depth"
-                    android:textColor="@color/text_primary"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -361,21 +368,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MED PRIORITY"
-                    android:textColor="@color/accent_safety_amber"
+                    android:textColor="@color/text_oxide_primary"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp" />
+                    android:background="@drawable/bg_tab_pill_inactive"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Building 2 • Level 12 West Facade • Status: IN REVIEW"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -388,11 +395,12 @@
                 android:textStyle="bold"
                 app:icon="@drawable/ic_comment"
                 app:iconSize="16dp"
-                app:backgroundTint="@color/dark_surface_elevated"
-                app:strokeColor="@color/accent_safety_amber"
-                app:strokeWidth="1dp"
-                android:textColor="@color/accent_safety_amber"
-                app:cornerRadius="8dp" />
+                app:iconTint="@color/oxide_blue_primary"
+                app:backgroundTint="@color/warm_ash_surface"
+                app:strokeColor="@color/oxide_blue_primary"
+                app:strokeWidth="1.5dp"
+                android:textColor="@color/oxide_blue_primary"
+                app:cornerRadius="12dp" />
         </LinearLayout>
 
     </LinearLayout>

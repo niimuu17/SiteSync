@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dark_card"
+    android:background="@drawable/bg_card_outlined"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:text="Check Level"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_oxide_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -30,7 +30,7 @@
             android:background="@drawable/bg_pill_inactive"
             android:contentDescription="Close"
             android:src="@drawable/ic_cancel_circle"
-            app:tint="@color/text_primary" />
+            app:tint="@color/text_oxide_primary" />
     </RelativeLayout>
 
     <!-- Subtitle -->
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Place device flat or edge-aligned on surface"
-        android:textColor="@color/text_secondary"
+        android:textColor="@color/text_oxide_secondary"
         android:textSize="13sp" />
 
     <!-- Interactive SemiCircleGaugeView -->
@@ -52,8 +52,8 @@
         android:layout_marginBottom="16dp"
         app:gaugeMax="100"
         app:gaugeProgress="0"
-        app:gaugeSweepColor="@color/accent_safety_yellow"
-        app:gaugeTrackColor="@color/gauge_track_dark" />
+        app:gaugeSweepColor="@color/oxide_blue_primary"
+        app:gaugeTrackColor="@color/gauge_track_ash" />
 
     <!-- Angle KPI readout grid -->
     <LinearLayout
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pitch (Slope)"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="11sp" />
 
             <TextView
@@ -81,15 +81,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0.0°"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <View
-            android:layout_width="1dp"
+            android:layout_width="1.5dp"
             android:layout_height="match_parent"
-            android:background="@color/stroke_card_border" />
+            android:background="@color/stroke_oxide_blue" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Roll (Tilt)"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="11sp" />
 
             <TextView
@@ -110,15 +110,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0.0°"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <View
-            android:layout_width="1dp"
+            android:layout_width="1.5dp"
             android:layout_height="match_parent"
-            android:background="@color/stroke_card_border" />
+            android:background="@color/stroke_oxide_blue" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -131,7 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Grade %"
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/text_oxide_secondary"
                 android:textSize="11sp" />
 
             <TextView
@@ -139,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0.0%"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_oxide_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>

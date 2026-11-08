@@ -105,7 +105,7 @@ public class CreateInspectionBottomSheet extends BottomSheetDialogFragment {
             dialog.setOnMeasurementSavedListener(formattedMeasurement -> {
                 capturedMeasurement = formattedMeasurement;
                 tvCapturedSlope.setText(formattedMeasurement);
-                tvCapturedSlope.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_telemetry_green));
+                tvCapturedSlope.setTextColor(ContextCompat.getColor(requireContext(), R.color.oxide_blue_primary));
             });
             dialog.show(getParentFragmentManager(), "CheckLevelDialog");
         });
@@ -153,21 +153,33 @@ public class CreateInspectionBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void updateDisciplineButtons() {
-        int amber = ContextCompat.getColor(requireContext(), R.color.accent_safety_amber);
-        int dark = ContextCompat.getColor(requireContext(), R.color.dark_canvas);
-        int surface = ContextCompat.getColor(requireContext(), R.color.dark_surface_elevated);
-        int textSec = ContextCompat.getColor(requireContext(), R.color.text_secondary);
+        int oxideBlue = ContextCompat.getColor(requireContext(), R.color.oxide_blue_primary);
+        int white = ContextCompat.getColor(requireContext(), R.color.text_on_oxide_white);
+        int ashSurface = ContextCompat.getColor(requireContext(), R.color.warm_ash_surface);
+        int textPrimary = ContextCompat.getColor(requireContext(), R.color.text_oxide_primary);
 
-        btnDiscStructural.setBackgroundColor("Structural".equalsIgnoreCase(selectedDiscipline) ? amber : surface);
-        btnDiscStructural.setTextColor("Structural".equalsIgnoreCase(selectedDiscipline) ? dark : textSec);
+        boolean isStruct = "Structural".equalsIgnoreCase(selectedDiscipline);
+        btnDiscStructural.setBackgroundColor(isStruct ? oxideBlue : ashSurface);
+        btnDiscStructural.setTextColor(isStruct ? white : textPrimary);
+        btnDiscStructural.setStrokeColorResource(R.color.stroke_oxide_blue);
+        btnDiscStructural.setStrokeWidth(isStruct ? 0 : 3);
 
-        btnDiscArch.setBackgroundColor("Architectural".equalsIgnoreCase(selectedDiscipline) ? amber : surface);
-        btnDiscArch.setTextColor("Architectural".equalsIgnoreCase(selectedDiscipline) ? dark : textSec);
+        boolean isArch = "Architectural".equalsIgnoreCase(selectedDiscipline);
+        btnDiscArch.setBackgroundColor(isArch ? oxideBlue : ashSurface);
+        btnDiscArch.setTextColor(isArch ? white : textPrimary);
+        btnDiscArch.setStrokeColorResource(R.color.stroke_oxide_blue);
+        btnDiscArch.setStrokeWidth(isArch ? 0 : 3);
 
-        btnDiscElec.setBackgroundColor("Electrical".equalsIgnoreCase(selectedDiscipline) ? amber : surface);
-        btnDiscElec.setTextColor("Electrical".equalsIgnoreCase(selectedDiscipline) ? dark : textSec);
+        boolean isElec = "Electrical".equalsIgnoreCase(selectedDiscipline);
+        btnDiscElec.setBackgroundColor(isElec ? oxideBlue : ashSurface);
+        btnDiscElec.setTextColor(isElec ? white : textPrimary);
+        btnDiscElec.setStrokeColorResource(R.color.stroke_oxide_blue);
+        btnDiscElec.setStrokeWidth(isElec ? 0 : 3);
 
-        btnDiscPlumb.setBackgroundColor("Plumbing".equalsIgnoreCase(selectedDiscipline) ? amber : surface);
-        btnDiscPlumb.setTextColor("Plumbing".equalsIgnoreCase(selectedDiscipline) ? dark : textSec);
+        boolean isPlumb = "Plumbing".equalsIgnoreCase(selectedDiscipline);
+        btnDiscPlumb.setBackgroundColor(isPlumb ? oxideBlue : ashSurface);
+        btnDiscPlumb.setTextColor(isPlumb ? white : textPrimary);
+        btnDiscPlumb.setStrokeColorResource(R.color.stroke_oxide_blue);
+        btnDiscPlumb.setStrokeWidth(isPlumb ? 0 : 3);
     }
 }
