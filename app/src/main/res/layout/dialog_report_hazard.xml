@@ -30,11 +30,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="REPORT JOBSITE HAZARD"
+                android:text="Report Hazard"
                 android:textColor="@color/text_oxide_primary"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.04" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/btnCloseDialog"
@@ -50,11 +49,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HAZARD CATEGORY"
+            android:text="Category"
             android:textColor="@color/text_oxide_primary"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:letterSpacing="0.06"
             android:layout_marginBottom="6dp" />
 
         <Spinner
@@ -70,11 +68,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SEVERITY / PRIORITY"
+            android:text="Priority"
             android:textColor="@color/text_oxide_primary"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:letterSpacing="0.06"
             android:layout_marginBottom="8dp" />
 
         <LinearLayout
@@ -132,18 +129,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SPECIFIC LOCATION / AREA"
+            android:text="Location"
             android:textColor="@color/text_oxide_primary"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:letterSpacing="0.06"
             android:layout_marginBottom="6dp" />
 
         <EditText
             android:id="@+id/etHazardLocation"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="e.g. Level 2 - East Pump Room"
+            android:hint="e.g. Level 2 East Pump Room"
             android:background="@drawable/bg_rounded_input"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
@@ -156,11 +152,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HAZARD DESCRIPTION"
+            android:text="Description"
             android:textColor="@color/text_oxide_primary"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:letterSpacing="0.06"
             android:layout_marginBottom="6dp" />
 
         <RelativeLayout
@@ -173,7 +168,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:gravity="top|start"
-                android:hint="Detail safety non-compliance, exposed hazard, or structural issue..."
+                android:hint="Describe safety issue..."
                 android:background="@drawable/bg_rounded_input"
                 android:paddingStart="14dp"
                 android:paddingTop="12dp"
@@ -221,9 +216,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
                 android:layout_margin="8dp"
-                android:text="📍 40.7128°N, 74.0060°W | UTC VERIFIED"
+                android:text="📍 GPS Verified"
                 android:textColor="#FFFFFF"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:textStyle="bold"
                 android:background="@drawable/bg_badge_low"
                 android:backgroundTint="#CC16394F"
@@ -256,7 +251,7 @@
                 android:id="@+id/tvCapturePhotoLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📷 Geotagged Photo: 40.7128°N, 74.0060°W"
+                android:text="📷 Add Photo"
                 android:textColor="@color/oxide_blue_primary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -266,14 +261,13 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitHazard"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="50dp"
             android:background="@drawable/bg_pill_primary"
             app:backgroundTint="@null"
-            android:text="LOG HAZARD TICKET"
+            android:text="Submit Hazard"
             android:textColor="@color/text_on_oxide_white"
             android:textSize="13sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.05" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

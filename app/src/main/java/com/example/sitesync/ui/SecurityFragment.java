@@ -88,20 +88,20 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
                 binding.pbDecibelLevel.setProgress((int) decibels);
 
                 if (isHazardous) {
-                    binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "HAZARDOUS • %.0f dB", decibels));
+                    binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Hazard)", decibels));
                     binding.tvNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
                     binding.tvNoiseStatusBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
                     binding.pbDecibelLevel.setProgressTintList(ColorStateList.valueOf(
                             ContextCompat.getColor(requireContext(), R.color.status_red)));
-                    binding.tvNoisePpeWarning.setText("⚠️ WARNING: Sustained noise exceeds OSHA 85 dB threshold! Double hearing PPE required in this zone.");
+                    binding.tvNoisePpeWarning.setText("⚠️ Hazardous noise (>85 dB). Hearing protection required.");
                     binding.tvNoisePpeWarning.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
                 } else {
-                    binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "SAFE • %.0f dB", decibels));
+                    binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Safe)", decibels));
                     binding.tvNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
                     binding.tvNoiseStatusBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_green));
                     binding.pbDecibelLevel.setProgressTintList(ColorStateList.valueOf(
                             ContextCompat.getColor(requireContext(), R.color.status_green)));
-                    binding.tvNoisePpeWarning.setText("Ambient jobsite noise is within normal limits. Hearing protection recommended above 85 dB.");
+                    binding.tvNoisePpeWarning.setText("Normal noise. Hearing protection required above 85 dB.");
                     binding.tvNoisePpeWarning.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_oxide_secondary));
                 }
             }
@@ -135,7 +135,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
             EmergencyConfirmationDialog dialog = EmergencyConfirmationDialog.newInstance();
             dialog.setOnEmergencyTriggeredListener((emergencyType, timestamp) -> {
                 binding.incEmergency.bannerActiveEmergency.setVisibility(View.VISIBLE);
-                binding.incEmergency.tvActiveEmergencyInfo.setText("ACTIVE ALERT: " + emergencyType.toUpperCase());
+                binding.incEmergency.tvActiveEmergencyInfo.setText("Active Alert: " + emergencyType);
             });
             dialog.show(getChildFragmentManager(), "EmergencyConfirmationDialog");
         });
@@ -260,7 +260,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
                 }
             }
         }
-        binding.tvHazardCountBadge.setText(openCount + " OPEN");
+        binding.tvHazardCountBadge.setText(openCount + " Open");
         if (openCount == 0) {
             binding.tvHazardCountBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
             binding.tvHazardCountBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_green));
@@ -277,9 +277,9 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
             binding.rvHazardTickets.setVisibility(View.GONE);
             binding.layoutHazardEmptyState.setVisibility(View.VISIBLE);
             if (isShowingResolved) {
-                binding.tvEmptyStateText.setText("Zero Resolved Hazards in Archive");
+                binding.tvEmptyStateText.setText("No Resolved Hazards");
             } else {
-                binding.tvEmptyStateText.setText("Zero Active Hazards • Site Perimeter Safe");
+                binding.tvEmptyStateText.setText("No Active Hazards");
             }
         } else {
             binding.rvHazardTickets.setVisibility(View.VISIBLE);
@@ -298,18 +298,18 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         // Observe pending queue count
         pendingSyncDao.getPendingCountLiveData().observe(getViewLifecycleOwner(), count -> {
             int pending = count != null ? count : 0;
-            binding.incSyncTelemetry.tvPendingSyncCount.setText(pending + " Operations");
+            binding.incSyncTelemetry.tvPendingSyncCount.setText(pending + (pending == 1 ? " item" : " items"));
             if (pending == 0) {
                 binding.incSyncTelemetry.ivTelemetrySyncIcon.setImageResource(R.drawable.ic_cloud_done);
                 binding.incSyncTelemetry.ivTelemetrySyncIcon.setColorFilter(
                         ContextCompat.getColor(requireContext(), R.color.status_green));
-                binding.incSyncTelemetry.tvRoomDbStatusPill.setText("HEALTHY");
+                binding.incSyncTelemetry.tvRoomDbStatusPill.setText("Synced");
                 binding.incSyncTelemetry.tvRoomDbStatusPill.setBackgroundResource(R.drawable.bg_badge_optimal);
             } else {
                 binding.incSyncTelemetry.ivTelemetrySyncIcon.setImageResource(R.drawable.ic_cloud_sync);
                 binding.incSyncTelemetry.ivTelemetrySyncIcon.setColorFilter(
                         ContextCompat.getColor(requireContext(), R.color.brand_amber));
-                binding.incSyncTelemetry.tvRoomDbStatusPill.setText("PENDING (" + pending + ")");
+                binding.incSyncTelemetry.tvRoomDbStatusPill.setText("Pending (" + pending + ")");
                 binding.incSyncTelemetry.tvRoomDbStatusPill.setBackgroundResource(R.drawable.bg_badge_medium);
             }
         });
@@ -317,9 +317,9 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         // Observe network state
         NetworkMonitor.getInstance(requireContext()).isOnline().observe(getViewLifecycleOwner(), isOnline -> {
             if (Boolean.TRUE.equals(isOnline)) {
-                binding.incSyncTelemetry.tvNetworkInterface.setText("Wi-Fi / Cellular (Online)");
+                binding.incSyncTelemetry.tvNetworkInterface.setText("Online");
             } else {
-                binding.incSyncTelemetry.tvNetworkInterface.setText("Offline (WAL Local Cache)");
+                binding.incSyncTelemetry.tvNetworkInterface.setText("Offline");
             }
         });
 
@@ -327,7 +327,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         binding.incSyncTelemetry.btnManualSyncFlush.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(requireContext(), v);
             SyncManager.enqueueOneTimeSync(requireContext());
-            Toast.makeText(requireContext(), "Sync queue dispatched to cloud worker", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Sync initiated", Toast.LENGTH_SHORT).show();
         });
     }
 

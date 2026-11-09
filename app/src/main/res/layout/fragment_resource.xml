@@ -40,18 +40,17 @@
                         android:id="@+id/tvInventoryHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SITE INVENTORY"
+                        android:text="Inventory"
                         android:textColor="@color/text_oxide_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.08" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvInventoryCountBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="(4 Items Tracked)"
+                        android:text="(4 items)"
                         android:textColor="@color/text_oxide_secondary"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -99,11 +98,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="📋 RECENT CONSUMPTION LOG"
+                        android:text="Recent Usage"
                         android:textColor="@color/text_oxide_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.04" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"

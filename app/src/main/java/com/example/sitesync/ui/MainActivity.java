@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             barometerElevationManager.startListening(new BarometerElevationManager.OnFloorLevelChangeListener() {
                 @Override
                 public void onFloorChanged(int computedFloor, float elevationDeltaMeters, float currentPressureHpa) {
-                    binding.tvProjectSubtitle.setText(String.format(java.util.Locale.US, "Floor Level: Level %d (Auto)", computedFloor));
+                    binding.tvProjectSubtitle.setText(String.format(java.util.Locale.US, "Floor %d (Auto)", computedFloor));
                 }
 
                 @Override
@@ -87,11 +87,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void setupTopAppBar() {
         binding.tvProjectTitle.setText(currentProjectTitle);
-        binding.tvProjectSubtitle.setText("Floor Level: Level 3 (Auto)");
+        binding.tvProjectSubtitle.setText("Floor 3 (Auto)");
         binding.tvProjectSubtitle.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(this, v);
             int floor = barometerElevationManager != null ? barometerElevationManager.getActiveFloor() : 3;
-            Toast.makeText(this, "Barometric Altimeter: Floor " + floor + " (Sensor Auto-Detect)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Floor " + floor + " (Sensor Auto-Detect)", Toast.LENGTH_SHORT).show();
         });
 
         binding.btnNotificationsHeader.setOnClickListener(v -> {

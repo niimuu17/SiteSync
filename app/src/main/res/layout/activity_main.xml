@@ -58,7 +58,7 @@
                     android:id="@+id/tvProjectSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Floor Level: Level 3 (Auto)"
+                    android:text="Floor 3 (Auto)"
                     android:textColor="@color/text_oxide_secondary"
                     android:textSize="12sp"
                     android:letterSpacing="0.02" />

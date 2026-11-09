@@ -160,7 +160,7 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         }
 
         inventoryAdapter.setItems(inventoryItems);
-        binding.tvInventoryCountBadge.setText("(" + inventoryItems.size() + " Items Tracked)");
+        binding.tvInventoryCountBadge.setText("(" + inventoryItems.size() + " items)");
 
         evaluateLowStockAlert();
     }
@@ -233,11 +233,10 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         if (mostCritical != null) {
             binding.layoutLowStockBanner.layoutLowStockBanner.setVisibility(View.VISIBLE);
             binding.layoutLowStockBanner.tvLowStockAlertTitle.setText(
-                    "LOW-STOCK ALERT: " + mostCritical.getName().toUpperCase() + " CRITICAL");
+                    "Low Stock: " + mostCritical.getName());
             binding.layoutLowStockBanner.tvLowStockAlertMessage.setText(
-                    mostCritical.getName() + " is at " + lowestPercent + "% of minimum safety threshold.\n" +
-                    "Available: " + (int)mostCritical.getCurrentStock() + " " + mostCritical.getUnit() +
-                    " | Minimum: " + (int)mostCritical.getMinThreshold() + " " + mostCritical.getUnit());
+                    (int)mostCritical.getCurrentStock() + " of " + (int)mostCritical.getMinThreshold() +
+                    " " + mostCritical.getUnit() + " remaining (" + lowestPercent + "%)");
         } else {
             binding.layoutLowStockBanner.layoutLowStockBanner.setVisibility(View.GONE);
         }

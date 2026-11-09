@@ -26,11 +26,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="CONFIRM EMERGENCY BROADCAST"
+            android:text="Confirm Emergency"
             android:textColor="#EF4444"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.04" />
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/btnCloseDialog"
@@ -45,7 +44,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This will transmit an immediate high-priority siren alert to all connected field personnel on the jobsite."
+        android:text="This will sound an immediate siren alert to all personnel on site."
         android:textColor="@color/text_oxide_secondary"
         android:textSize="12sp"
         android:layout_marginBottom="16dp" />
@@ -54,11 +53,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="STEP 1: SELECT HAZARD TYPE"
+        android:text="Emergency Type"
         android:textColor="@color/text_oxide_primary"
-        android:textSize="11sp"
+        android:textSize="12sp"
         android:textStyle="bold"
-        android:letterSpacing="0.06"
         android:layout_marginBottom="8dp" />
 
     <RadioGroup
@@ -93,7 +91,7 @@
             android:id="@+id/rbSevereWeather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Severe Weather / Lightning / High Wind"
+            android:text="Severe Weather / High Wind"
             android:textColor="@color/text_oxide_primary"
             android:textSize="13sp"
             android:buttonTint="#EF4444"
@@ -114,11 +112,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="STEP 2: HOLD TO TRANSMIT (2.5 SECONDS)"
+        android:text="Hold to Sound Alarm (2.5s)"
         android:textColor="@color/text_oxide_primary"
-        android:textSize="11sp"
+        android:textSize="12sp"
         android:textStyle="bold"
-        android:letterSpacing="0.06"
         android:layout_marginBottom="8dp" />
 
     <ProgressBar
@@ -136,7 +133,7 @@
     <FrameLayout
         android:id="@+id/btnHoldToConfirm"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="52dp"
         android:background="@drawable/bg_btn_emergency"
         android:clickable="true"
         android:focusable="true">
@@ -146,11 +143,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="PRESS &amp; HOLD TO BROADCAST"
+            android:text="Press &amp; Hold to Broadcast"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.05" />
+            android:textStyle="bold" />
     </FrameLayout>
 
 </LinearLayout>

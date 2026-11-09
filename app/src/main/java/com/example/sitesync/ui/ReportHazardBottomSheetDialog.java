@@ -206,7 +206,7 @@ public class ReportHazardBottomSheetDialog extends BottomSheetDialogFragment {
             String location = binding.etHazardLocation.getText().toString().trim();
             if (location.isEmpty()) location = "Metro Central Tower - Sector 4";
 
-            binding.tvCapturePhotoLabel.setText("Capturing & Watermarking...");
+            binding.tvCapturePhotoLabel.setText("Capturing photo...");
 
             cameraOverlayManager.captureWatermarkedPhoto(location, "Inspector #402", new CameraOverlayManager.OnPhotoCapturedCallback() {
                 @Override
@@ -218,16 +218,16 @@ public class ReportHazardBottomSheetDialog extends BottomSheetDialogFragment {
 
                     binding.layoutPhotoPreviewContainer.setVisibility(View.VISIBLE);
                     binding.ivHazardPhotoPreview.setImageURI(fileUri);
-                    binding.tvGpsWatermarkBadge.setText("📍 40.7128°N, 74.0060°W | UTC VERIFIED");
-                    binding.tvCapturePhotoLabel.setText("✓ Photo Attached & Watermarked");
-                    Toast.makeText(requireContext(), "Geotagged site photo captured & GPS verified", Toast.LENGTH_SHORT).show();
+                    binding.tvGpsWatermarkBadge.setText("📍 GPS Verified");
+                    binding.tvCapturePhotoLabel.setText("✓ Photo Attached");
+                    Toast.makeText(requireContext(), "Photo captured", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onError(String errorMessage) {
                     if (binding == null) return;
-                    Toast.makeText(requireContext(), "Photo capture failed: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    binding.tvCapturePhotoLabel.setText("📷 Geotagged Photo: 40.7128°N, 74.0060°W");
+                    Toast.makeText(requireContext(), "Capture failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    binding.tvCapturePhotoLabel.setText("📷 Add Photo");
                 }
             });
         });

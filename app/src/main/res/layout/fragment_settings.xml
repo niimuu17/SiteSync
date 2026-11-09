@@ -16,11 +16,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="APPLICATION &amp; USER PROFILE"
+            android:text="Profile"
             android:textColor="@color/text_oxide_primary"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:letterSpacing="0.08"
             android:layout_marginBottom="12dp" />
 
         <!-- User Profile Card -->
@@ -78,7 +77,7 @@
             app:backgroundTint="@color/warm_ash_surface"
             app:strokeColor="@color/stroke_oxide_blue"
             app:strokeWidth="1.5dp"
-            android:text="Sign Out of Session"
+            android:text="Sign Out"
             android:textColor="@color/status_red"
             android:textSize="13sp"
             android:textStyle="bold"

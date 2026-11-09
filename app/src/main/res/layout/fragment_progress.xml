@@ -16,42 +16,30 @@
         android:padding="16dp">
 
         <!-- ============================================================= -->
-        <!-- EDITORIAL TITLE HEADER (Inspired by Dribbble Reference)        -->
+        <!-- CLEAN TITLE HEADER                                            -->
         <!-- ============================================================= -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="18dp">
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
-                android:text="Centralized Constructi-"
+                android:text="Site Progress"
                 android:textColor="@color/text_oxide_primary"
-                android:textSize="22sp"
-                android:textStyle="italic" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-2dp"
-                android:text="On Project Progress"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="26sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Construction Progress"
+                android:layout_marginTop="2dp"
+                android:text="Metro Central Tower • Live Status"
                 android:textColor="@color/text_oxide_secondary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.04" />
+                android:textSize="13sp" />
         </LinearLayout>
 
         <!-- ============================================================= -->
@@ -77,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="Work Progress"
+                    android:text="Overall Progress"
                     android:textColor="@color/text_oxide_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -169,14 +157,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start Date: 11/02/2026"
+                        android:text="Start: 11/02/2026"
                         android:textColor="@color/text_oxide_secondary"
                         android:textSize="11sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Target Completion: 23/03/2026"
+                        android:text="Due: 23/03/2026"
                         android:textColor="@color/text_oxide_primary"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -188,7 +176,7 @@
                     android:id="@+id/tvScheduleStatusBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Status: On Schedule"
+                    android:text="On Schedule"
                     android:textColor="@color/text_oxide_primary"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -226,7 +214,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cut And Fill"
+                        android:text="Cut &amp; Fill"
                         android:textColor="@color/text_oxide_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -234,7 +222,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12 Feb, 2026 11:03PM"
+                        android:text="Updated Today"
                         android:textColor="@color/text_oxide_secondary"
                         android:textSize="11sp"
                         android:layout_marginTop="2dp" />
@@ -279,7 +267,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tolerance: ±0.05 Ft"
+                    android:text="±0.05 ft"
                     android:textColor="@color/text_oxide_secondary"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -299,27 +287,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Daily Site Progress"
+                android:text="Daily Progress"
                 android:textColor="@color/text_oxide_primary"
                 android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Submit daily work notes and volume counts"
-                android:textColor="@color/text_oxide_secondary"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="14dp" />
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
 
             <!-- Work Summary Notes (Multiline) -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Work Summary Notes"
+                android:text="Summary"
                 android:textColor="@color/text_oxide_primary"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="6dp" />
 
@@ -330,7 +310,7 @@
                 android:gravity="top|start"
                 android:background="@drawable/bg_rounded_input"
                 android:padding="12dp"
-                android:hint="Enter summary of structural work, pours, or trade activities completed today..."
+                android:hint="Today's work summary..."
                 android:textColor="@color/text_oxide_primary"
                 android:textColorHint="@color/text_oxide_muted"
                 android:textSize="13sp"
@@ -354,7 +334,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Volume / Quantity"
+                        android:text="Volume"
                         android:textColor="@color/text_oxide_primary"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -385,7 +365,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Trade / Activity"
+                        android:text="Trade"
                         android:textColor="@color/text_oxide_primary"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -413,7 +393,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/btn_primary_oxide"
                 app:backgroundTint="@color/oxide_blue_primary"
-                android:text="Submit Progress Entry"
+                android:text="Log Progress"
                 android:textColor="@color/text_on_oxide_white"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -436,19 +416,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Geotagged Site Evidence"
+                android:text="Site Photo"
                 android:textColor="@color/text_oxide_primary"
                 android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Capture real-time field photos stamped with GPS coordinates."
-                android:textColor="@color/text_oxide_secondary"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="14dp" />
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
 
             <!-- Photo Preview Box with Overlay Badge -->
             <FrameLayout
@@ -482,7 +454,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No evidence photo captured yet"
+                        android:text="No photo captured"
                         android:textColor="@color/text_oxide_secondary"
                         android:textSize="12sp"
                         android:layout_marginTop="6dp" />
@@ -515,7 +487,7 @@
                 app:backgroundTint="@color/warm_ash_surface"
                 app:strokeColor="@color/stroke_oxide_blue"
                 app:strokeWidth="1.5dp"
-                android:text="Capture Site Evidence"
+                android:text="Take Photo"
                 android:textColor="@color/oxide_blue_primary"
                 android:textSize="13sp"
                 android:textStyle="bold"
@@ -538,25 +510,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Audit &amp; Executive Reports"
+                android:text="Reports"
                 android:textColor="@color/text_oxide_primary"
                 android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Generate and share audit-ready progress logs for custom date ranges."
-                android:textColor="@color/text_oxide_secondary"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="14dp" />
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
 
             <!-- Date Range Selector Pill -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reporting Period"
+                android:text="Period"
                 android:textColor="@color/text_oxide_primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -595,9 +559,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CHANGE"
+                    android:text="Edit"
                     android:textColor="@color/oxide_blue_light"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
             </LinearLayout>
 

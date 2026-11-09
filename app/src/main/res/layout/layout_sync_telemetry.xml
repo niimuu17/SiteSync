@@ -13,7 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="8dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,11 +32,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OFFLINE CACHE &amp; CLOUD SYNC"
+                android:text="Cloud Sync"
                 android:textColor="@color/text_oxide_primary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.04" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
@@ -44,9 +43,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="HEALTHY"
+            android:text="Online"
             android:textColor="#065F46"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:background="@drawable/bg_badge_optimal"
             android:paddingStart="8dp"
@@ -58,9 +57,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="All tasks, requisitions, and safety tickets persist to encrypted SQLite WAL storage before background dispatch."
+        android:text="Changes sync automatically when online."
         android:textColor="@color/text_oxide_secondary"
-        android:textSize="11sp"
+        android:textSize="12sp"
         android:layout_marginBottom="14dp" />
 
     <!-- Two-column telemetry stats -->
@@ -83,19 +82,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PENDING QUEUE"
+                android:text="Queued"
                 android:textColor="@color/text_oxide_secondary"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.05" />
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvPendingSyncCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 Operations"
+                android:text="0 items"
                 android:textColor="@color/text_oxide_primary"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
@@ -113,11 +111,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NETWORK INTERFACE"
+                android:text="Network"
                 android:textColor="@color/text_oxide_secondary"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.05" />
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvNetworkInterface"
@@ -125,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:text="Wi-Fi / Cellular"
                 android:textColor="@color/text_oxide_primary"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
@@ -138,10 +135,9 @@
         android:layout_height="48dp"
         android:background="@drawable/bg_pill_primary"
         app:backgroundTint="@null"
-        android:text="⟳  MANUAL SYNC FLUSH"
+        android:text="⟳  Sync Now"
         android:textColor="@color/text_on_oxide_white"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:letterSpacing="0.05" />
+        android:textSize="13sp"
+        android:textStyle="bold" />
 
 </LinearLayout>

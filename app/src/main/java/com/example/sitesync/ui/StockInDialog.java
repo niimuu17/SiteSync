@@ -34,8 +34,8 @@ public class StockInDialog {
         }
 
         binding.tvStockInTitle.setText("Stock In: " + item.getName());
-        binding.tvStockInCurrent.setText("Current Available: " + item.getCurrentStock() + " " + item.getUnit() +
-                " (Min: " + item.getMinThreshold() + " " + item.getUnit() + ")");
+        binding.tvStockInCurrent.setText("Current: " + (int) item.getCurrentStock() + " " + item.getUnit() +
+                " (Min: " + (int) item.getMinThreshold() + " " + item.getUnit() + ")");
 
         binding.btnScanDeliveryTicket.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(context, v);

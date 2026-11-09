@@ -32,7 +32,7 @@ public class StockOutDialog {
         }
 
         binding.tvStockOutTitle.setText("Stock Out: " + item.getName());
-        binding.tvStockOutCurrent.setText("Current Available: " + item.getCurrentStock() + " " + item.getUnit());
+        binding.tvStockOutCurrent.setText("Current: " + (int) item.getCurrentStock() + " " + item.getUnit());
 
         binding.btnCancelStockOut.setOnClickListener(v -> dialog.dismiss());
 

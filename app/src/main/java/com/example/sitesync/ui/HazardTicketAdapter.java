@@ -116,14 +116,14 @@ public class HazardTicketAdapter extends RecyclerView.Adapter<HazardTicketAdapte
 
             boolean isResolved = "RESOLVED".equalsIgnoreCase(item.getStatus());
             if (isResolved) {
-                b.tvHazardStatus.setText("STATUS: RESOLVED ✓");
+                b.tvHazardStatus.setText("Resolved ✓");
                 b.tvHazardStatus.setTextColor(ContextCompat.getColor(context, R.color.status_green));
                 b.btnResolveHazard.setVisibility(View.GONE);
                 b.tvResolutionNote.setVisibility(View.VISIBLE);
                 b.tvResolutionNote.setText("Resolved: " + (item.getResolutionNotes() != null && !item.getResolutionNotes().isEmpty() ?
                         item.getResolutionNotes() : "Corrective action verified by safety inspector."));
             } else {
-                b.tvHazardStatus.setText("STATUS: OPEN");
+                b.tvHazardStatus.setText("Open");
                 b.tvHazardStatus.setTextColor(ContextCompat.getColor(context, R.color.text_oxide_secondary));
                 b.btnResolveHazard.setVisibility(View.VISIBLE);
                 b.tvResolutionNote.setVisibility(View.GONE);

@@ -18,11 +18,10 @@
             android:id="@+id/tvHazardCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ELECTRICAL HAZARD"
+            android:text="Electrical Hazard"
             android:textColor="@color/text_oxide_primary"
             android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.04" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvHazardPriorityBadge"
@@ -33,7 +32,6 @@
             android:textColor="#991B1B"
             android:textSize="10sp"
             android:textStyle="bold"
-            android:letterSpacing="0.05"
             android:background="@drawable/bg_badge_urgent"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
@@ -92,9 +90,9 @@
             android:id="@+id/tvHazardStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="STATUS: OPEN"
+            android:text="Open"
             android:textColor="@color/text_oxide_secondary"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <View
@@ -107,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:gravity="center"
-            android:text="MARK RESOLVED"
+            android:text="Resolve"
             android:textColor="@color/oxide_blue_primary"
             android:textSize="11sp"
             android:textStyle="bold"

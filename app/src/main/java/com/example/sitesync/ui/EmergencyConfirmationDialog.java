@@ -91,7 +91,7 @@ public class EmergencyConfirmationDialog extends BottomSheetDialogFragment {
     private void startHolding() {
         isHolding = true;
         holdStartTime = System.currentTimeMillis();
-        binding.tvHoldButtonLabel.setText("TRANSMITTING... KEEP HOLDING");
+        binding.tvHoldButtonLabel.setText("Holding... keep pressing");
         HapticFeedbackUtil.heavyClick(requireContext(), binding.btnHoldToConfirm);
         holdHandler.post(holdRunnable);
     }
@@ -101,7 +101,7 @@ public class EmergencyConfirmationDialog extends BottomSheetDialogFragment {
         isHolding = false;
         holdHandler.removeCallbacks(holdRunnable);
         binding.pbHoldProgress.setProgress(0);
-        binding.tvHoldButtonLabel.setText("PRESS & HOLD TO BROADCAST");
+        binding.tvHoldButtonLabel.setText("Press & Hold to Broadcast");
     }
 
     private final Runnable holdRunnable = new Runnable() {

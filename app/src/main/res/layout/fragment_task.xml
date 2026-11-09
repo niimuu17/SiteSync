@@ -115,11 +115,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="🎯 UPCOMING MILESTONES"
+                        android:text="Milestones"
                         android:textColor="@color/text_oxide_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.04" />
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvMilestonesBadge"
@@ -127,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:text="3 ACTIVE"
+                        android:text="3 Active"
                         android:textColor="@color/text_on_oxide_white"
                         android:textSize="10sp"
                         android:textStyle="bold"
@@ -260,11 +259,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="ACTIVE TASKS"
+                    android:text="Tasks"
                     android:textColor="@color/text_oxide_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.08" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvTaskCountBadge"

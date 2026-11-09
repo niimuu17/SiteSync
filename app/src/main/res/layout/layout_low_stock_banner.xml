@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="LOW-STOCK ALERT: CEMENT CRITICAL"
+            android:text="Low Stock: Portland Cement"
             android:textColor="#92400E"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -40,10 +40,9 @@
         android:id="@+id/tvLowStockAlertMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Portland Cement (50kg) is at 17% of minimum safety threshold.\nAvailable: 85 Bags | Minimum: 500 Bags"
+        android:text="85 of 500 Bags remaining (17%)"
         android:textColor="@color/text_oxide_primary"
         android:textSize="12sp"
-        android:lineSpacingExtra="2dp"
         android:layout_marginBottom="12dp" />
 
     <com.google.android.material.button.MaterialButton
@@ -52,7 +51,7 @@
         android:layout_height="40dp"
         android:background="@drawable/btn_primary_oxide"
         app:backgroundTint="@color/oxide_blue_primary"
-        android:text="+ Quick Requisition"
+        android:text="Order Stock"
         android:textColor="@color/text_on_oxide_white"
         android:textSize="12sp"
         android:textStyle="bold"
