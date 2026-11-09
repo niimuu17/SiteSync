@@ -33,6 +33,11 @@
         android:theme="@style/Theme.SiteSync"
         tools:targetApi="31">
 
+        <!-- Google ML Kit Vision Models (Text Recognition & Barcode) -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr,barcode" />
+
         <!-- Screen 1: LoginActivity (Primary App Launcher) -->
         <activity
             android:name=".ui.LoginActivity"

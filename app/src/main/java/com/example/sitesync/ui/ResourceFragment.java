@@ -2,6 +2,8 @@ package com.example.sitesync.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,15 +64,16 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
             HapticFeedbackUtil.heavyClick(requireContext(), v);
             TicketScannerDialog scannerDialog = TicketScannerDialog.newInstance();
             scannerDialog.setOnTicketParsedListener(ticket -> {
-                if (ticket == null) return;
+                if (ticket == null || !isAdded()) return;
                 HapticFeedbackUtil.scanSuccess(requireContext());
-                handleScannedTicket(ticket);
+                new Handler(Looper.getMainLooper()).post(() -> handleScannedTicket(ticket));
             });
             scannerDialog.show(getChildFragmentManager(), "TicketScannerDialog");
         });
     }
 
     private void handleScannedTicket(TicketScannerManager.DeliveryTicket ticket) {
+        if (!isAdded() || getActivity() == null) return;
         if (inventoryItems.isEmpty()) {
             Toast.makeText(requireContext(), "No inventory items to update", Toast.LENGTH_SHORT).show();
             return;
@@ -79,7 +82,7 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         // Auto-match material based on OCR text heuristics
         InventoryItemEntity matched = matchItemFromTicket(ticket);
         if (matched != null) {
-            StockInDialog.showWithTicket(requireContext(), matched, ticket, this::loadAndSeedInventory);
+            StockInDialog.showWithTicket(requireActivity(), matched, ticket, this::loadAndSeedInventory);
         } else {
             // Let supervisor pick which material to stock in
             String[] names = new String[inventoryItems.size()];
@@ -87,11 +90,11 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
                 names[i] = inventoryItems.get(i).getName();
             }
 
-            new AlertDialog.Builder(requireContext())
+            new AlertDialog.Builder(requireActivity())
                     .setTitle("Chalan Scanned: Select Material")
                     .setItems(names, (dialog, which) -> {
                         InventoryItemEntity selected = inventoryItems.get(which);
-                        StockInDialog.showWithTicket(requireContext(), selected, ticket, this::loadAndSeedInventory);
+                        StockInDialog.showWithTicket(requireActivity(), selected, ticket, this::loadAndSeedInventory);
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
