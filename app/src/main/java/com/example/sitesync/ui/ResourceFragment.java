@@ -19,6 +19,8 @@ import com.example.sitesync.data.local.AppDatabase;
 import com.example.sitesync.data.local.entities.InventoryItemEntity;
 import com.example.sitesync.data.local.entities.PendingSyncEntity;
 import com.example.sitesync.databinding.FragmentResourceBinding;
+import com.example.sitesync.hardware.TicketScannerDialog;
+import com.example.sitesync.hardware.TicketScannerManager;
 import com.example.sitesync.utils.HapticFeedbackUtil;
 
 import java.util.ArrayList;
@@ -49,9 +51,65 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         db = AppDatabase.getDatabase(requireContext());
 
         setupRecyclerView();
+        setupChalanOcrScanner();
         setupRequisitionActions();
         setupAddCustomItem();
         loadAndSeedInventory();
+    }
+
+    private void setupChalanOcrScanner() {
+        binding.cardScanChalan.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(requireContext(), v);
+            TicketScannerDialog scannerDialog = TicketScannerDialog.newInstance();
+            scannerDialog.setOnTicketParsedListener(ticket -> {
+                if (ticket == null) return;
+                HapticFeedbackUtil.scanSuccess(requireContext());
+                handleScannedTicket(ticket);
+            });
+            scannerDialog.show(getChildFragmentManager(), "TicketScannerDialog");
+        });
+    }
+
+    private void handleScannedTicket(TicketScannerManager.DeliveryTicket ticket) {
+        if (inventoryItems.isEmpty()) {
+            Toast.makeText(requireContext(), "No inventory items to update", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Auto-match material based on OCR text heuristics
+        InventoryItemEntity matched = matchItemFromTicket(ticket);
+        if (matched != null) {
+            StockInDialog.showWithTicket(requireContext(), matched, ticket, this::loadAndSeedInventory);
+        } else {
+            // Let supervisor pick which material to stock in
+            String[] names = new String[inventoryItems.size()];
+            for (int i = 0; i < inventoryItems.size(); i++) {
+                names[i] = inventoryItems.get(i).getName();
+            }
+
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Chalan Scanned: Select Material")
+                    .setItems(names, (dialog, which) -> {
+                        InventoryItemEntity selected = inventoryItems.get(which);
+                        StockInDialog.showWithTicket(requireContext(), selected, ticket, this::loadAndSeedInventory);
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        }
+    }
+
+    private InventoryItemEntity matchItemFromTicket(TicketScannerManager.DeliveryTicket ticket) {
+        String query = (ticket.mixId + " " + ticket.rawText + " " + ticket.supplierOrSerial).toLowerCase();
+        for (InventoryItemEntity item : inventoryItems) {
+            String nameLower = item.getName().toLowerCase();
+            String catLower = item.getCategory().toLowerCase();
+            if (nameLower.contains("cement") && query.contains("cement")) return item;
+            if (nameLower.contains("rebar") && (query.contains("rebar") || query.contains("steel"))) return item;
+            if (nameLower.contains("sand") && (query.contains("sand") || query.contains("aggregate"))) return item;
+            if (nameLower.contains("plasticizer") && (query.contains("plasticizer") || query.contains("admixture") || query.contains("chemical"))) return item;
+            if (query.contains(catLower)) return item;
+        }
+        return null;
     }
 
     private void setupRecyclerView() {

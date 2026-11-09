@@ -23,6 +23,10 @@ public class StockInDialog {
     }
 
     public static void show(Context context, InventoryItemEntity item, OnStockUpdatedListener listener) {
+        showWithTicket(context, item, null, listener);
+    }
+
+    public static void showWithTicket(Context context, InventoryItemEntity item, TicketScannerManager.DeliveryTicket ticket, OnStockUpdatedListener listener) {
         DialogStockInBinding binding = DialogStockInBinding.inflate(LayoutInflater.from(context));
 
         AlertDialog dialog = new AlertDialog.Builder(context)
@@ -37,23 +41,38 @@ public class StockInDialog {
         binding.tvStockInCurrent.setText("Current: " + (int) item.getCurrentStock() + " " + item.getUnit() +
                 " (Min: " + (int) item.getMinThreshold() + " " + item.getUnit() + ")");
 
+        if (ticket != null) {
+            if (ticket.parsedNumericQuantity > 0) {
+                binding.etStockInQuantity.setText(String.valueOf((int) ticket.parsedNumericQuantity));
+            } else if (ticket.quantity != null && !ticket.quantity.isEmpty()) {
+                String clean = ticket.quantity.replaceAll("[^0-9.]", "").trim();
+                binding.etStockInQuantity.setText(clean.isEmpty() ? ticket.quantity : clean);
+            }
+            if (ticket.supplierOrSerial != null && !ticket.supplierOrSerial.isEmpty()) {
+                binding.etStockInSupplier.setText(ticket.supplierOrSerial);
+            } else if (ticket.mixId != null && !ticket.mixId.isEmpty()) {
+                binding.etStockInSupplier.setText(ticket.mixId);
+            }
+            binding.tvScanTicketLabel.setText("Scanned: " + ticket.getSummary() + " ✓");
+        }
+
         binding.btnScanDeliveryTicket.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(context, v);
             if (context instanceof androidx.fragment.app.FragmentActivity) {
                 androidx.fragment.app.FragmentActivity activity = (androidx.fragment.app.FragmentActivity) context;
                 TicketScannerDialog scannerDialog = TicketScannerDialog.newInstance();
-                scannerDialog.setOnTicketParsedListener(ticket -> {
-                    if (ticket != null) {
-                        if (ticket.parsedNumericQuantity > 0) {
-                            binding.etStockInQuantity.setText(String.valueOf((int) ticket.parsedNumericQuantity));
-                        } else if (ticket.quantity != null && !ticket.quantity.isEmpty()) {
-                            String clean = ticket.quantity.replaceAll("[^0-9.]", "").trim();
-                            binding.etStockInQuantity.setText(clean.isEmpty() ? ticket.quantity : clean);
+                scannerDialog.setOnTicketParsedListener(scanned -> {
+                    if (scanned != null) {
+                        if (scanned.parsedNumericQuantity > 0) {
+                            binding.etStockInQuantity.setText(String.valueOf((int) scanned.parsedNumericQuantity));
+                        } else if (scanned.quantity != null && !scanned.quantity.isEmpty()) {
+                            String clean = scanned.quantity.replaceAll("[^0-9.]", "").trim();
+                            binding.etStockInQuantity.setText(clean.isEmpty() ? scanned.quantity : clean);
                         }
-                        if (ticket.supplierOrSerial != null && !ticket.supplierOrSerial.isEmpty()) {
-                            binding.etStockInSupplier.setText(ticket.supplierOrSerial);
+                        if (scanned.supplierOrSerial != null && !scanned.supplierOrSerial.isEmpty()) {
+                            binding.etStockInSupplier.setText(scanned.supplierOrSerial);
                         }
-                        binding.tvScanTicketLabel.setText("Scanned: " + ticket.getSummary() + " ✓");
+                        binding.tvScanTicketLabel.setText("Scanned: " + scanned.getSummary() + " ✓");
                         HapticFeedbackUtil.confirm(context);
                     }
                 });
