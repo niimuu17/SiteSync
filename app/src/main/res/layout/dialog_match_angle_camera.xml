@@ -62,7 +62,9 @@
         <androidx.camera.view.PreviewView
             android:id="@+id/previewView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:implementationMode="compatible"
+            app:scaleType="fillCenter" />
 
         <!-- Ghost Baseline Overlay ImageView (Alpha 0.40) -->
         <ImageView
@@ -72,13 +74,12 @@
             android:alpha="0.40"
             android:scaleType="centerCrop" />
 
-        <!-- Subtle Alignment Reticle -->
+        <!-- Alignment Reticle -->
         <View
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_card_outlined"
-            android:alpha="0.40" />
+            android:background="@drawable/bg_reticle_frame" />
     </FrameLayout>
 
     <!-- Bottom Controls -->

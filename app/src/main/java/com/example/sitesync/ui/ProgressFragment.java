@@ -28,6 +28,7 @@ import com.example.sitesync.R;
 import com.example.sitesync.data.ProgressRepository;
 import com.example.sitesync.data.SessionManager;
 import com.example.sitesync.databinding.FragmentProgressBinding;
+import com.example.sitesync.hardware.MatchAngleCameraDialog;
 import com.example.sitesync.models.ConstructionActivity;
 import com.example.sitesync.models.User;
 import com.example.sitesync.utils.HapticFeedbackUtil;
@@ -165,17 +166,20 @@ public class ProgressFragment extends Fragment {
     private void initSectionC() {
         binding.btnCaptureEvidence.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(requireContext(), v);
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            try {
-                cameraLauncher.launch(takePictureIntent);
-            } catch (Exception e) {
-                // Fallback simulation for emulators without camera hardware
-                binding.layoutPhotoPlaceholder.setVisibility(View.GONE);
-                binding.ivSiteEvidencePreview.setImageResource(R.drawable.bg_card_outlined);
-                binding.tvGpsStampBadge.setText("GPS: 40.7128° N, 74.0060° W • Level 3 • " +
-                        new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
-                Toast.makeText(requireContext(), "Geotagged Photo Stamped with GPS & Time", Toast.LENGTH_SHORT).show();
-            }
+            User user = sessionManager.getCurrentUser();
+            String engineerName = user != null ? user.getFullName() : "Elena R. (Lead Eng)";
+            String location = "Metro Central Tower";
+
+            MatchAngleCameraDialog dialog = MatchAngleCameraDialog.newInstance("", engineerName, location);
+            dialog.setOnPhotoVerifiedCallback((photoFile, photoUri) -> {
+                if (binding != null) {
+                    binding.ivSiteEvidencePreview.setImageURI(photoUri);
+                    binding.layoutPhotoPlaceholder.setVisibility(View.GONE);
+                    binding.tvGpsStampBadge.setText("📍 GPS Verified • " + photoFile.getName());
+                }
+                Toast.makeText(requireContext(), "Tamper-Proof Geotagged Photo Captured & Stamped", Toast.LENGTH_SHORT).show();
+            });
+            dialog.show(getChildFragmentManager(), "MatchAngleCameraDialog");
         });
     }
 
