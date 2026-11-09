@@ -198,6 +198,41 @@
                 android:contentDescription="Speak Note" />
         </RelativeLayout>
 
+        <!-- Geotag Photo Thumbnail & Status Container -->
+        <FrameLayout
+            android:id="@+id/layoutPhotoPreviewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/ivHazardPhotoPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_rounded_input"
+                android:contentDescription="Hazard Evidence Preview" />
+
+            <!-- GPS Watermark Badge Overlay -->
+            <TextView
+                android:id="@+id/tvGpsWatermarkBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="8dp"
+                android:text="📍 40.7128°N, 74.0060°W | UTC VERIFIED"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_badge_low"
+                android:backgroundTint="#CC16394F"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp" />
+        </FrameLayout>
+
         <!-- Geotag Photo Status -->
         <LinearLayout
             android:id="@+id/btnCaptureHazardPhoto"

@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
         com.example.sitesync.data.local.entities.InventoryLogEntity.class,
         com.example.sitesync.data.local.entities.HazardTicketEntity.class,
         com.example.sitesync.data.local.entities.PendingSyncEntity.class
-}, version = 3, exportSchema = false)
+}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ActivityDao activityDao();

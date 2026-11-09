@@ -23,11 +23,20 @@ public interface PendingSyncDao {
     @Query("SELECT * FROM pending_sync_queue ORDER BY timestamp ASC")
     List<PendingSyncEntity> getAllPending();
 
-    @Query("SELECT COUNT(*) FROM pending_sync_queue")
+    @Query("SELECT * FROM pending_sync_queue ORDER BY timestamp ASC")
+    List<PendingSyncEntity> getPendingMutationsSync();
+
+    @Query("SELECT * FROM pending_sync_queue WHERE status = 'PENDING' ORDER BY timestamp ASC")
+    List<PendingSyncEntity> getPendingUnsyncedMutations();
+
+    @Query("SELECT COUNT(*) FROM pending_sync_queue WHERE status = 'PENDING'")
     LiveData<Integer> getPendingCountLiveData();
 
-    @Query("SELECT COUNT(*) FROM pending_sync_queue")
+    @Query("SELECT COUNT(*) FROM pending_sync_queue WHERE status = 'PENDING'")
     int getPendingCount();
+
+    @Query("UPDATE pending_sync_queue SET status = :status WHERE id = :id")
+    void updateStatus(String id, String status);
 
     @Query("DELETE FROM pending_sync_queue WHERE id = :id")
     void deleteById(String id);

@@ -1,6 +1,7 @@
 package com.example.sitesync.ui;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,12 @@ import com.example.sitesync.data.local.dao.PendingSyncDao;
 import com.example.sitesync.data.local.entities.HazardTicketEntity;
 import com.example.sitesync.data.sync.SyncManager;
 import com.example.sitesync.databinding.FragmentSecurityBinding;
+import com.example.sitesync.hardware.AudioDecibelManager;
 import com.example.sitesync.utils.HapticFeedbackUtil;
 import com.example.sitesync.utils.NetworkMonitor;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Tab 4: Security & Site Reliability Subsystem.
@@ -31,6 +34,7 @@ import java.util.List;
  * 1. High-Priority Emergency Broadcast (Two-step safeguard with 2.5s hold-to-confirm).
  * 2. Site Hazard & Safety Ticketing Feed (Filterable Open/Resolved, GPS photo geotagging, voice notes).
  * 3. Offline-First Sync Telemetry & Manual Flush (Room DB WAL cache monitoring & WorkManager trigger).
+ * 4. Acoustic Jobsite Safety Decibel Telemetry (OSHA 85 dB PPE warning).
  */
 public class SecurityFragment extends Fragment implements HazardTicketAdapter.OnHazardActionListener {
 
@@ -38,6 +42,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
     private HazardTicketDao hazardDao;
     private PendingSyncDao pendingSyncDao;
     private HazardTicketAdapter adapter;
+    private AudioDecibelManager decibelManager;
     private boolean isShowingResolved = false;
 
     public static SecurityFragment newInstance() {
@@ -61,11 +66,67 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         pendingSyncDao = db.pendingSyncDao();
 
         setupEmergencyBroadcast();
+        setupAcousticDecibelMonitoring();
         setupHazardList();
         setupFilterChips();
         setupSyncTelemetry();
         seedInitialHazardsIfEmpty();
         loadHazardTickets();
+    }
+
+    private void setupAcousticDecibelMonitoring() {
+        decibelManager = new AudioDecibelManager(requireContext());
+    }
+
+    private void startDecibelSampling() {
+        if (decibelManager == null) return;
+        decibelManager.startMonitoring(new AudioDecibelManager.OnNoiseLevelListener() {
+            @Override
+            public void onNoiseLevelUpdated(double decibels, boolean isHazardous) {
+                if (binding == null) return;
+
+                binding.pbDecibelLevel.setProgress((int) decibels);
+
+                if (isHazardous) {
+                    binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "HAZARDOUS • %.0f dB", decibels));
+                    binding.tvNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                    binding.tvNoiseStatusBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
+                    binding.pbDecibelLevel.setProgressTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(requireContext(), R.color.status_red)));
+                    binding.tvNoisePpeWarning.setText("⚠️ WARNING: Sustained noise exceeds OSHA 85 dB threshold! Double hearing PPE required in this zone.");
+                    binding.tvNoisePpeWarning.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
+                } else {
+                    binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "SAFE • %.0f dB", decibels));
+                    binding.tvNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
+                    binding.tvNoiseStatusBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_green));
+                    binding.pbDecibelLevel.setProgressTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(requireContext(), R.color.status_green)));
+                    binding.tvNoisePpeWarning.setText("Ambient jobsite noise is within normal limits. Hearing protection recommended above 85 dB.");
+                    binding.tvNoisePpeWarning.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_oxide_secondary));
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                if (binding != null) {
+                    binding.tvNoisePpeWarning.setText("Acoustic Sensor: Nominal background calibration active.");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startDecibelSampling();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (decibelManager != null) {
+            decibelManager.stopMonitoring();
+        }
     }
 
     private void setupEmergencyBroadcast() {

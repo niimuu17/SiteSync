@@ -22,8 +22,12 @@ public class TiltInclinometerManager implements SensorEventListener {
         void onAngleChanged(float pitchDegrees, float rollDegrees, float slopePercent, boolean isLevel, boolean isPipeGrade);
     }
 
+    public interface OnTiltChangedListener {
+        void onTiltChanged(float pitch, float roll, boolean isLevel);
+    }
+
     private static final float ALPHA = 0.15f; // Low-pass filter constant
-    private static final float LEVEL_TOLERANCE_DEG = 0.3f;
+    private static final float LEVEL_TOLERANCE_DEG = 1.0f; // ±1.0° tolerance
     private static final float PIPE_GRADE_TARGET = 2.0f;
     private static final float PIPE_GRADE_TOLERANCE = 0.2f;
 
@@ -35,6 +39,7 @@ public class TiltInclinometerManager implements SensorEventListener {
 
     private boolean isRegistered = false;
     private OnInclinometerListener listener;
+    private OnTiltChangedListener tiltListener;
 
     private final float[] rotationMatrix = new float[9];
     private final float[] orientationAngles = new float[3];
@@ -65,6 +70,15 @@ public class TiltInclinometerManager implements SensorEventListener {
 
     public void startListening(OnInclinometerListener listener) {
         this.listener = listener;
+        registerSensors();
+    }
+
+    public void startListening(OnTiltChangedListener tiltListener) {
+        this.tiltListener = tiltListener;
+        registerSensors();
+    }
+
+    private void registerSensors() {
         if (sensorManager == null || isRegistered) return;
 
         if (rotationSensor != null) {
@@ -85,6 +99,7 @@ public class TiltInclinometerManager implements SensorEventListener {
             isRegistered = false;
         }
         listener = null;
+        tiltListener = null;
         prevInTolerance = false;
     }
 
@@ -160,6 +175,9 @@ public class TiltInclinometerManager implements SensorEventListener {
         mainHandler.post(() -> {
             if (listener != null) {
                 listener.onAngleChanged(finalPitch, finalRoll, finalSlope, finalLevel, finalPipe);
+            }
+            if (tiltListener != null) {
+                tiltListener.onTiltChanged(finalPitch, finalRoll, finalLevel);
             }
         });
     }

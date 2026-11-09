@@ -20,6 +20,7 @@ import com.example.sitesync.data.SessionManager;
 import com.example.sitesync.data.local.AppDatabase;
 import com.example.sitesync.data.sync.SyncManager;
 import com.example.sitesync.databinding.ActivityMainBinding;
+import com.example.sitesync.hardware.BarometerElevationManager;
 import com.example.sitesync.models.User;
 import com.example.sitesync.utils.HapticFeedbackUtil;
 import com.example.sitesync.utils.NetworkMonitor;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private ActivityMainBinding binding;
     private SessionManager sessionManager;
+    private BarometerElevationManager barometerElevationManager;
     private String currentProjectTitle = "Metro Central Tower";
     private int currentPendingCount = 0;
     private boolean isCurrentlyOnline = true;
@@ -52,13 +54,45 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        barometerElevationManager = new BarometerElevationManager(this);
+
         setupTopAppBar();
         setupBottomNavigation(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (barometerElevationManager != null) {
+            barometerElevationManager.startListening(new BarometerElevationManager.OnFloorLevelChangeListener() {
+                @Override
+                public void onFloorChanged(int computedFloor, float elevationDeltaMeters, float currentPressureHpa) {
+                    binding.tvProjectSubtitle.setText(String.format(java.util.Locale.US, "Floor Level: Level %d (Auto)", computedFloor));
+                }
+
+                @Override
+                public void onRawElevationUpdate(float elevationDeltaMeters, float pressureHpa) {
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (barometerElevationManager != null) {
+            barometerElevationManager.stopListening();
+        }
     }
 
     private void setupTopAppBar() {
         binding.tvProjectTitle.setText(currentProjectTitle);
         binding.tvProjectSubtitle.setText("Floor Level: Level 3 (Auto)");
+        binding.tvProjectSubtitle.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            int floor = barometerElevationManager != null ? barometerElevationManager.getActiveFloor() : 3;
+            Toast.makeText(this, "Barometric Altimeter: Floor " + floor + " (Sensor Auto-Detect)", Toast.LENGTH_SHORT).show();
+        });
 
         binding.btnNotificationsHeader.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(this, v);

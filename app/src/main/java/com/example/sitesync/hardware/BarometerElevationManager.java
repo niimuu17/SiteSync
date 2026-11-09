@@ -19,7 +19,7 @@ import android.util.Log;
 public class BarometerElevationManager implements SensorEventListener {
 
     private static final String TAG = "BarometerManager";
-    private static final float FLOOR_HEIGHT_METERS = 3.3f;
+    private static final float FLOOR_HEIGHT_METERS = 3.5f;
     private static final float STABLE_SHIFT_METERS = 3.0f;
     private static final long STABILITY_WINDOW_MS = 10000; // 10 seconds
 

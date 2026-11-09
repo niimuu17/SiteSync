@@ -10,6 +10,8 @@ import com.example.sitesync.data.local.entities.InventoryItemEntity;
 import com.example.sitesync.data.local.entities.InventoryLogEntity;
 import com.example.sitesync.data.local.entities.PendingSyncEntity;
 import com.example.sitesync.databinding.DialogStockInBinding;
+import com.example.sitesync.hardware.TicketScannerDialog;
+import com.example.sitesync.hardware.TicketScannerManager;
 import com.example.sitesync.utils.HapticFeedbackUtil;
 
 import java.util.UUID;
@@ -37,10 +39,31 @@ public class StockInDialog {
 
         binding.btnScanDeliveryTicket.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(context, v);
-            binding.etStockInSupplier.setText("Holcim Cement Delivery #WB-" + (int)(Math.random() * 8999 + 1000));
-            binding.etStockInQuantity.setText("400");
-            binding.tvScanTicketLabel.setText("Ticket Scanned: WB-" + (int)(Math.random() * 8999 + 1000) + " ✓");
-            Toast.makeText(context, "Delivery Ticket Scanned via Camera OCR", Toast.LENGTH_SHORT).show();
+            if (context instanceof androidx.fragment.app.FragmentActivity) {
+                androidx.fragment.app.FragmentActivity activity = (androidx.fragment.app.FragmentActivity) context;
+                TicketScannerDialog scannerDialog = TicketScannerDialog.newInstance();
+                scannerDialog.setOnTicketParsedListener(ticket -> {
+                    if (ticket != null) {
+                        if (ticket.parsedNumericQuantity > 0) {
+                            binding.etStockInQuantity.setText(String.valueOf((int) ticket.parsedNumericQuantity));
+                        } else if (ticket.quantity != null && !ticket.quantity.isEmpty()) {
+                            String clean = ticket.quantity.replaceAll("[^0-9.]", "").trim();
+                            binding.etStockInQuantity.setText(clean.isEmpty() ? ticket.quantity : clean);
+                        }
+                        if (ticket.supplierOrSerial != null && !ticket.supplierOrSerial.isEmpty()) {
+                            binding.etStockInSupplier.setText(ticket.supplierOrSerial);
+                        }
+                        binding.tvScanTicketLabel.setText("Scanned: " + ticket.getSummary() + " ✓");
+                        HapticFeedbackUtil.confirm(context);
+                    }
+                });
+                scannerDialog.show(activity.getSupportFragmentManager(), "ticket_scanner_dialog");
+            } else {
+                binding.etStockInSupplier.setText("Holcim Cement Delivery #WB-" + (int)(Math.random() * 8999 + 1000));
+                binding.etStockInQuantity.setText("400");
+                binding.tvScanTicketLabel.setText("Ticket Scanned: WB-" + (int)(Math.random() * 8999 + 1000) + " ✓");
+                Toast.makeText(context, "Delivery Ticket Scanned via Camera OCR", Toast.LENGTH_SHORT).show();
+            }
         });
 
         binding.btnCancelStockIn.setOnClickListener(v -> dialog.dismiss());

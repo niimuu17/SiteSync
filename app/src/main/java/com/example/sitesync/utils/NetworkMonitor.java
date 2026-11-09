@@ -79,6 +79,22 @@ public class NetworkMonitor {
     }
 
     public boolean isCurrentlyOnline() {
+        if (connectivityManager != null) {
+            try {
+                Network activeNetwork = connectivityManager.getActiveNetwork();
+                if (activeNetwork != null) {
+                    NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(activeNetwork);
+                    if (capabilities != null &&
+                            (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ||
+                             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))) {
+                        return true;
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+        }
         Boolean value = isOnlineLiveData.getValue();
         return value != null && value;
     }
