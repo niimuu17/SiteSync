@@ -377,23 +377,40 @@ public class TicketScannerManager {
         }
 
         String lower = raw.toLowerCase(Locale.ROOT);
+        boolean isEquipment = false;
 
-        // 1. Material Identification
-        if (lower.contains("cement") || lower.contains("portland") || lower.contains("opc") || lower.contains("ppc")) {
+        // 1. Material & Equipment Identification (QR/Barcode and Chalan Text)
+        if (lower.contains("drill") || lower.contains("hammer") || lower.contains("eqp-001")) {
+            ticket.mixId = "Bosch Rotary Hammer Drill GBH 2-26";
+            ticket.parsedUnit = "Units";
+            isEquipment = true;
+        } else if (lower.contains("compactor") || lower.contains("eqp-002")) {
+            ticket.mixId = "Plate Compactor 90kg Honda";
+            ticket.parsedUnit = "Units";
+            isEquipment = true;
+        } else if (lower.contains("vibrator") || lower.contains("needle") || lower.contains("eqp-003")) {
+            ticket.mixId = "Concrete Vibrator Needle Unit";
+            ticket.parsedUnit = "Units";
+            isEquipment = true;
+        } else if (lower.contains("harness") || lower.contains("safety") || lower.contains("eqp-004")) {
+            ticket.mixId = "Fall Arrest Safety Harness Set";
+            ticket.parsedUnit = "Units";
+            isEquipment = true;
+        } else if (lower.contains("cement") || lower.contains("portland") || lower.contains("opc") || lower.contains("ppc") || lower.contains("mat-001")) {
             ticket.mixId = "Portland Cement (50kg Bags)";
             ticket.parsedUnit = "Bags";
-        } else if (lower.contains("rebar") || lower.contains("steel") || lower.contains("rod") || lower.contains("deformed") || lower.contains("tmt")) {
+        } else if (lower.contains("rebar") || lower.contains("steel") || lower.contains("rod") || lower.contains("deformed") || lower.contains("tmt") || lower.contains("mat-002")) {
             ticket.mixId = "Structural Rebar 16mm (Tons)";
             ticket.parsedUnit = "Tons";
-        } else if (lower.contains("sand") || lower.contains("aggregate") || lower.contains("cft") || lower.contains("gravel")) {
+        } else if (lower.contains("sand") || lower.contains("aggregate") || lower.contains("cft") || lower.contains("gravel") || lower.contains("mat-003")) {
             ticket.mixId = "Coarse River Sand (cft)";
             ticket.parsedUnit = "cft";
-        } else if (lower.contains("plasticizer") || lower.contains("admixture") || lower.contains("chemical") || lower.contains("sika")) {
+        } else if (lower.contains("plasticizer") || lower.contains("admixture") || lower.contains("chemical") || lower.contains("sika") || lower.contains("mat-004")) {
             ticket.mixId = "Concrete Admixture Plasticizer (L)";
             ticket.parsedUnit = "Liters";
         } else {
             // General Regex mix pattern
-            Pattern mixPattern = Pattern.compile("(?i)(?:item|material|grade|mix|product|desc)[\\s:#-]*([A-Za-z0-9/\\-\\+\\s]{3,24})");
+            Pattern mixPattern = Pattern.compile("(?i)(?:item|material|grade|mix|product|desc|tool|equipment)[\\s:#-]*([A-Za-z0-9/\\-\\+\\s]{3,24})");
             Matcher mixMatcher = mixPattern.matcher(raw);
             if (mixMatcher.find()) {
                 ticket.mixId = mixMatcher.group(1).trim();
@@ -403,24 +420,40 @@ public class TicketScannerManager {
         }
 
         // 2. Quantity & Units extraction
-        // Matches patterns like "500 Bags", "400.0 bags", "12 Tons", "280 cft", "7.5 m3", "180 Liters", "Qty: 350"
-        Pattern qtyPattern = Pattern.compile("(?i)(?:qty|quantity|amount|vol|delivered)?[\\s:#-]*(\\d+(?:[.,]\\d+)?)\\s*(bags?|bgs?|tons?|tonnes?|cft|cu\\.?\\s*yd|cuyd|m\\^3|m3|kg|liters?|ltrs?|units?)?");
-        Matcher qtyMatcher = qtyPattern.matcher(raw);
+        // First priority: numbers with explicit units or explicit "qty:" / "delivered:" prefix
+        Pattern explicitQtyPattern = Pattern.compile("(?i)(?:(?:qty|quantity|amount|vol|delivered)[\\s:#-]+(\\d+(?:[.,]\\d+)?)|(\\d+(?:[.,]\\d+)?)\\s*(bags?|bgs?|tons?|tonnes?|cft|cu\\.?\\s*yd|cuyd|m\\^3|m3|kg|liters?|ltrs?|units?))");
+        Matcher explicitMatcher = explicitQtyPattern.matcher(raw);
         boolean foundQty = false;
 
-        while (qtyMatcher.find()) {
-            String numStr = qtyMatcher.group(1);
-            String unitStr = qtyMatcher.group(2);
+        if (explicitMatcher.find()) {
+            String numStr = explicitMatcher.group(1) != null ? explicitMatcher.group(1) : explicitMatcher.group(2);
+            String unitStr = explicitMatcher.group(3);
             if (numStr != null && !numStr.isEmpty()) {
                 try {
                     double val = Double.parseDouble(numStr.replace(",", "."));
                     if (val > 0 && val < 50000) {
                         ticket.parsedNumericQuantity = val;
                         ticket.quantity = (val == (long) val ? String.valueOf((long) val) : String.valueOf(val))
-                                + " " + (unitStr != null ? unitStr : (ticket.parsedUnit.isEmpty() ? "Bags" : ticket.parsedUnit));
+                                + " " + (unitStr != null ? unitStr : (ticket.parsedUnit.isEmpty() ? (isEquipment ? "Units" : "Bags") : ticket.parsedUnit));
                         if (unitStr != null) ticket.parsedUnit = unitStr;
                         foundQty = true;
-                        break;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        // If still not found and NOT equipment, try relaxed quantity pattern (avoiding asset codes like EQP-001)
+        if (!foundQty && !isEquipment) {
+            Pattern relaxedQtyPattern = Pattern.compile("(?i)(?:^|\\s)(?:qty|delivered)?[\\s:#-]*(\\d{2,5})(?:\\s|$)");
+            Matcher relaxedMatcher = relaxedQtyPattern.matcher(raw);
+            if (relaxedMatcher.find()) {
+                try {
+                    double val = Double.parseDouble(relaxedMatcher.group(1));
+                    if (val > 0 && val < 50000) {
+                        ticket.parsedNumericQuantity = val;
+                        ticket.quantity = (long) val + " " + (ticket.parsedUnit.isEmpty() ? "Bags" : ticket.parsedUnit);
+                        foundQty = true;
                     }
                 } catch (Exception ignored) {
                 }
@@ -428,9 +461,15 @@ public class TicketScannerManager {
         }
 
         if (!foundQty) {
-            ticket.parsedNumericQuantity = 250.0;
-            ticket.quantity = "250 Bags";
-            if (ticket.parsedUnit.isEmpty()) ticket.parsedUnit = "Bags";
+            if (isEquipment) {
+                ticket.parsedNumericQuantity = 1.0;
+                ticket.quantity = "1 Unit";
+                if (ticket.parsedUnit.isEmpty()) ticket.parsedUnit = "Units";
+            } else {
+                ticket.parsedNumericQuantity = 250.0;
+                ticket.quantity = "250 Bags";
+                if (ticket.parsedUnit.isEmpty()) ticket.parsedUnit = "Bags";
+            }
         }
 
         // 3. Supplier / Vendor Name & Chalan Number

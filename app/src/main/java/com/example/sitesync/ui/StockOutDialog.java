@@ -31,8 +31,12 @@ public class StockOutDialog {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        binding.tvStockOutTitle.setText("Stock Out: " + item.getName());
-        binding.tvStockOutCurrent.setText("Current: " + (int) item.getCurrentStock() + " " + item.getUnit());
+        boolean isEquipment = "EQUIPMENT".equalsIgnoreCase(item.getCategory()) || "SAFETY_GEAR".equalsIgnoreCase(item.getCategory());
+        binding.tvStockOutTitle.setText((isEquipment ? "Check-Out / Deploy: " : "Stock Out: ") + item.getName());
+        binding.tvStockOutCurrent.setText("Available in Depot: " + (int) item.getCurrentStock() + " " + item.getUnit());
+        if (isEquipment) {
+            binding.etStockOutQuantity.setText("1");
+        }
 
         binding.btnCancelStockOut.setOnClickListener(v -> dialog.dismiss());
 

@@ -60,7 +60,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Scan Delivery Chalan (OCR)"
+                        android:text="QR, Barcode &amp; Chalan Scanner"
                         android:textColor="@color/text_oxide_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -68,7 +68,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Auto-extract quantity &amp; supplier via Camera OCR"
+                        android:text="Check-in/out machinery tags, pallets &amp; chalan OCR"
                         android:textColor="@color/text_oxide_secondary"
                         android:textSize="12sp"
                         android:layout_marginTop="2dp" />

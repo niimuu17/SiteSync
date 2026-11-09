@@ -79,26 +79,50 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
             return;
         }
 
-        // Auto-match material based on OCR text heuristics
+        // Auto-match equipment or material based on QR / Barcode / OCR text heuristics
         InventoryItemEntity matched = matchItemFromTicket(ticket);
         if (matched != null) {
-            StockInDialog.showWithTicket(requireActivity(), matched, ticket, this::loadAndSeedInventory);
+            showCheckInOutActionDialog(matched, ticket);
         } else {
-            // Let supervisor pick which material to stock in
+            // Let supervisor pick which equipment or material to check in / out
             String[] names = new String[inventoryItems.size()];
             for (int i = 0; i < inventoryItems.size(); i++) {
-                names[i] = inventoryItems.get(i).getName();
+                InventoryItemEntity it = inventoryItems.get(i);
+                names[i] = it.getName() + " (" + it.getId() + ")";
             }
 
             new AlertDialog.Builder(requireActivity())
-                    .setTitle("Chalan Scanned: Select Material")
+                    .setTitle("Barcode Scanned: Select Item")
                     .setItems(names, (dialog, which) -> {
                         InventoryItemEntity selected = inventoryItems.get(which);
-                        StockInDialog.showWithTicket(requireActivity(), selected, ticket, this::loadAndSeedInventory);
+                        showCheckInOutActionDialog(selected, ticket);
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         }
+    }
+
+    private void showCheckInOutActionDialog(InventoryItemEntity item, TicketScannerManager.DeliveryTicket ticket) {
+        boolean isEquipment = "EQUIPMENT".equalsIgnoreCase(item.getCategory()) || "SAFETY_GEAR".equalsIgnoreCase(item.getCategory());
+
+        String title = (isEquipment ? "Machinery Tag: " : "Consumable Barcode: ") + item.getName();
+        String summary = "Available in Depot / Crib: " + (int) item.getCurrentStock() + " " + item.getUnit() +
+                "\nCode: " + item.getId() + (ticket != null && !ticket.rawText.isEmpty() ? " | " + ticket.rawText : "");
+
+        String checkInLabel = isEquipment ? "📥 Check-In / Return" : "📥 Stock In (Receive)";
+        String checkOutLabel = isEquipment ? "📤 Check-Out / Deploy" : "📤 Stock Out (Issue)";
+
+        new AlertDialog.Builder(requireActivity())
+                .setTitle(title)
+                .setMessage(summary)
+                .setPositiveButton(checkInLabel, (dialog, which) -> {
+                    StockInDialog.showWithTicket(requireActivity(), item, ticket, this::loadAndSeedInventory);
+                })
+                .setNegativeButton(checkOutLabel, (dialog, which) -> {
+                    StockOutDialog.show(requireActivity(), item, this::loadAndSeedInventory);
+                })
+                .setNeutralButton("Cancel", null)
+                .show();
     }
 
     private InventoryItemEntity matchItemFromTicket(TicketScannerManager.DeliveryTicket ticket) {
@@ -106,6 +130,12 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         for (InventoryItemEntity item : inventoryItems) {
             String nameLower = item.getName().toLowerCase();
             String catLower = item.getCategory().toLowerCase();
+            String idLower = item.getId().toLowerCase();
+            if (query.contains(idLower)) return item;
+            if (nameLower.contains("drill") && (query.contains("drill") || query.contains("hammer"))) return item;
+            if (nameLower.contains("compactor") && query.contains("compactor")) return item;
+            if (nameLower.contains("vibrator") && (query.contains("vibrator") || query.contains("needle"))) return item;
+            if (nameLower.contains("harness") && (query.contains("harness") || query.contains("safety"))) return item;
             if (nameLower.contains("cement") && query.contains("cement")) return item;
             if (nameLower.contains("rebar") && (query.contains("rebar") || query.contains("steel"))) return item;
             if (nameLower.contains("sand") && (query.contains("sand") || query.contains("aggregate"))) return item;
@@ -213,6 +243,19 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         if (existing == null || existing.isEmpty()) {
             seedDefaultInventory();
             existing = db.inventoryDao().getAllInventorySync();
+        } else {
+            // Seed equipment if not yet present in existing database
+            boolean hasEquipment = false;
+            for (InventoryItemEntity item : existing) {
+                if ("EQUIPMENT".equalsIgnoreCase(item.getCategory()) || "SAFETY_GEAR".equalsIgnoreCase(item.getCategory())) {
+                    hasEquipment = true;
+                    break;
+                }
+            }
+            if (!hasEquipment) {
+                seedEquipmentItems();
+                existing = db.inventoryDao().getAllInventorySync();
+            }
         }
 
         inventoryItems.clear();
@@ -224,6 +267,57 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         binding.tvInventoryCountBadge.setText("(" + inventoryItems.size() + " items)");
 
         evaluateLowStockAlert();
+    }
+
+    private void seedEquipmentItems() {
+        long now = System.currentTimeMillis();
+        List<InventoryItemEntity> equipmentSeed = new ArrayList<>();
+
+        equipmentSeed.add(new InventoryItemEntity(
+                "EQP-001",
+                "Bosch Rotary Hammer Drill GBH 2-26",
+                "EQUIPMENT",
+                3.0,
+                1.0,
+                "Units",
+                now,
+                true
+        ));
+
+        equipmentSeed.add(new InventoryItemEntity(
+                "EQP-002",
+                "Plate Compactor 90kg Honda",
+                "EQUIPMENT",
+                2.0,
+                1.0,
+                "Units",
+                now,
+                true
+        ));
+
+        equipmentSeed.add(new InventoryItemEntity(
+                "EQP-003",
+                "Concrete Vibrator Needle Unit",
+                "EQUIPMENT",
+                4.0,
+                2.0,
+                "Units",
+                now,
+                true
+        ));
+
+        equipmentSeed.add(new InventoryItemEntity(
+                "EQP-004",
+                "Fall Arrest Safety Harness Set",
+                "SAFETY_GEAR",
+                12.0,
+                5.0,
+                "Units",
+                now,
+                true
+        ));
+
+        db.inventoryDao().insertAll(equipmentSeed);
     }
 
     private void seedDefaultInventory() {
@@ -275,6 +369,7 @@ public class ResourceFragment extends Fragment implements InventoryAdapter.OnInv
         ));
 
         db.inventoryDao().insertAll(seed);
+        seedEquipmentItems();
     }
 
     private void evaluateLowStockAlert() {

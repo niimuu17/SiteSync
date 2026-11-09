@@ -181,19 +181,38 @@ public class TicketScannerDialog extends DialogFragment {
             galleryPickerLauncher.launch("image/*");
         });
 
-        // Manual Entry Fallback
+        // Manual Entry Fallback / Asset Tag Quick-Select
         btnManual.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(requireContext(), v);
-            dismiss();
-            if (parsedListener != null) {
-                TicketScannerManager.DeliveryTicket manualTicket = new TicketScannerManager.DeliveryTicket();
-                manualTicket.mixId = "Portland Composite Cement (PCC)";
-                manualTicket.quantity = "200 Bags";
-                manualTicket.parsedNumericQuantity = 200;
-                manualTicket.parsedUnit = "Bags";
-                manualTicket.supplierOrSerial = "Holcim / CEMEX Supply";
-                parsedListener.onTicketParsed(manualTicket);
-            }
+            String[] assetOptions = {
+                    "🔨 Machinery: Bosch Rotary Hammer Drill (EQP-001)",
+                    "🚜 Machinery: Plate Compactor 90kg Honda (EQP-002)",
+                    "⚡ Machinery: Concrete Vibrator Needle Unit (EQP-003)",
+                    "🦺 Safety: Fall Arrest Safety Harness Set (EQP-004)",
+                    "🧱 Consumable: Portland Cement 100 Bags (MAT-001)",
+                    "🏗️ Consumable: Structural Rebar 25 Tons (MAT-002)",
+                    "🏖️ Consumable: Coarse River Sand 200 cft (MAT-003)"
+            };
+
+            new android.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Select Asset Tag or Pallet to Test")
+                    .setItems(assetOptions, (d, which) -> {
+                        String chosenCode;
+                        switch (which) {
+                            case 0: chosenCode = "EQP-001"; break;
+                            case 1: chosenCode = "EQP-002"; break;
+                            case 2: chosenCode = "EQP-003"; break;
+                            case 3: chosenCode = "EQP-004"; break;
+                            case 4: chosenCode = "MAT-001 100 Bags"; break;
+                            case 5: chosenCode = "MAT-002 25 Tons"; break;
+                            case 6: chosenCode = "MAT-003 200 cft"; break;
+                            default: chosenCode = "EQP-001"; break;
+                        }
+                        TicketScannerManager.DeliveryTicket simulatedTicket = TicketScannerManager.parseDeliveryTicket(chosenCode);
+                        deliverResult(simulatedTicket);
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         // Check Camera permission and start

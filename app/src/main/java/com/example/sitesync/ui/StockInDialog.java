@@ -37,8 +37,9 @@ public class StockInDialog {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        binding.tvStockInTitle.setText("Stock In: " + item.getName());
-        binding.tvStockInCurrent.setText("Current: " + (int) item.getCurrentStock() + " " + item.getUnit() +
+        boolean isEquipment = "EQUIPMENT".equalsIgnoreCase(item.getCategory()) || "SAFETY_GEAR".equalsIgnoreCase(item.getCategory());
+        binding.tvStockInTitle.setText((isEquipment ? "Check-In / Return: " : "Stock In: ") + item.getName());
+        binding.tvStockInCurrent.setText("Current in Depot: " + (int) item.getCurrentStock() + " " + item.getUnit() +
                 " (Min: " + (int) item.getMinThreshold() + " " + item.getUnit() + ")");
 
         if (ticket != null) {
@@ -54,6 +55,8 @@ public class StockInDialog {
                 binding.etStockInSupplier.setText(ticket.mixId);
             }
             binding.tvScanTicketLabel.setText("Scanned: " + ticket.getSummary() + " ✓");
+        } else if (isEquipment) {
+            binding.etStockInQuantity.setText("1");
         }
 
         binding.btnScanDeliveryTicket.setOnClickListener(v -> {

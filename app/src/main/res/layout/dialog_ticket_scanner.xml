@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Scan Delivery Chalan"
+                android:text="Scan QR, Barcode or Chalan"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -55,7 +55,7 @@
                 android:id="@+id/tvScannerStatusSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Position receipt or barcode in frame"
+                android:text="Position tool tag, pallet QR, or chalan in frame"
                 android:textColor="#CBD5E1"
                 android:textSize="12sp" />
         </LinearLayout>
