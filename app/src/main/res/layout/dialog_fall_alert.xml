@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:backgroundTint="#FFFDF8F6"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="🚨"
+            android:textSize="28sp"
+            android:background="@drawable/bg_badge_urgent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FALL / IMPACT DETECTED"
+                android:textColor="@color/status_red"
+                android:textStyle="bold"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tvFallTelemetrySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extreme G-force impact and immobility registered"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="16dp"
+        android:background="@color/stroke_card_border" />
+
+    <!-- Countdown Timer Block -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingVertical="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency Response Dispatch In:"
+            android:textColor="@color/text_oxide_secondary"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvCountdownSeconds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15s"
+            android:textColor="@color/status_red"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:layout_marginVertical="8dp" />
+
+        <TextView
+            android:id="@+id/tvImpactMagnitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Peak Vector: 3.2G | Elevation: Level 3"
+            android:textColor="@color/text_oxide_primary"
+            android:fontFamily="monospace"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="16dp"
+        android:background="@color/stroke_card_border" />
+
+    <!-- Action Buttons -->
+    <Button
+        android:id="@+id/btnCancelFallAlert"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:text="✅  I AM OK — CANCEL ALERT"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:background="@drawable/btn_primary_oxide" />
+
+    <Button
+        android:id="@+id/btnInstantEvacuate"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:text="🚨  DISPATCH RESCUE TEAM NOW"
+        android:textColor="@color/status_red"
+        android:textSize="13sp"
+        android:background="?android:attr/selectableItemBackground" />
+
+</LinearLayout>

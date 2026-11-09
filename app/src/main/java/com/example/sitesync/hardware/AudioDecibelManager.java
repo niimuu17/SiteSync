@@ -112,6 +112,16 @@ public class AudioDecibelManager {
         while (isMonitoring.get() && audioRecord != null) {
             int readCount = audioRecord.read(audioBuffer, 0, audioBuffer.length);
 
+            if (readCount <= 0) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+                continue;
+            }
+
             if (readCount > 0) {
                 // Calculate RMS: sqrt( (1/N) * sum(x_i^2) )
                 double sumOfSquares = 0.0;

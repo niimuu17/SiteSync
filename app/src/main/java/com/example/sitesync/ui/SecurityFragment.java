@@ -22,6 +22,10 @@ import com.example.sitesync.data.local.entities.HazardTicketEntity;
 import com.example.sitesync.data.sync.SyncManager;
 import com.example.sitesync.databinding.FragmentSecurityBinding;
 import com.example.sitesync.hardware.AudioDecibelManager;
+import com.example.sitesync.hardware.CheckLevelDialog;
+import com.example.sitesync.hardware.FallAlertCountdownDialog;
+import com.example.sitesync.hardware.FallDetectionManager;
+import com.example.sitesync.notifications.SiteSyncFirebaseMessagingService;
 import com.example.sitesync.utils.HapticFeedbackUtil;
 import com.example.sitesync.utils.NetworkMonitor;
 
@@ -43,6 +47,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
     private PendingSyncDao pendingSyncDao;
     private HazardTicketAdapter adapter;
     private AudioDecibelManager decibelManager;
+    private FallDetectionManager fallDetectionManager;
     private boolean isShowingResolved = false;
 
     public static SecurityFragment newInstance() {
@@ -67,11 +72,90 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
 
         setupEmergencyBroadcast();
         setupAcousticDecibelMonitoring();
+        setupFallDetection();
+        setupSpiritLevelUtility();
         setupHazardList();
         setupFilterChips();
         setupSyncTelemetry();
         seedInitialHazardsIfEmpty();
         loadHazardTickets();
+    }
+
+    private void setupFallDetection() {
+        fallDetectionManager = new FallDetectionManager(requireContext());
+
+        binding.btnSimulateFallTest.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(requireContext(), v);
+            triggerFallAlertCountdown(3.4f);
+        });
+
+        binding.btnTestFcmPush.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(requireContext(), v);
+            SiteSyncFirebaseMessagingService.postCriticalNotification(
+                    requireContext(),
+                    "🚨 CRITICAL JOBSITE HAZARD (FCM)",
+                    "Perimeter scaffolding displacement on Level 3 East. Evacuate zone immediately.",
+                    "SCAFFOLD_COLLAPSE"
+            );
+            Toast.makeText(requireContext(), "FCM Critical Hazard Push Dispatched!", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void setupSpiritLevelUtility() {
+        binding.btnOpenSpiritLevel.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(requireContext(), v);
+            CheckLevelDialog dialog = CheckLevelDialog.newInstance();
+            dialog.show(requireActivity().getSupportFragmentManager(), "CheckLevelDialog");
+        });
+    }
+
+    private void triggerFallAlertCountdown(float impactG) {
+        FallAlertCountdownDialog dialog = FallAlertCountdownDialog.newInstance(impactG);
+        dialog.setOnFallAlertResolvedListener(new FallAlertCountdownDialog.OnFallAlertResolvedListener() {
+            @Override
+            public void onFallAlertCancelled() {
+                if (binding != null) {
+                    binding.tvFallSensorBadge.setText("ACTIVE (OK)");
+                    binding.tvFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
+                    binding.tvFallSensorBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_green));
+                }
+            }
+
+            @Override
+            public void onEmergencyDispatched(float impactG) {
+                if (binding != null) {
+                    binding.tvFallSensorBadge.setText("ALERT SENT");
+                    binding.tvFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                    binding.tvFallSensorBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
+                }
+                loadHazardTickets();
+            }
+        });
+        dialog.show(getParentFragmentManager(), "FallAlertCountdownDialog");
+    }
+
+    private void startFallMonitoring() {
+        if (fallDetectionManager == null) return;
+        fallDetectionManager.startMonitoring(
+                (impactG, timestamp) -> triggerFallAlertCountdown(impactG),
+                (magnitude, stateDescription) -> {
+                    if (binding == null) return;
+                    float gForce = magnitude / 9.8f;
+                    if ("IMPACT_DETECTED".equals(stateDescription)) {
+                        binding.tvFallSensorBadge.setText(String.format(Locale.US, "IMPACT (%.1fG)", gForce));
+                        binding.tvFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                        binding.tvFallSensorBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
+                    } else if ("FREE_FALL".equals(stateDescription)) {
+                        binding.tvFallSensorBadge.setText("FREE-FALL");
+                        binding.tvFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                        binding.tvFallSensorBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.brand_amber));
+                    } else {
+                        binding.tvFallSensorBadge.setText(String.format(Locale.US, "ACTIVE (%.1fG)", gForce));
+                        binding.tvFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
+                        binding.tvFallSensorBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_green));
+                    }
+                }
+        );
     }
 
     private void setupAcousticDecibelMonitoring() {
@@ -119,6 +203,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
     public void onResume() {
         super.onResume();
         startDecibelSampling();
+        startFallMonitoring();
     }
 
     @Override
@@ -126,6 +211,9 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         super.onPause();
         if (decibelManager != null) {
             decibelManager.stopMonitoring();
+        }
+        if (fallDetectionManager != null) {
+            fallDetectionManager.stopMonitoring();
         }
     }
 

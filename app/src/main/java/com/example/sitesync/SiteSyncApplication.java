@@ -44,6 +44,9 @@ public class SiteSyncApplication extends Application {
             FirebaseSyncManager.getInstance(this);
             Log.d(TAG, "SiteSync Firebase ecosystem initialized with offline persistence.");
 
+            // Subscribe to Critical Hazard FCM Push Channels
+            com.example.sitesync.notifications.SiteSyncFirebaseMessagingService.subscribeToSiteSafetyChannels();
+
             // Schedule WorkManager periodic offline background sync
             com.example.sitesync.data.sync.SyncManager.schedulePeriodicSync(this);
         } catch (Exception e) {
