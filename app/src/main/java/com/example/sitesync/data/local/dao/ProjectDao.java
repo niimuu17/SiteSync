@@ -48,6 +48,12 @@ public interface ProjectDao {
     @Query("SELECT * FROM projects WHERE id = :id OR projectCode = :id LIMIT 1")
     LiveData<ProjectEntity> getProjectByIdLive(String id);
 
+    @Query("SELECT * FROM projects WHERE projectCode IN (:codes) ORDER BY lastOpenedAt DESC")
+    LiveData<List<ProjectEntity>> getProjectsByCodesLive(List<String> codes);
+
+    @Query("SELECT * FROM projects WHERE projectCode IN (:codes) ORDER BY lastOpenedAt DESC")
+    List<ProjectEntity> getProjectsByCodes(List<String> codes);
+
     @Query("UPDATE projects SET lastOpenedAt = :timestamp WHERE id = :id OR projectCode = :id")
     void updateLastOpened(String id, long timestamp);
 

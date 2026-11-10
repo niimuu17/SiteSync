@@ -109,6 +109,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     protected void onResume() {
         super.onResume();
         loadProfilePhotoIntoViews();
+
+        if (sessionManager.isFloatingVoiceAlerterEnabled()) {
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M || android.provider.Settings.canDrawOverlays(this)) {
+                com.example.sitesync.hardware.FloatingVoiceAlerterService.startAlerter(this);
+            }
+        }
+
         if (barometerElevationManager != null) {
             barometerElevationManager.startListening(new BarometerElevationManager.OnFloorLevelChangeListener() {
                 @Override

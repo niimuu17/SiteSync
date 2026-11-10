@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -73,6 +74,10 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         overlayPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
+                        FloatingVoiceAlerterService.startAlerter(this);
+                        sessionManager.setFloatingVoiceAlerterEnabled(true);
+                    }
                     updateVoiceAlerterBubbleUi();
                 }
         );
@@ -103,10 +108,27 @@ public class WorkerDashboardActivity extends AppCompatActivity {
             finish();
         });
 
-        binding.btnWorkerSignOut.setOnClickListener(v -> {
+        binding.tvWorkerProjectCode.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(this, v);
             startActivity(new Intent(this, ProjectHubActivity.class));
             finish();
+        });
+
+        binding.btnWorkerSignOut.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            new AlertDialog.Builder(this)
+                    .setTitle("Sign Out")
+                    .setMessage("Are you sure you want to sign out of SiteSync?")
+                    .setPositiveButton("Sign Out", (dialog, which) -> {
+                        sessionManager.clearSession();
+                        FloatingVoiceAlerterService.stopAlerter(WorkerDashboardActivity.this);
+                        Intent intent = new Intent(WorkerDashboardActivity.this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         binding.btnWorkerChatHeader.setOnClickListener(v -> {
@@ -300,6 +322,24 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadWorkerProfilePhoto();
+
+        // Auto-start Floating Voice Alerter if overlay permission is granted
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)) {
+            FloatingVoiceAlerterService.startAlerter(this);
+            sessionManager.setFloatingVoiceAlerterEnabled(true);
+        } else if (!sessionManager.isOverlayPermissionPrompted()) {
+            sessionManager.setOverlayPermissionPrompted(true);
+            new AlertDialog.Builder(this)
+                    .setTitle("Enable Site Voice Alerter")
+                    .setMessage("SiteSync includes a floating emergency voice bubble for instant hands-free alerts (e.g. 'tin tolay agun lagse'). Enable 'Display over other apps' to keep it accessible.")
+                    .setPositiveButton("Enable", (d, w) -> {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                        overlayPermissionLauncher.launch(intent);
+                    })
+                    .setNegativeButton("Later", null)
+                    .show();
+        }
+
         updateVoiceAlerterBubbleUi();
     }
 

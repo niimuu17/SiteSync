@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import com.example.sitesync.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
 /**
  * Manages persistent user session, Firebase state, and profile caching.
  */
@@ -136,11 +140,31 @@ public class SessionManager {
     }
 
     public boolean isFloatingVoiceAlerterEnabled() {
-        return pref.getBoolean("floating_voice_alerter_enabled", false);
+        return pref.getBoolean("floating_voice_alerter_enabled", true);
     }
 
     public void setFloatingVoiceAlerterEnabled(boolean enabled) {
         editor.putBoolean("floating_voice_alerter_enabled", enabled).apply();
+    }
+
+    public void addWorkerProjectCode(String code) {
+        if (code == null || code.trim().isEmpty()) return;
+        Set<String> current = getWorkerProjectCodes();
+        Set<String> updated = new HashSet<>(current);
+        updated.add(code.trim().toUpperCase(Locale.US));
+        editor.putStringSet("worker_joined_project_codes", updated).apply();
+    }
+
+    public Set<String> getWorkerProjectCodes() {
+        return pref.getStringSet("worker_joined_project_codes", new HashSet<>());
+    }
+
+    public boolean isOverlayPermissionPrompted() {
+        return pref.getBoolean("overlay_permission_prompted", false);
+    }
+
+    public void setOverlayPermissionPrompted(boolean prompted) {
+        editor.putBoolean("overlay_permission_prompted", prompted).apply();
     }
 
     public void clearSession() {

@@ -49,6 +49,15 @@ public class ProjectRepository {
         return projectDao.getProjectByIdLive(id);
     }
 
+    public LiveData<List<ProjectEntity>> getProjectsByCodesLive(List<String> codes) {
+        if (codes == null || codes.isEmpty()) {
+            androidx.lifecycle.MutableLiveData<List<ProjectEntity>> empty = new androidx.lifecycle.MutableLiveData<>();
+            empty.setValue(new ArrayList<>());
+            return empty;
+        }
+        return projectDao.getProjectsByCodesLive(codes);
+    }
+
     public void getProjectById(String id, ActionCallback<ProjectEntity> callback) {
         executor.execute(() -> {
             try {

@@ -190,7 +190,7 @@ public class LogProgressBottomSheetDialog extends BottomSheetDialogFragment {
         binding.tvAiCompletedSummary.setText("Done: " + result.completedTodaySummary);
         binding.tvAiRemainingSummary.setText("Pending: " + result.remainingWorkSummary);
 
-        binding.btnAnalyzeAndSaveLog.setText("Saved to Database ✓");
+        binding.btnAnalyzeAndSaveLog.setText("Saved to Database");
         binding.btnAnalyzeAndSaveLog.setEnabled(false);
 
         Toast.makeText(requireContext(), "Daily Log Recorded & Progress Updated!", Toast.LENGTH_SHORT).show();

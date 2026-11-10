@@ -347,11 +347,18 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
         List<PieEntry> entries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
         int[] palette = new int[]{
-                Color.parseColor("#F5C29B"), // Soft Peach
-                Color.parseColor("#89A19A"), // Muted Teal
-                Color.parseColor("#34524A"), // Forest Pill
-                Color.parseColor("#E8AF84"), // Dark Peach
-                Color.parseColor("#526B64")  // Sage Green
+                Color.parseColor("#F5C29B"), // Warm Peach
+                Color.parseColor("#4ECDC4"), // Bright Cyan / Aqua Teal
+                Color.parseColor("#F4A261"), // Amber Gold
+                Color.parseColor("#2EC4B6"), // Emerald Mint
+                Color.parseColor("#9B5DE5"), // Royal Violet / Purple
+                Color.parseColor("#E76F51"), // Terracotta / Crimson Coral
+                Color.parseColor("#48CAE4"), // Sky Blue
+                Color.parseColor("#FFD166"), // Solar Gold
+                Color.parseColor("#06D6A0"), // Neon Mint
+                Color.parseColor("#F15BB5"), // Magenta Pink
+                Color.parseColor("#3A86FF"), // Electric Blue
+                Color.parseColor("#FB5607")  // Sunset Orange
         };
 
         float density = getResources().getDisplayMetrics().density;

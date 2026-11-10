@@ -231,6 +231,12 @@ public class SiteChatActivity extends AppCompatActivity {
                 currentUser.getUsername() : "current_user";
 
         adapter = new SiteChatAdapter(currentUid);
+        adapter.setOnMessageImageClickListener(message -> {
+            if (message != null && message.getMediaUrl() != null && !message.getMediaUrl().isEmpty()) {
+                ChatImageViewerDialog dialog = ChatImageViewerDialog.newInstance(message);
+                dialog.show(getSupportFragmentManager(), "ChatImageViewer");
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         binding.rvChatMessages.setLayoutManager(layoutManager);

@@ -206,6 +206,7 @@ public class SignUpActivity extends AppCompatActivity {
                             AppDatabase.getInstance(SignUpActivity.this).workerJoinRequestDao().insert(joinRequest);
                         });
                         sessionManager.setActiveProject(1L, workerProjectCode, "Site Project: " + workerProjectCode);
+                        sessionManager.addWorkerProjectCode(workerProjectCode);
                     }
 
                     FirebaseFirestore.getInstance().collection("users").document(uid)
@@ -232,6 +233,7 @@ public class SignUpActivity extends AppCompatActivity {
                             AppDatabase.getInstance(SignUpActivity.this).workerJoinRequestDao().insert(joinRequest);
                         });
                         sessionManager.setActiveProject(1L, workerProjectCode, "Site Project: " + workerProjectCode);
+                        sessionManager.addWorkerProjectCode(workerProjectCode);
                     }
                     User user = new User(username, fullName, selectedRole, uid, email, mobile, "BD");
                     sessionManager.createLoginSession(user, true);

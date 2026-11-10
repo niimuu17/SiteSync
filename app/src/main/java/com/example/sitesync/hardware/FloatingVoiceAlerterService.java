@@ -21,7 +21,10 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import android.widget.Toast;
+
 import com.example.sitesync.R;
+import com.example.sitesync.data.SessionManager;
 import com.example.sitesync.ui.VoiceAlerterDialogActivity;
 
 /**
@@ -37,26 +40,44 @@ public class FloatingVoiceAlerterService extends Service {
     private WindowManager windowManager;
     private View floatingView;
     private WindowManager.LayoutParams params;
+    private View cancelView;
+    private WindowManager.LayoutParams cancelParams;
+    private SessionManager sessionManager;
 
     public static void startAlerter(Context context) {
-        Intent intent = new Intent(context, FloatingVoiceAlerterService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent);
-        } else {
-            context.startService(intent);
+        try {
+            Intent intent = new Intent(context, FloatingVoiceAlerterService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent);
+            } else {
+                context.startService(intent);
+            }
+        } catch (Exception e) {
+            android.util.Log.w("FloatingAlerter", "startAlerter warning: " + e.getMessage());
         }
     }
 
     public static void stopAlerter(Context context) {
-        Intent intent = new Intent(context, FloatingVoiceAlerterService.class);
-        context.stopService(intent);
+        try {
+            Intent intent = new Intent(context, FloatingVoiceAlerterService.class);
+            context.stopService(intent);
+        } catch (Exception ignored) {}
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        startForeground(NOTIFICATION_ID, buildForegroundNotification());
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(NOTIFICATION_ID, buildForegroundNotification(),
+                        android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            } else {
+                startForeground(NOTIFICATION_ID, buildForegroundNotification());
+            }
+        } catch (Exception e) {
+            android.util.Log.w("FloatingAlerter", "startForeground warning: " + e.getMessage());
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)) {
             initFloatingOverlay();
@@ -97,8 +118,10 @@ public class FloatingVoiceAlerterService extends Service {
 
     private void initFloatingOverlay() {
         try {
+            sessionManager = new SessionManager(this);
             windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             floatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_voice_bubble, null);
+            cancelView = LayoutInflater.from(this).inflate(R.layout.layout_floating_cancel_zone, null);
 
             int layoutType;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -107,6 +130,7 @@ public class FloatingVoiceAlerterService extends Service {
                 layoutType = WindowManager.LayoutParams.TYPE_PHONE;
             }
 
+            // Bubble Layout Params
             params = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.WRAP_CONTENT,
@@ -114,10 +138,23 @@ public class FloatingVoiceAlerterService extends Service {
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT
             );
-
             params.gravity = Gravity.TOP | Gravity.START;
             params.x = 20;
             params.y = 350;
+
+            // Cancel Target Layout Params (Bottom Center)
+            cancelParams = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    layoutType,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    PixelFormat.TRANSLUCENT
+            );
+            cancelParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            cancelParams.y = 120;
+
+            cancelView.setVisibility(View.GONE);
+            windowManager.addView(cancelView, cancelParams);
 
             ImageView ivBubble = floatingView.findViewById(R.id.ivFloatingBubble);
             ivBubble.setOnTouchListener(new View.OnTouchListener() {
@@ -127,6 +164,9 @@ public class FloatingVoiceAlerterService extends Service {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    int screenHeight = getResources().getDisplayMetrics().heightPixels;
+                    int screenWidth = getResources().getDisplayMetrics().widthPixels;
+
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             initialX = params.x;
@@ -141,17 +181,68 @@ public class FloatingVoiceAlerterService extends Service {
                             int deltaY = (int) (event.getRawY() - initialTouchY);
                             if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
                                 isClick = false;
+                                if (cancelView != null && cancelView.getVisibility() != View.VISIBLE) {
+                                    cancelView.setVisibility(View.VISIBLE);
+                                }
                             }
+
                             params.x = initialX + deltaX;
                             params.y = initialY + deltaY;
                             if (windowManager != null && floatingView != null) {
                                 windowManager.updateViewLayout(floatingView, params);
                             }
+
+                            // Check if dragged down into the cancel zone (bottom 25% of screen and center horizontally)
+                            boolean inCancelZone = (event.getRawY() > screenHeight - 320)
+                                    && (Math.abs(event.getRawX() - (screenWidth / 2.0f)) < (screenWidth * 0.35f));
+                            if (cancelView != null) {
+                                if (inCancelZone) {
+                                    cancelView.setScaleX(1.18f);
+                                    cancelView.setScaleY(1.18f);
+                                } else {
+                                    cancelView.setScaleX(1.0f);
+                                    cancelView.setScaleY(1.0f);
+                                }
+                            }
                             return true;
 
                         case MotionEvent.ACTION_UP:
+                            if (cancelView != null) {
+                                cancelView.setVisibility(View.GONE);
+                            }
+
                             if (isClick) {
                                 openVoiceAlerterActivity();
+                                return true;
+                            }
+
+                            // If dropped in the cancel zone -> dismiss and stop service
+                            boolean droppedInCancel = (event.getRawY() > screenHeight - 320)
+                                    && (Math.abs(event.getRawX() - (screenWidth / 2.0f)) < (screenWidth * 0.35f));
+
+                            if (droppedInCancel) {
+                                if (sessionManager != null) {
+                                    sessionManager.setFloatingVoiceAlerterEnabled(false);
+                                }
+                                Toast.makeText(FloatingVoiceAlerterService.this, "Voice Alerter closed", Toast.LENGTH_SHORT).show();
+                                stopSelf();
+                                return true;
+                            }
+
+                            // Snap bubble to nearest screen edge (left or right)
+                            int bubbleWidth = floatingView.getWidth() > 0 ? floatingView.getWidth() : 140;
+                            if (params.x + (bubbleWidth / 2) < (screenWidth / 2)) {
+                                params.x = 24; // Snap to left edge
+                            } else {
+                                params.x = screenWidth - bubbleWidth - 24; // Snap to right edge
+                            }
+
+                            // Clamp vertical bounds within visible screen
+                            if (params.y < 80) params.y = 80;
+                            if (params.y > screenHeight - 250) params.y = screenHeight - 250;
+
+                            if (windowManager != null && floatingView != null) {
+                                windowManager.updateViewLayout(floatingView, params);
                             }
                             return true;
                     }
@@ -177,10 +268,19 @@ public class FloatingVoiceAlerterService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (windowManager != null && floatingView != null) {
-            try {
-                windowManager.removeView(floatingView);
-            } catch (Exception ignored) {}
+        if (windowManager != null) {
+            if (floatingView != null) {
+                try {
+                    windowManager.removeView(floatingView);
+                } catch (Exception ignored) {}
+                floatingView = null;
+            }
+            if (cancelView != null) {
+                try {
+                    windowManager.removeView(cancelView);
+                } catch (Exception ignored) {}
+                cancelView = null;
+            }
         }
     }
 

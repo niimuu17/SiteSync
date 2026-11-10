@@ -28,10 +28,16 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
     private final Context context;
     private final OnProjectClickListener listener;
     private final List<ProjectEntity> projects = new ArrayList<>();
+    private boolean allowOptions = true;
 
     public ProjectCardAdapter(Context context, OnProjectClickListener listener) {
         this.context = context;
         this.listener = listener;
+    }
+
+    public void setAllowOptions(boolean allowOptions) {
+        this.allowOptions = allowOptions;
+        notifyDataSetChanged();
     }
 
     public void setProjects(List<ProjectEntity> newProjects) {
@@ -97,7 +103,8 @@ public class ProjectCardAdapter extends RecyclerView.Adapter<ProjectCardAdapter.
                 }
             });
 
-            // Three-dot options menu
+            // Three-dot options menu (Manager only)
+            b.btnHubProjectOptions.setVisibility(allowOptions ? View.VISIBLE : View.GONE);
             b.btnHubProjectOptions.setOnClickListener(v -> {
                 HapticFeedbackUtil.lightClick(context, v);
                 showOptionsMenu(v, project);

@@ -30,13 +30,22 @@ import java.util.Locale;
 
 public class SiteChatAdapter extends RecyclerView.Adapter<SiteChatAdapter.ChatViewHolder> {
 
+    public interface OnMessageImageClickListener {
+        void onImageClick(SiteChatMessageEntity message);
+    }
+
     private final String currentUserId;
     private final List<SiteChatMessageEntity> messages = new ArrayList<>();
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.US);
     private static MediaPlayer activeMediaPlayer;
+    private OnMessageImageClickListener imageClickListener;
 
     public SiteChatAdapter(String currentUserId) {
         this.currentUserId = currentUserId != null ? currentUserId : "";
+    }
+
+    public void setOnMessageImageClickListener(OnMessageImageClickListener listener) {
+        this.imageClickListener = listener;
     }
 
     public void setMessages(List<SiteChatMessageEntity> newMessages) {
@@ -59,7 +68,7 @@ public class SiteChatAdapter extends RecyclerView.Adapter<SiteChatAdapter.ChatVi
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         SiteChatMessageEntity msg = messages.get(position);
-        holder.bind(msg, currentUserId, timeFormat);
+        holder.bind(msg, currentUserId, timeFormat, imageClickListener);
     }
 
     @Override
@@ -75,7 +84,7 @@ public class SiteChatAdapter extends RecyclerView.Adapter<SiteChatAdapter.ChatVi
             this.binding = binding;
         }
 
-        public void bind(SiteChatMessageEntity msg, String currentUserId, SimpleDateFormat timeFormat) {
+        public void bind(SiteChatMessageEntity msg, String currentUserId, SimpleDateFormat timeFormat, OnMessageImageClickListener imageClickListener) {
             Context context = itemView.getContext();
             boolean isSelf = currentUserId.equalsIgnoreCase(msg.getSenderId()) ||
                     currentUserId.equalsIgnoreCase(msg.getSenderName());
@@ -98,8 +107,14 @@ public class SiteChatAdapter extends RecyclerView.Adapter<SiteChatAdapter.ChatVi
                 } else {
                     Glide.with(context).load(msg.getMediaUrl()).into(binding.ivChatImageAttachment);
                 }
+                binding.ivChatImageAttachment.setOnClickListener(v -> {
+                    if (imageClickListener != null) {
+                        imageClickListener.onImageClick(msg);
+                    }
+                });
             } else {
                 binding.ivChatImageAttachment.setVisibility(View.GONE);
+                binding.ivChatImageAttachment.setOnClickListener(null);
             }
 
             // Audio attachment
