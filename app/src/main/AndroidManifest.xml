@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
@@ -55,10 +57,29 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Middle Layer: Project Hub (Create Project, Recent Projects) -->
+        <activity
+            android:name=".ui.ProjectHubActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Worker Module Dashboard -->
+        <activity
+            android:name=".ui.WorkerDashboardActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Worker & Manager Real-Time Project Chat -->
+        <activity
+            android:name=".ui.SiteChatActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- Screen 3: Main Dashboard (Default: Progress Tab) -->
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize" />
 
         <!-- Legacy WelcomeActivity -->
@@ -221,6 +242,16 @@
 
         <receiver
             android:name=".utils.TaskReminderReceiver"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.VoiceAlerterDialogActivity"
+            android:theme="@style/Theme.SiteSync"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+
+        <service
+            android:name=".hardware.FloatingVoiceAlerterService"
             android:exported="false" />
 
         <!-- Firebase Cloud Messaging High-Priority Critical Hazard Service -->

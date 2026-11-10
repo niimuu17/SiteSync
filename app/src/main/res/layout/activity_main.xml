@@ -22,20 +22,23 @@
             android:paddingEnd="16dp"
             android:background="@color/warm_ash_base">
 
-            <!-- Brand / Project Mark (Amber Squircle with Dark Icon) -->
+            <!-- Brand / Project Mark (Clickable Project Menu & Switcher) -->
             <FrameLayout
+                android:id="@+id/layoutProjectBadge"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_squircle_amber"
-                android:layout_marginEnd="12dp">
+                android:background="@drawable/bg_squircle_brand"
+                android:layout_marginEnd="12dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_app_brand_symbol"
-                    app:tint="@color/oxide_blue_dark"
-                    android:contentDescription="Brand" />
+                    android:src="@drawable/ic_business"
+                    app:tint="@color/forest_surface_deep"
+                    android:contentDescription="Project Switcher" />
             </FrameLayout>
 
             <!-- Project Title & Floor Level Subtitle -->
@@ -50,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Metro Central Tower"
-                    android:textColor="@color/text_oxide_primary"
+                    android:textColor="@color/forest_surface_deep"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -59,10 +62,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Floor 3 (Auto)"
-                    android:textColor="@color/text_oxide_secondary"
+                    android:textColor="@color/forest_muted"
                     android:textSize="12sp"
                     android:letterSpacing="0.02" />
             </LinearLayout>
+
+            <!-- Site Crew Chat Room Button -->
+            <FrameLayout
+                android:id="@+id/btnChatHeader"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="4dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_chat"
+                    app:tint="@color/forest_surface_deep"
+                    android:contentDescription="Crew Chat Room" />
+            </FrameLayout>
 
             <!-- Notification Bell with Alert Dot -->
             <FrameLayout
@@ -71,69 +93,47 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:layout_marginEnd="8dp">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_bell"
-                    app:tint="@color/oxide_blue_primary"
+                    app:tint="@color/forest_surface_deep"
                     android:contentDescription="Notifications" />
 
                 <View
-                    android:layout_width="7dp"
-                    android:layout_height="7dp"
+                    android:id="@+id/dotNotificationAlert"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_gravity="top|end"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="7dp"
                     android:background="@drawable/indicator_pulse_dot"
-                    app:backgroundTint="@color/brand_amber" />
+                    android:visibility="gone"
+                    app:backgroundTint="@color/peach_accent" />
             </FrameLayout>
 
-            <!-- Cloud Sync Status Telemetry Indicator -->
+            <!-- User Profile Picture / Avatar Button -->
             <FrameLayout
-                android:id="@+id/btnCloudSyncIndicator"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:id="@+id/btnUserProfileAvatar"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_squircle_brand"
                 android:clickable="true"
                 android:focusable="true">
 
                 <ImageView
-                    android:id="@+id/ivCloudSyncStatus"
+                    android:id="@+id/ivUserAvatarHeader"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_cloud_done"
-                    app:tint="@color/status_green"
-                    android:contentDescription="Cloud Sync Status" />
-
-                <TextView
-                    android:id="@+id/tvPendingSyncBadge"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="top|end"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/bg_badge_urgent"
-                    android:gravity="center"
-                    android:textColor="#991B1B"
-                    android:textSize="9sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/forest_surface_deep"
+                    android:contentDescription="User Profile Info" />
             </FrameLayout>
-
-            <!-- 3-Dot Overflow Menu Icon -->
-            <ImageView
-                android:id="@+id/ivTopMenu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_more_vert"
-                app:tint="@color/oxide_blue_primary"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Project Options Menu" />
         </LinearLayout>
 
         <!-- Divider Line -->

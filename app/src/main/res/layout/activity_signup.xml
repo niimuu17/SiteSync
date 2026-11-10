@@ -250,6 +250,113 @@
                 android:contentDescription="Toggle Confirm Password Visibility" />
         </RelativeLayout>
 
+        <!-- Role Selection (Manager vs Worker) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Account Type"
+            android:textColor="@color/text_oxide_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <RadioGroup
+            android:id="@+id/rgAccountRole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/rbRoleManager"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Project Manager"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp" />
+
+            <RadioButton
+                android:id="@+id/rbRoleWorker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Site Worker"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp" />
+        </RadioGroup>
+
+        <!-- Worker-Specific Fields (Visible only if Worker role selected) -->
+        <LinearLayout
+            android:id="@+id/layoutWorkerFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Project Code to Join"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_rounded_input"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/etWorkerProjectCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:hint="e.g. PRJ-DHAKA-101"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textColorHint="@color/text_oxide_muted"
+                    android:textSize="14sp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:inputType="textCapCharacters"
+                    android:maxLines="1" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Trade / Specialty"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_rounded_input"
+                android:layout_marginBottom="24dp">
+
+                <EditText
+                    android:id="@+id/etWorkerTrade"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:hint="e.g. Mason, Tile Mistry, Electrician"
+                    android:textColor="@color/text_oxide_primary"
+                    android:textColorHint="@color/text_oxide_muted"
+                    android:textSize="14sp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:inputType="textCapWords"
+                    android:maxLines="1" />
+            </FrameLayout>
+        </LinearLayout>
+
         <!-- Action Button: Sign Up -->
         <FrameLayout
             android:layout_width="match_parent"

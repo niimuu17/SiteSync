@@ -52,7 +52,7 @@ public class TaskReminderReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        String title = isOverdue ? "⚠️ Overdue Task Alert!" : "📅 Upcoming Task Deadline";
+        String title = isOverdue ? "Overdue Task Alert!" : "Upcoming Task Deadline";
         String message = isOverdue
                 ? "Task [" + taskTitle + "] is now overdue! Please review and update status."
                 : "Task [" + taskTitle + "] is due in 24 hours.";

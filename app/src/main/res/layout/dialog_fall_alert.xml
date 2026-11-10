@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -13,13 +14,14 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <TextView
+        <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:gravity="center"
-            android:text="🚨"
-            android:textSize="28sp"
-            android:background="@drawable/bg_badge_urgent" />
+            android:padding="10dp"
+            android:src="@drawable/ic_warning_hazard"
+            app:tint="@color/status_red"
+            android:background="@drawable/bg_badge_urgent"
+            android:contentDescription="Emergency Hazard Alert" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -94,24 +96,39 @@
         android:background="@color/stroke_card_border" />
 
     <!-- Action Buttons -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancelFallAlert"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:text="✅  I AM OK — CANCEL ALERT"
-        android:textColor="#FFFFFF"
+        android:layout_height="52dp"
+        android:text="I AM OK — CANCEL ALERT"
+        android:textColor="@color/text_on_oxide_white"
         android:textStyle="bold"
-        android:textSize="15sp"
-        android:background="@drawable/btn_primary_oxide" />
+        android:textSize="14sp"
+        app:icon="@drawable/ic_check_circle"
+        app:iconTint="@color/text_on_oxide_white"
+        app:iconGravity="textStart"
+        app:backgroundTint="@color/oxide_blue_primary"
+        app:cornerRadius="26dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnInstantEvacuate"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="10dp"
-        android:text="🚨  DISPATCH RESCUE TEAM NOW"
+        android:text="DISPATCH RESCUE TEAM NOW"
         android:textColor="@color/status_red"
         android:textSize="13sp"
-        android:background="?android:attr/selectableItemBackground" />
+        android:textStyle="bold"
+        app:icon="@drawable/ic_warning_hazard"
+        app:iconTint="@color/status_red"
+        app:iconGravity="textStart"
+        app:strokeColor="@color/status_red"
+        app:strokeWidth="1.5dp"
+        app:cornerRadius="24dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp" />
 
 </LinearLayout>

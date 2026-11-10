@@ -16,6 +16,23 @@
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Room Database entities & DAOs
+-keep class androidx.room.** { *; }
+-keep class com.example.sitesync.data.local.entities.** { *; }
+-keep class com.example.sitesync.data.local.dao.** { *; }
+-keep class com.example.sitesync.models.** { *; }
+
+# JSON POJOs & Vision AI models
+-keepclassmembers class com.example.sitesync.data.models.** { <fields>; }
+-keepclassmembers class com.example.sitesync.models.** { <fields>; }
+
+# MPAndroidChart
+-keep class com.github.mikephil.charting.** { *; }
+
+# OkHttp & Glide
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.**

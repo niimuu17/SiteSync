@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/forest_card_dark"
+    app:strokeColor="@color/forest_stroke"
+    app:strokeWidth="1dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="22dp">
+
+        <!-- Header: Alert Badge + Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <FrameLayout
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_badge_coral"
+                android:layout_marginEnd="14dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_warning_hazard"
+                    app:tint="@color/alert_coral_text"
+                    android:contentDescription="Duplicate Alert" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duplicate Receipt Detected"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Double Entry Prevented"
+                    android:textColor="@color/peach_accent"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Receipt Details Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/forest_surface_deep"
+            android:padding="16dp"
+            android:layout_marginBottom="18dp">
+
+            <!-- Status Badge -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALREADY RECORDED IN INVENTORY"
+                android:textColor="@color/alert_coral_text"
+                android:background="@drawable/bg_badge_coral"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:letterSpacing="0.05"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Challan # & Supplier -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Challan / Memo: "
+                    android:textColor="@color/text_on_dark_muted"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvDuplicateChallanNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CH-94812"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Supplier: "
+                    android:textColor="@color/text_on_dark_muted"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvDuplicateSupplier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Meghna Cement &amp; Steel Mills Ltd"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Entered On: "
+                    android:textColor="@color/text_on_dark_muted"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvDuplicateDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nov 10, 2026 • 09:15 AM"
+                    android:textColor="@color/peach_accent"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/forest_stroke_subtle"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/tvDuplicateMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This delivery challan has already been verified and entered into your inventory ledger. Double entry is prevented to protect site material balance accuracy."
+                android:textColor="@color/text_on_dark_secondary"
+                android:textSize="12sp"
+                android:lineSpacingExtra="3dp" />
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewInLedger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="16dp"
+            android:text="View in Movement Ledger"
+            android:textColor="@color/forest_surface_deep"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/peach_accent"
+            app:cornerRadius="25dp"
+            app:elevation="0dp"
+            android:textAllCaps="false"
+            android:layout_marginBottom="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDismissDuplicate"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="Dismiss"
+            android:textColor="@color/text_on_dark_muted"
+            android:textSize="13sp"
+            app:cornerRadius="22dp"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

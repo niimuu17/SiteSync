@@ -2,9 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_switch_project"
+        android:title="Switch Project (Hub)"
+        android:icon="@drawable/ic_business"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_site_chat"
+        android:title="Site Crew Chat Room"
+        android:icon="@drawable/ic_chat"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/menu_create_project"
-        android:title="Create Project"
+        android:title="Create New Project"
         android:icon="@drawable/ic_add"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_worker_requests"
+        android:title="Worker Join Requests"
+        android:icon="@drawable/ic_person"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_project_details"

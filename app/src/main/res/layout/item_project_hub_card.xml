@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/forest_card_dark"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/forest_stroke"
+    app:strokeWidth="1dp"
+    app:rippleColor="@color/peach_alpha">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Top Row: Code Pill, Status, Three-Dot Menu -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true">
+
+                <!-- Project Code Pill -->
+                <TextView
+                    android:id="@+id/tvHubProjectCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MCT-2026"
+                    android:textColor="@color/peach_accent"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_badge_pill_teal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp" />
+
+                <TextView
+                    android:id="@+id/tvHubProjectStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACTIVE"
+                    android:textColor="@color/badge_green_text"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_badge_green"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- Three Dot Options Button -->
+            <ImageView
+                android:id="@+id/btnHubProjectOptions"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Project Options"
+                android:padding="6dp"
+                android:src="@drawable/ic_more_vert"
+                app:tint="@color/text_on_dark_secondary" />
+        </RelativeLayout>
+
+        <!-- Project Title -->
+        <TextView
+            android:id="@+id/tvHubProjectTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Metro Central Tower"
+            android:textColor="@color/text_on_dark_primary"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <!-- Client & Location Subtitle -->
+        <TextView
+            android:id="@+id/tvHubProjectSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Metro Urban Development • Dhaka Central"
+            android:textColor="@color/text_on_dark_muted"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp" />
+
+        <!-- Scope & Plan Specification Summary Pill -->
+        <TextView
+            android:id="@+id/tvHubProjectScopeSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scope: 2-Room Building • 10ft Walls • 6 Windows • Floor Tiles"
+            android:textColor="@color/text_on_dark_secondary"
+            android:textSize="11sp"
+            android:drawableStart="@drawable/ic_straighten"
+            android:drawablePadding="6dp"
+            android:drawableTint="@color/peach_accent"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Progress Bar & Percentage Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ProgressBar
+                android:id="@+id/pbHubProjectProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1"
+                android:progress="68"
+                android:max="100"
+                android:progressDrawable="@drawable/bg_progress_custom_horizontal" />
+
+            <TextView
+                android:id="@+id/tvHubProjectPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="68%"
+                android:textColor="@color/peach_accent"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -72,12 +72,14 @@ public class CreateRequisitionBottomSheetDialog extends BottomSheetDialogFragmen
                 "Concrete Admixture Plasticizer (Liters)"
         };
         ArrayAdapter<String> matAdapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_dropdown_item, materials);
+                requireContext(), R.layout.item_spinner_task_status, materials);
+        matAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         binding.spinnerReqMaterial.setAdapter(matAdapter);
 
         String[] units = new String[]{"Bags", "Tons", "cft", "Liters", "Bundles"};
         ArrayAdapter<String> unitAdapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_dropdown_item, units);
+                requireContext(), R.layout.item_spinner_task_status, units);
+        unitAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         binding.spinnerReqUnit.setAdapter(unitAdapter);
     }
 

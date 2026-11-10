@@ -179,6 +179,27 @@ public class PdfReportGenerator {
         return y;
     }
 
+    public static File generateMockReport(Context context, String projectName, String projectCode) throws IOException {
+        DailySiteReport report = new DailySiteReport(
+                "REP-" + (System.currentTimeMillis() % 10000),
+                projectName != null ? projectName : "Site Project",
+                new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US).format(new java.util.Date()),
+                "Site Engineer",
+                DailySiteReport.STATUS_SUBMITTED,
+                "Sunny 31°C",
+                "Thai Aluminum window framing installed in 4 units. Floor tiles setting in Unit 201.",
+                "14 Masons, 8 Electricians, 6 Helpers",
+                "120 Bags Cement, 4.5 Ton Rebar, 800 sqft Porcelain Tiles",
+                "1 Concrete Mixer, 2 Needle Vibrators",
+                "None reported.",
+                null,
+                "Continue 2nd floor plastering and plumbing pressure test.",
+                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.US).format(new java.util.Date()),
+                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.US).format(new java.util.Date())
+        );
+        return generateReportPdf(context, report);
+    }
+
     public static void shareReportPdf(Context context, DailySiteReport report) {
         try {
             File pdfFile = generateReportPdf(context, report);

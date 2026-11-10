@@ -15,6 +15,10 @@ public enum Role {
     ENGINEER(
             "Engineer",
             "Blueprint validation, telemetry synchronization, material tests, and structural notes."
+    ),
+    WORKER(
+            "Site Worker",
+            "Daily task execution, smart attendance, site chat communication, and progress logging."
     );
 
     private final String displayName;

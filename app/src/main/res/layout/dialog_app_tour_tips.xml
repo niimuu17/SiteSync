@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="20dp"
+    app:cardBackgroundColor="@color/forest_card_dark"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="16dp"
+    app:strokeColor="@color/forest_stroke"
+    app:strokeWidth="1.5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header: Category & Step Indicator Pill -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp">
+
+            <TextView
+                android:id="@+id/tvTipStepPill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feature Guide • 1 of 6"
+                android:textColor="@color/forest_dark"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_badge_pill_teal"
+                android:backgroundTint="@color/peach_accent"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <ImageView
+                android:id="@+id/btnCloseTipsDialog"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Close Tips"
+                android:padding="6dp"
+                android:src="@drawable/ic_close"
+                app:tint="@color/text_on_dark_muted" />
+        </RelativeLayout>
+
+        <!-- Feature Icon Squircle -->
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_squircle_brand"
+            android:backgroundTint="@color/forest_card_inset"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:id="@+id/ivTipIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_camera"
+                app:tint="@color/peach_accent"
+                android:contentDescription="Tip Feature Icon" />
+        </FrameLayout>
+
+        <!-- Feature Title -->
+        <TextView
+            android:id="@+id/tvTipTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Multimodal Challan Vision OCR"
+            android:textColor="@color/text_on_dark_primary"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Feature Description -->
+        <TextView
+            android:id="@+id/tvTipDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan printed or handwritten Bangladesh delivery challans with Gemini &amp; Groq Vision. Quantities and unit rates are automatically extracted and verified against live market prices."
+            android:textColor="@color/text_on_dark_secondary"
+            android:textSize="13sp"
+            android:lineSpacingExtra="3dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Highlight Badge / Pro Tip Box -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_card_inset_forest"
+            android:padding="12dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_electric_bolt"
+                app:tint="@color/peach_accent"
+                android:contentDescription="Tip highlight"
+                android:layout_marginEnd="10dp" />
+
+            <TextView
+                android:id="@+id/tvTipProNote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Pro Tip: The app checks against duplicate receipt fingerprints to prevent overbilling."
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Navigation Buttons: Skip & Next -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSkipTips"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Skip"
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="16dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNextTip"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Next Tip"
+                android:textColor="@color/forest_dark"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/peach_accent"
+                app:cornerRadius="24dp"
+                android:paddingHorizontal="24dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

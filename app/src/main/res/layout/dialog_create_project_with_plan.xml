@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet_forest"
+    android:padding="22dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header Row -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_squircle_brand"
+                    android:src="@drawable/ic_construction"
+                    app:tint="@color/forest_dark"
+                    android:padding="10dp"
+                    android:contentDescription="Project Scope" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Project Scope &amp; Plan"
+                        android:textColor="@color/text_on_dark_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mandatory building scope for AI estimation"
+                        android:textColor="@color/peach_accent"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btnCloseProjectPlanModal"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Close"
+                android:padding="6dp"
+                android:src="@drawable/ic_close"
+                app:tint="@color/text_on_dark_muted" />
+        </RelativeLayout>
+
+        <!-- Section 1: Basic Identifiers -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. BASIC IDENTITY"
+            android:textColor="@color/peach_accent"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.06"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:hint="Project Code"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlanProjectCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="BD-2026"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp"
+                    android:inputType="textCapCharacters" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginStart="6dp"
+                android:hint="Project Name"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlanProjectName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="e.g. Uttara Lakeview Villa"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp"
+                    android:inputType="textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Client / General Contractor / Location"
+            app:boxStrokeColor="@color/forest_stroke"
+            app:hintTextColor="@color/peach_accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPlanClientLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Engr. Tariqul Islam • Dhaka, Bangladesh"
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="13sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Section 2: Building Scope & Structural Idea (Mandatory) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. MANDATORY BUILDING SCOPE &amp; SPECIFICATIONS"
+            android:textColor="@color/peach_accent"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.06"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="Building Type (e.g. 2-Room Duplex, 6-Floor Apartment)"
+            app:boxStrokeColor="@color/forest_stroke"
+            app:hintTextColor="@color/peach_accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPlanBuildingType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2-Room Residential Building"
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="13sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 2x2 Grid: Rooms, Wall Height, Windows, Doors -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:hint="Total Rooms"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlanTotalRooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:hint="Wall Height (ft)"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlanWallHeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="10.0"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:hint="Num Windows"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlanNumWindows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="6"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:hint="Num Doors"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPlanNumDoors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Flooring Finish Selector (Tiles vs Mosaic) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flooring Finish Option"
+            android:textColor="@color/text_on_dark_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <RadioGroup
+            android:id="@+id/rgFlooringOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+
+            <RadioButton
+                android:id="@+id/rbTiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Porcelain Tiles"
+                android:textColor="@color/text_on_dark_primary"
+                android:checked="true"
+                android:layout_marginEnd="16dp" />
+
+            <RadioButton
+                android:id="@+id/rbMosaic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Polished Mosaic"
+                android:textColor="@color/text_on_dark_primary"
+                android:layout_marginEnd="16dp" />
+
+            <RadioButton
+                android:id="@+id/rbConcrete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hardener Concrete"
+                android:textColor="@color/text_on_dark_primary" />
+        </RadioGroup>
+
+        <!-- Scope & Remarks Details -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:hint="Scope Details (Thai glass specs, electrical points, plaster)"
+            app:boxStrokeColor="@color/forest_stroke"
+            app:hintTextColor="@color/peach_accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPlanAdditionalScope"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="3"
+                android:text="2-Room building with 10ft walls, 6 Thai aluminum sliding windows, 4 flush doors, 24x24 porcelain floor tiles, concealed electrical wiring, and PPR sanitary pipe fitting."
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="12sp"
+                android:gravity="top|start" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Action Buttons: Cancel and Submit -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelProjectPlan"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="Cancel"
+                android:textColor="@color/text_on_dark_secondary"
+                android:textStyle="bold"
+                app:strokeColor="@color/forest_stroke"
+                app:cornerRadius="25dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmitProjectPlan"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="2"
+                android:layout_marginStart="6dp"
+                android:text="Save Project &amp; Scope"
+                android:textColor="@color/forest_dark"
+                android:textStyle="bold"
+                app:backgroundTint="@color/peach_accent"
+                app:cornerRadius="25dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

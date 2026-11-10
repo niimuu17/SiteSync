@@ -138,7 +138,8 @@ public class CreateTaskBottomSheetDialog extends BottomSheetDialogFragment {
                 "Safety & Compliance Lead"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                requireContext(), android.R.layout.simple_spinner_dropdown_item, members);
+                requireContext(), R.layout.item_spinner_task_status, members);
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         binding.spinnerAssignee.setAdapter(adapter);
     }
 

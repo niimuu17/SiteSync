@@ -67,7 +67,7 @@ public class SiteSyncFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "FCM Message Received from: " + remoteMessage.getFrom());
 
-        String title = "🚨 CRITICAL JOBSITE HAZARD";
+        String title = "CRITICAL JOBSITE HAZARD";
         String body = "Evacuate danger zone immediately.";
         String hazardType = "GENERAL_SAFETY";
 

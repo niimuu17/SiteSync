@@ -1,615 +1,608 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/warm_ash_base"
-    android:clipToPadding="false"
-    android:paddingBottom="100dp"
-    android:fillViewport="true">
+    android:background="@color/warm_canvas_bg">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/progressNestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingBottom="120dp">
 
-        <!-- ============================================================= -->
-        <!-- CLEAN TITLE HEADER                                            -->
-        <!-- ============================================================= -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp">
+            android:paddingHorizontal="16dp"
+            android:paddingTop="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Site Progress"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Metro Central Tower • Live Status"
-                android:textColor="@color/text_oxide_secondary"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <!-- ============================================================= -->
-        <!-- SECTION A: Progress Tracking & Metrics Card                   -->
-        <!-- ============================================================= -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="18dp"
-            android:layout_marginBottom="16dp">
-
-            <!-- Card Header: Title & Action Triggers -->
+            <!-- Section Header -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
-
-                <TextView
-                    android:id="@+id/tvWorkProgressTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:text="Overall Progress"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/btnProgressCalendar"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_calendar_toggle"
-                        app:tint="@color/oxide_blue_primary"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Calendar Milestone"
-                        android:layout_marginEnd="6dp" />
-
-                    <ImageView
-                        android:id="@+id/btnProgressAnalytics"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_chart_toggle"
-                        app:tint="@color/oxide_blue_primary"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Analytics S-Curve" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <!-- Central Percentage Readout (40sp bold Oxide Blue) & Trend Indicator -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="bottom"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:id="@+id/tvProgressPercent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="68%"
-                    android:textColor="@color/oxide_blue_primary"
-                    android:textSize="44sp"
-                    android:textStyle="bold"
-                    android:includeFontPadding="false" />
-
-                <TextView
-                    android:id="@+id/tvProgressTrend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" +2.23% this week"
-                    android:textColor="@color/color_trend_green"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginBottom="8dp" />
-            </LinearLayout>
-
-            <!-- Horizontal Hatched Safety Progress Bar (Hazard Stripes) -->
-            <com.example.sitesync.ui.custom.HatchedProgressBar
-                android:id="@+id/hatchedProgressBar"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginBottom="14dp"
-                app:barProgress="68"
-                app:barStripeColor="@color/brand_amber"
-                app:barTrackColor="@color/warm_ash_surface"
-                app:delayMarkerText="Delay 126" />
-
-            <!-- Schedule Info Row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_alignParentStart="true">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start: 11/02/2026"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Due: 23/03/2026"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="12sp"
+                        android:text="SITE PROGRESS &amp; AUDIT"
+                        android:textColor="@color/forest_muted"
+                        android:textSize="11sp"
                         android:textStyle="bold"
-                        android:layout_marginTop="2dp" />
+                        android:letterSpacing="0.08" />
+
+                    <TextView
+                        android:id="@+id/tvProgressProjectHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Metro Central Tower"
+                        android:textColor="@color/forest_dark"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Status Pill Badge -->
+                <!-- Live Status Pill Badge -->
                 <TextView
-                    android:id="@+id/tvScheduleStatusBadge"
+                    android:id="@+id/tvLiveStatusBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="On Schedule"
-                    android:textColor="@color/text_oxide_primary"
+                    android:text="Live Telemetry"
+                    android:textColor="@color/text_on_dark_primary"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- ============================================================= -->
-        <!-- SECTION A2: Cut And Fill Earthwork Telemetry Card             -->
-        <!-- ============================================================= -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="18dp"
-            android:layout_marginBottom="16dp">
-
-            <!-- Card Header: Title & Expand Action -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cut &amp; Fill"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Updated Today"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="11sp"
-                        android:layout_marginTop="2dp" />
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:background="@drawable/bg_pill_forest"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="5dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:padding="5dp"
-                    android:src="@drawable/ic_arrow_diagonal"
-                    app:tint="@color/oxide_blue_primary"
-                    android:contentDescription="Expand" />
+                    android:layout_centerVertical="true" />
             </RelativeLayout>
 
-            <!-- Candlestick Depth Gauge Elevation Chart -->
-            <com.example.sitesync.ui.views.CutAndFillChartView
-                android:id="@+id/cutAndFillChart"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
-
-            <!-- Net Cut/Fill Metric Summary -->
-            <LinearLayout
+            <!-- ============================================================= -->
+            <!-- SECTION 1: OVERALL PROGRESS & BANGLADESH CIVIL TRADE INDICES  -->
+            <!-- ============================================================= -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingTop="4dp">
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/forest_stroke"
+                app:strokeWidth="1dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Net: 224,400 cu yd"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="±0.05 ft"
-                    android:textColor="@color/text_oxide_secondary"
-                    android:textSize="11sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- ============================================================= -->
-        <!-- SECTION B: Daily Progress Submission Section                  -->
-        <!-- ============================================================= -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="18dp"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Daily Progress"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Work Summary Notes (Multiline) -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Summary"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
-
-            <EditText
-                android:id="@+id/etWorkSummaryNotes"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:gravity="top|start"
-                android:background="@drawable/bg_rounded_input"
-                android:padding="12dp"
-                android:hint="Today's work summary..."
-                android:textColor="@color/text_oxide_primary"
-                android:textColorHint="@color/text_oxide_muted"
-                android:textSize="13sp"
-                android:layout_marginBottom="14dp" />
-
-            <!-- Two-Column Work Volume / Units Completed -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
-
-                <!-- Column 1: Volume -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_marginEnd="6dp">
+                    android:padding="20dp">
 
-                    <TextView
+                    <!-- Header Row: Title & "Add/Edit Project Plan" Action Button -->
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Volume"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                        android:layout_marginBottom="12dp">
 
-                    <EditText
-                        android:id="@+id/etWorkVolume"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_rounded_input"
-                        android:padding="12dp"
-                        android:hint="e.g. 85 cu yd"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textColorHint="@color/text_oxide_muted"
-                        android:textSize="13sp"
-                        android:inputType="text"
-                        android:maxLines="1" />
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="OVERALL PROGRESS &amp; S-CURVE"
+                            android:textColor="@color/peach_accent"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.08"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true" />
 
-                <!-- Column 2: Trade Category -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="6dp">
+                        <!-- Add Project Plan Button Pill -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddProjectPlan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="34dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="Project Plan"
+                            android:textColor="@color/forest_dark"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            app:icon="@drawable/ic_straighten"
+                            app:iconTint="@color/forest_dark"
+                            app:iconSize="14dp"
+                            app:iconGravity="textStart"
+                            app:backgroundTint="@color/peach_accent"
+                            app:cornerRadius="17dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingHorizontal="10dp" />
+                    </RelativeLayout>
 
-                    <TextView
+                    <!-- Large KPI Stat Row -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Trade"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
 
-                    <EditText
-                        android:id="@+id/etTradeCategory"
+                        <TextView
+                            android:id="@+id/tvProgressPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="68%"
+                            android:textColor="@color/peach_accent"
+                            android:textSize="44sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="14dp">
+
+                            <TextView
+                                android:id="@+id/tvProgressTrend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="+2.23% this week"
+                                android:textColor="@color/badge_green_text"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:background="@drawable/bg_badge_green"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp" />
+
+                            <TextView
+                                android:id="@+id/tvScheduleStatusBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="On Schedule"
+                                android:textColor="@color/text_on_dark_secondary"
+                                android:textSize="11sp"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Horizontal Progress Bar -->
+                    <com.example.sitesync.ui.custom.HatchedProgressBar
+                        android:id="@+id/hatchedProgressBar"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_rounded_input"
-                        android:padding="12dp"
-                        android:hint="Concrete Pour"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textColorHint="@color/text_oxide_muted"
-                        android:textSize="13sp"
-                        android:inputType="text"
-                        android:maxLines="1" />
-                </LinearLayout>
-            </LinearLayout>
+                        android:layout_height="22dp"
+                        android:layout_marginBottom="16dp"
+                        app:hpbProgress="68"
+                        app:hpbTargetMilestone="85"
+                        app:hpbProgressColor="@color/peach_accent"
+                        app:hpbTrackColor="@color/forest_card_inset" />
 
-            <!-- Submit CTA -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSubmitProgressEntry"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/btn_primary_oxide"
-                app:backgroundTint="@color/oxide_blue_primary"
-                android:text="Log Progress"
-                android:textColor="@color/text_on_oxide_white"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:cornerRadius="24dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp" />
-        </LinearLayout>
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/forest_stroke_subtle"
+                        android:layout_marginBottom="14dp" />
 
-        <!-- ============================================================= -->
-        <!-- SECTION C: Geotagged Site Photo Documentation                 -->
-        <!-- ============================================================= -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="18dp"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Site Photo"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Photo Preview Box with Overlay Badge -->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@drawable/bg_rounded_input"
-                android:layout_marginBottom="12dp">
-
-                <ImageView
-                    android:id="@+id/ivSiteEvidencePreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="Photo Preview" />
-
-                <!-- Empty State Placeholder -->
-                <LinearLayout
-                    android:id="@+id/layoutPhotoPlaceholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:src="@drawable/ic_camera"
-                        app:tint="@color/oxide_blue_primary"
-                        android:contentDescription="Camera" />
-
+                    <!-- BANGLADESH CIVIL TRADE BREAKDOWN GRID (6 Trades) -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No photo captured"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="12sp"
-                        android:layout_marginTop="6dp" />
+                        android:text="BANGLADESH TRADE COMPLETION INDICES"
+                        android:textColor="@color/peach_accent"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.06"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Row 1: Civil, Thai Glass, Tiles -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <!-- Civil & Structure -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Civil &amp; Structure"
+                                android:textColor="@color/text_on_dark_muted"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tvTradeCivilPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="92%"
+                                android:textColor="@color/text_on_dark_primary"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Thai Glass & Windows -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Thai Glass"
+                                android:textColor="@color/text_on_dark_muted"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tvTradeThaiGlassPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="45%"
+                                android:textColor="@color/peach_accent"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Tiles & Flooring -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tiles &amp; Flooring"
+                                android:textColor="@color/text_on_dark_muted"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tvTradeTilesPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="30%"
+                                android:textColor="@color/peach_accent"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Row 2: Electrical, Plumbing, Plaster/Interior -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="14dp">
+
+                        <!-- Electrical & Wiring -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Electrical"
+                                android:textColor="@color/text_on_dark_muted"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tvTradeElectricPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="65%"
+                                android:textColor="@color/text_on_dark_primary"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Plumbing & Sanitary -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Plumbing &amp; Sanitary"
+                                android:textColor="@color/text_on_dark_muted"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tvTradePlumbingPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="58%"
+                                android:textColor="@color/text_on_dark_primary"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Plaster & Interior -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Plaster &amp; Interior"
+                                android:textColor="@color/text_on_dark_muted"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tvTradePlasterPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="50%"
+                                android:textColor="@color/text_on_dark_primary"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Footer: Building Plan Brief -->
+                    <TextView
+                        android:id="@+id/tvProgressPlanSummaryBrief"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Plan: 2-Room Building • 10ft Wall Height • 6 Windows • 4 Doors"
+                        android:textColor="@color/text_on_dark_muted"
+                        android:textSize="11sp"
+                        android:drawableStart="@drawable/ic_straighten"
+                        android:drawablePadding="6dp"
+                        android:drawableTint="@color/peach_accent"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <!-- Stamped GPS Badge -->
-                <TextView
-                    android:id="@+id/tvGpsStampBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|start"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/bg_bottom_nav_dock"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="GPS: 40.7128° N, 74.0060° W • Level 3"
-                    android:textColor="@color/text_on_oxide_white"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
-
-            <!-- Capture Trigger Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCaptureEvidence"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/bg_rounded_input"
-                app:backgroundTint="@color/warm_ash_surface"
-                app:strokeColor="@color/stroke_oxide_blue"
-                app:strokeWidth="1.5dp"
-                android:text="Take Photo"
-                android:textColor="@color/oxide_blue_primary"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                app:icon="@drawable/ic_camera"
-                app:iconTint="@color/oxide_blue_primary"
-                app:iconSize="18dp"
-                app:cornerRadius="14dp" />
-        </LinearLayout>
-
-        <!-- ============================================================= -->
-        <!-- SECTION D: Report Export (PDF & CSV)                          -->
-        <!-- ============================================================= -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_card_outlined"
-            android:padding="18dp">
-
+            <!-- ============================================================= -->
+            <!-- SECTION 2: SLEEK ACTION MINI CARDS (Replaces Bulky Forms)     -->
+            <!-- ============================================================= -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reports"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="15sp"
+                android:text="SITE OPERATIONS &amp; FIELD TOOLS"
+                android:textColor="@color/forest_muted"
+                android:textSize="11sp"
                 android:textStyle="bold"
+                android:letterSpacing="0.08"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Date Range Selector Pill -->
-            <TextView
+            <!-- Mini Card 1: Log Daily Progress Entry (AI LLM Evaluator) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardMiniLogProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Period"
-                android:textColor="@color/text_oxide_primary"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
-
-            <LinearLayout
-                android:id="@+id/btnSelectDateRange"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/bg_rounded_input"
-                android:gravity="center_vertical"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:layout_marginBottom="12dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginBottom="16dp">
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/forest_stroke"
+                app:strokeWidth="1dp"
+                app:rippleColor="@color/peach_alpha">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_calendar_toggle"
-                    app:tint="@color/oxide_blue_primary"
-                    android:contentDescription="Calendar" />
-
-                <TextView
-                    android:id="@+id/tvDateRangeSelected"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="10dp"
-                    android:text="01 Feb 2026 - 12 Feb 2026"
-                    android:textColor="@color/text_oxide_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Edit"
-                    android:textColor="@color/oxide_blue_light"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_squircle_brand"
+                        android:backgroundTint="@color/peach_accent">
 
-            <!-- Export Buttons (Side-by-side) -->
-            <LinearLayout
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_edit"
+                            app:tint="@color/forest_dark"
+                            android:contentDescription="Log entry icon" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Log Daily Progress Entry"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Describe today's work • AI estimates completed %"
+                            android:textColor="@color/text_on_dark_muted"
+                            android:textSize="12sp"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/peach_accent"
+                        android:contentDescription="Open log modal" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Mini Card 2: Geotagged Site Evidence Camera -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardMiniEvidenceCamera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/forest_stroke"
+                app:strokeWidth="1dp"
+                app:rippleColor="@color/peach_alpha">
 
-                <!-- Export PDF -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnExportPdf"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/btn_primary_oxide"
-                    app:backgroundTint="@color/oxide_blue_primary"
-                    android:text="Export PDF"
-                    android:textColor="@color/text_on_oxide_white"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:icon="@drawable/ic_pdf"
-                    app:iconTint="@color/text_on_oxide_white"
-                    app:iconSize="18dp"
-                    app:cornerRadius="24dp"
-                    android:layout_marginEnd="6dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
 
-                <!-- Export CSV -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnExportCsv"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_rounded_input"
-                    app:backgroundTint="@color/warm_ash_surface"
-                    app:strokeColor="@color/stroke_oxide_blue"
-                    app:strokeWidth="1.5dp"
-                    android:text="Export CSV"
-                    android:textColor="@color/oxide_blue_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:icon="@drawable/ic_table"
-                    app:iconTint="@color/oxide_blue_primary"
-                    app:iconSize="18dp"
-                    app:cornerRadius="24dp"
-                    android:layout_marginStart="6dp" />
-            </LinearLayout>
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_squircle_brand"
+                        android:backgroundTint="@color/forest_card_inset">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_camera"
+                            app:tint="@color/peach_accent"
+                            android:contentDescription="Camera icon" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Geotagged Site Evidence"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tamper-proof photos • Archived to Firebase"
+                            android:textColor="@color/text_on_dark_muted"
+                            android:textSize="12sp"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/peach_accent"
+                        android:contentDescription="Open camera modal" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Mini Card 3: Audit Trail & Report Export -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardMiniAuditExport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/forest_stroke"
+                app:strokeWidth="1dp"
+                app:rippleColor="@color/peach_alpha">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_squircle_brand"
+                        android:backgroundTint="@color/forest_card_inset">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_bar_chart"
+                            app:tint="@color/peach_accent"
+                            android:contentDescription="Report icon" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Audit Trail &amp; Report Export"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Generate certified PDF reports &amp; Excel/CSV logs"
+                            android:textColor="@color/text_on_dark_muted"
+                            android:textSize="12sp"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/peach_accent"
+                        android:contentDescription="Open export modal" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

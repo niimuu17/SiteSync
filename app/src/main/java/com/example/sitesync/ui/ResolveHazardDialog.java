@@ -85,7 +85,7 @@ public class ResolveHazardDialog extends BottomSheetDialogFragment {
                 db.pendingSyncDao().insert(sync);
 
                 HapticFeedbackUtil.confirm(requireContext());
-                Toast.makeText(requireContext(), "Hazard resolved ✓", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Hazard resolved", Toast.LENGTH_SHORT).show();
 
                 if (listener != null) {
                     listener.onHazardResolved(ticket);

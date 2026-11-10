@@ -134,7 +134,7 @@ public class FallAlertCountdownDialog extends DialogFragment {
         }
 
         HapticFeedbackUtil.heavyClick(context, null);
-        Toast.makeText(context, "🚨 RESCUE DISPATCHED: Safety Officer & First Aid Notified!", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "RESCUE DISPATCHED: Safety Officer & First Aid Notified!", Toast.LENGTH_LONG).show();
 
         // Queue high-priority safety hazard in Room DB
         Executors.newSingleThreadExecutor().execute(() -> {

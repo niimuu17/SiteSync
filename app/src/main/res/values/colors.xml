@@ -99,4 +99,50 @@
     <color name="teal_700">#0E2636</color>
     <color name="black">#FF16394F</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- ================================================================= -->
+    <!-- UKIL BHAI DESIGN SYSTEM TOKENS (Forest-Teal, Warm-Cream & Peach)   -->
+    <!-- ================================================================= -->
+
+    <!-- Background Canvas (Warm Cream / Organic Light Editorial Surface) -->
+    <color name="canvas_cream">#F4F5F0</color>
+    <color name="canvas_white">#FFFFFF</color>
+
+    <!-- Deep Forest-Teal Surfaces (Used for Cards, Hero Banners, and Drawers) -->
+    <color name="forest_surface_deep">#FF1B2E29</color>
+    <color name="forest_card_dark">#FF2B443E</color>
+    <color name="forest_pill_bg">#FF34524A</color>
+    <color name="forest_stroke">#FF3D5E56</color>
+    <color name="forest_stroke_subtle">#FF35574F</color>
+
+    <!-- Primary Accent (Soft Apricot / Warm Peach - Primary CTA, Glow & Badges) -->
+    <color name="peach_accent">#F5C29B</color>
+    <color name="peach_accent_pressed">#E8AF84</color>
+    <color name="peach_dark">#D99262</color>
+    <color name="peach_alpha">#29F5C29B</color>
+
+    <!-- Typography Tokens on Dark Forest Cards -->
+    <color name="text_on_dark_primary">#F9F5EB</color>
+    <color name="text_on_dark_secondary">#B8C9C3</color>
+    <color name="text_on_dark_muted">#89A19A</color>
+
+    <!-- Typography Tokens on Light Canvas -->
+    <color name="text_on_light_primary">#1B2E29</color>
+    <color name="text_on_light_secondary">#526B64</color>
+
+    <!-- Additional Forest & Canvas Aliases for Layout Compatibility -->
+    <color name="warm_canvas_bg">#F4F5F0</color>
+    <color name="forest_dark">#1B2E29</color>
+    <color name="forest_muted">#526B64</color>
+    <color name="forest_card_inset">#1F342F</color>
+    <color name="forest_teal_card">#2B443E</color>
+    <color name="peach_soft">#F5C29B</color>
+
+    <!-- Semantic Alerts & Hotlines -->
+    <color name="alert_coral_bg">#F9E3DF</color>
+    <color name="alert_coral_stroke">#E5B5AD</color>
+    <color name="alert_coral_text">#B9382C</color>
+
+    <color name="badge_green_bg">#D8F3DC</color>
+    <color name="badge_green_text">#1B5E20</color>
 </resources>

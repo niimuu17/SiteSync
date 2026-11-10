@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/canvas_cream">
+
+    <!-- Scrollable Content Canvas -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp">
+
+            <!-- ============================================================= -->
+            <!-- 1. TOP BAR HEADER                                             -->
+            <!-- ============================================================= -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <!-- Start: 42dp Squircle App Icon Button -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardHeaderIcon"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    app:cardCornerRadius="14dp"
+                    app:cardBackgroundColor="@color/forest_card_dark"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/forest_stroke"
+                    app:cardElevation="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:rippleColor="@color/peach_alpha">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_construction"
+                        app:tint="@color/peach_accent"
+                        android:contentDescription="Brand Symbol" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Center: Title + Subtitle Stack -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/cardHeaderIcon"
+                    android:layout_toStartOf="@id/cardHeaderAvatar"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvHeaderTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SiteSync Pro"
+                        android:textColor="@color/text_on_light_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvHeaderSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Central Command &amp; Telemetry"
+                        android:textColor="@color/text_on_light_secondary"
+                        android:textSize="12sp"
+                        android:layout_marginTop="1dp" />
+                </LinearLayout>
+
+                <!-- End: 44dp Circular Profile Avatar Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardHeaderAvatar"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:cardCornerRadius="22dp"
+                    app:cardBackgroundColor="@color/forest_surface_deep"
+                    app:strokeWidth="1.5dp"
+                    app:strokeColor="@color/forest_stroke"
+                    app:cardElevation="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:rippleColor="@color/peach_alpha">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_person"
+                        app:tint="@color/peach_accent"
+                        android:contentDescription="User Profile" />
+                </com.google.android.material.card.MaterialCardView>
+
+            </RelativeLayout>
+
+            <!-- ============================================================= -->
+            <!-- 2. HERO PAGE TITLE                                            -->
+            <!-- ============================================================= -->
+            <TextView
+                android:id="@+id/tvPageHeadline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Operations Command"
+                android:textColor="@color/text_on_light_primary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:letterSpacing="-0.01" />
+
+            <TextView
+                android:id="@+id/tvPageDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="18dp"
+                android:text="Unified industrial telemetry, sensor verification &amp; safety dispatch"
+                android:textColor="@color/text_on_light_secondary"
+                android:textSize="13sp" />
+
+            <!-- ============================================================= -->
+            <!-- 3. EMERGENCY / QUICK ACTION CAPSULE ROW                       -->
+            <!-- ============================================================= -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <!-- Capsule 1: Emergency Site Alert (Coral Tinted) -->
+                <LinearLayout
+                    android:id="@+id/btnEmergencyHotlineCapsule"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_alert_coral"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_warning_hazard"
+                        app:tint="@color/alert_coral_text"
+                        android:contentDescription="Alert Icon" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Emergency Alert"
+                            android:textColor="@color/alert_coral_text"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Instant Site Dispatch"
+                            android:textColor="@color/alert_coral_text"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Capsule 2: Safety Officer Action (Forest Teal Tinted) -->
+                <LinearLayout
+                    android:id="@+id/btnSafetyOfficerCapsule"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_forest_action"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_shield"
+                        app:tint="@color/peach_accent"
+                        android:contentDescription="Safety Icon" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Safety Lead"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sector 4 Active"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ============================================================= -->
+            <!-- 4. SPOTLIGHT HERO CARD                                        -->
+            <!-- ============================================================= -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSpotlightHero"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="24dp"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/forest_stroke"
+                app:cardElevation="1dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:rippleColor="@color/peach_alpha">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Title Row with Category Badge -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvSpotlightTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@id/tvSpotlightBadge"
+                            android:text="Core Tower Phase II"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSpotlightBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/bg_pill_forest_badge"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="CRITICAL PATH"
+                            android:textColor="@color/peach_accent"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <!-- Descriptive Subtitle -->
+                    <TextView
+                        android:id="@+id/tvSpotlightDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="18dp"
+                        android:lineSpacingExtra="3dp"
+                        android:text="Active concrete pour on Level 14 perimeter columns. Structural load telemetry verified with zero inspection anomalies."
+                        android:textColor="@color/text_on_dark_secondary"
+                        android:textSize="13sp" />
+
+                    <!-- Dual-Button Action Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Outlined Button on Left -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSpotlightOutlined"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="44dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="View Specs"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="13sp"
+                            app:cornerRadius="22dp"
+                            app:strokeColor="@color/forest_stroke"
+                            app:strokeWidth="1.2dp" />
+
+                        <!-- Solid Peach Button on Right -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSpotlightPrimary"
+                            android:layout_width="0dp"
+                            android:layout_height="44dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="Log Progress"
+                            android:textColor="@color/forest_surface_deep"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:backgroundTint="@color/peach_accent"
+                            app:cornerRadius="22dp"
+                            app:elevation="0dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ============================================================= -->
+            <!-- 5. FULL-WIDTH QUICK ACTION LIST CARDS                         -->
+            <!-- ============================================================= -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Field Utilities &amp; Capture"
+                android:textColor="@color/text_on_light_secondary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Action Card 1: Geotagged Watermark Camera -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardQuickActionWatermark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/forest_stroke"
+                app:cardElevation="1dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:rippleColor="@color/peach_alpha">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
+
+                    <!-- 40dp Icon Container with 1dp Peach Stroke -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardBackgroundColor="@color/forest_pill_bg"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/peach_accent"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_camera"
+                            app:tint="@color/peach_accent"
+                            android:contentDescription="Camera Icon" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Title & Subtitle Stack -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Geotagged Proof Camera"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Indelible GPS &amp; UTC watermark burned into bitmap"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="11sp"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <!-- End Action Micro-Pill -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_forest_badge"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="SNAP"
+                        android:textColor="@color/peach_accent"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Action Card 2: Voice Snagging Assistant -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardQuickActionVoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/forest_stroke"
+                app:cardElevation="1dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:rippleColor="@color/peach_alpha">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
+
+                    <!-- 40dp Icon Container with 1dp Peach Stroke -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardBackgroundColor="@color/forest_pill_bg"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/peach_accent"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_mic"
+                            app:tint="@color/peach_accent"
+                            android:contentDescription="Mic Icon" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Title & Subtitle Stack -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hands-Free Voice Snagging"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Glove-friendly speech-to-text issue transcription"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="11sp"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <!-- End Action Micro-Pill -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill_forest_badge"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="DICTATE"
+                        android:textColor="@color/peach_accent"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ============================================================= -->
+            <!-- 6. MODULAR 2x2 FEATURE GRID                                   -->
+            <!-- ============================================================= -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:text="Engineering Telemetry"
+                    android:textColor="@color/text_on_light_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/bg_pill_green_badge"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="ALL NOMINAL"
+                    android:textColor="@color/badge_green_text"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <!-- Grid Row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <!-- Grid Item 1: Digital Spirit Level -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardGridSpiritLevel"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="@color/forest_card_dark"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/forest_stroke"
+                    app:cardElevation="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:rippleColor="@color/peach_alpha">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/ic_construction"
+                                app:tint="@color/peach_accent"
+                                android:contentDescription="Spirit Level Icon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/bg_pill_forest_badge"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="±0.1°"
+                                android:textColor="@color/peach_accent"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Digital Spirit Level"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Rotation sensor slope &amp; 2.0% pipe grade plumb check"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="11sp"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Grid Item 2: Acoustic Noise Meter -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardGridDecibelMeter"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="@color/forest_card_dark"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/forest_stroke"
+                    app:cardElevation="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:rippleColor="@color/peach_alpha">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/ic_shield"
+                                app:tint="@color/peach_accent"
+                                android:contentDescription="Decibel Icon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/bg_pill_forest_badge"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="68 dB"
+                                android:textColor="@color/peach_accent"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Noise Exposure"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="OSHA 85 dB threshold acoustic monitoring"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="11sp"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Grid Row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Grid Item 3: Chalan & Pallet OCR -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardGridDeliveryOcr"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="@color/forest_card_dark"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/forest_stroke"
+                    app:cardElevation="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:rippleColor="@color/peach_alpha">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/ic_document"
+                                app:tint="@color/peach_accent"
+                                android:contentDescription="OCR Icon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/bg_pill_forest_badge"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="ML KIT"
+                                android:textColor="@color/peach_accent"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delivery OCR"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Instant material ticket quantity &amp; supplier ingestion"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="11sp"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Grid Item 4: Fall Detection Sensor -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardGridFallSensor"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="@color/forest_card_dark"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/forest_stroke"
+                    app:cardElevation="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:rippleColor="@color/peach_alpha">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/ic_warning_hazard"
+                                app:tint="@color/peach_accent"
+                                android:contentDescription="Fall Sensor Icon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="@drawable/bg_pill_forest_badge"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="3dp"
+                                android:text="ACTIVE"
+                                android:textColor="@color/peach_accent"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fall &amp; Impact"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="High-G vector spike &amp; immobility countdown alert"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="11sp"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ================================================================= -->
+    <!-- 7. BOTTOM FLOATING ACTION PILL (Global Primary Trigger)            -->
+    <!-- ================================================================= -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFloatingActionPill"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:paddingHorizontal="26dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Launch Site Inspection"
+        android:textColor="@color/forest_surface_deep"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/peach_accent"
+        app:cornerRadius="28dp"
+        app:elevation="6dp"
+        app:icon="@drawable/ic_add"
+        app:iconPadding="8dp"
+        app:iconTint="@color/forest_surface_deep" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

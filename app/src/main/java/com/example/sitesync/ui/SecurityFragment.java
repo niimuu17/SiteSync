@@ -93,7 +93,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
             HapticFeedbackUtil.heavyClick(requireContext(), v);
             SiteSyncFirebaseMessagingService.postCriticalNotification(
                     requireContext(),
-                    "🚨 CRITICAL JOBSITE HAZARD (FCM)",
+                    "CRITICAL JOBSITE HAZARD (FCM)",
                     "Perimeter scaffolding displacement on Level 3 East. Evacuate zone immediately.",
                     "SCAFFOLD_COLLAPSE"
             );
@@ -177,7 +177,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
                     binding.tvNoiseStatusBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
                     binding.pbDecibelLevel.setProgressTintList(ColorStateList.valueOf(
                             ContextCompat.getColor(requireContext(), R.color.status_red)));
-                    binding.tvNoisePpeWarning.setText("⚠️ Hazardous noise (>85 dB). Hearing protection required.");
+                    binding.tvNoisePpeWarning.setText("Hazardous noise (>85 dB). Hearing protection required.");
                     binding.tvNoisePpeWarning.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
                 } else {
                     binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Safe)", decibels));

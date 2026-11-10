@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/forest_card_dark"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/forest_stroke"
+    app:strokeWidth="1.5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Top Row: Avatar, Name & Trade, Status Pill -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Avatar Squircle -->
+            <FrameLayout
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/bg_squircle_brand"
+                android:layout_marginEnd="12dp">
+
+                <ImageView
+                    android:id="@+id/ivWorkerIcon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/forest_surface_deep"
+                    android:contentDescription="Worker Avatar" />
+            </FrameLayout>
+
+            <!-- Name & Trade Info -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvWorkerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Md. Rafiqul Islam"
+                    android:textColor="@color/canvas_cream"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvWorkerTrade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Steel Fixer / Rebar Binder"
+                        android:textColor="@color/peach_accent"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_badge_pill_teal"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp" />
+
+                    <TextView
+                        android:id="@+id/tvWorkerPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        tools:text="+880 1712-345678"
+                        android:textColor="@color/text_on_dark_secondary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Status Badge (when resolved) -->
+            <TextView
+                android:id="@+id/tvStatusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="APPROVED"
+                android:textColor="@color/status_green"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_badge_green"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Metadata & Timestamp Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tvRequestTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Requested: 10 mins ago"
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/tvProjectCodeTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Project: PRJ-DHAKA-101"
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Action Buttons: Approve vs Reject (visible only when PENDING) -->
+        <LinearLayout
+            android:id="@+id/layoutActionButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="12dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRejectWorker"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="Reject"
+                android:textColor="@color/color_error"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="19dp"
+                app:strokeColor="@color/color_error"
+                app:strokeWidth="1dp"
+                app:backgroundTint="@android:color/transparent"
+                android:layout_marginEnd="10dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnApproveWorker"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="Approve to Site"
+                android:textColor="@color/forest_surface_deep"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="19dp"
+                app:backgroundTint="@color/peach_accent"
+                app:icon="@drawable/ic_check_circle"
+                app:iconTint="@color/forest_surface_deep"
+                app:iconSize="16dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

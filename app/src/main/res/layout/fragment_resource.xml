@@ -1,55 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/warm_ash_base">
+    android:background="@color/canvas_cream">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="120dp"
+        android:paddingBottom="96dp"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="20dp"
+            android:paddingTop="20dp">
 
-            <!-- Dynamic Low-Stock Alert Banner -->
-            <include
-                android:id="@+id/layoutLowStockBanner"
-                layout="@layout/layout_low_stock_banner" />
-
-            <!-- Direct Delivery Chalan OCR Scanner Card -->
+            <!-- Top Editorial Site Header -->
             <LinearLayout
-                android:id="@+id/cardScanChalan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@drawable/bg_card_outlined"
-                android:padding="16dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="16dp"
-                android:clickable="true"
-                android:focusable="true">
-
-                <FrameLayout
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_badge_low"
-                    android:layout_marginEnd="12dp">
-
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_camera"
-                        app:tint="@color/oxide_blue_primary"
-                        android:contentDescription="Camera Scanner" />
-                </FrameLayout>
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -60,245 +38,422 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="QR, Barcode &amp; Chalan Scanner"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="INVENTORY &amp; DELIVERY AUDIT"
+                        android:textColor="@color/text_on_light_secondary"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.08" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Check-in/out machinery tags, pallets &amp; chalan OCR"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="12sp"
+                        android:text="Metro Central Tower"
+                        android:textColor="@color/text_on_light_primary"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
                         android:layout_marginTop="2dp" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_arrow_diagonal"
-                    app:tint="@color/oxide_blue_primary"
-                    android:contentDescription="Open Scanner" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Site A"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_pill_forest_badge"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="5dp" />
             </LinearLayout>
 
-            <!-- Inventory Section Header -->
-            <RelativeLayout
+            <!-- Hero Valuation & Inflow KPI Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/forest_stroke"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TOTAL INVENTORY VALUATION"
+                            android:textColor="@color/text_on_dark_muted"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.06" />
+
+                        <TextView
+                            android:id="@+id/tvLowStockAlertBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="All Stocks Healthy"
+                            android:textColor="@color/badge_green_text"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_badge_green"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="3dp" />
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/tvInventoryHeader"
+                        android:id="@+id/tvTotalInventoryValuation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Inventory"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="$ 0.00"
+                        android:textColor="@color/peach_accent"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="6dp" />
 
-                    <TextView
-                        android:id="@+id/tvInventoryCountBadge"
-                        android:layout_width="wrap_content"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/forest_stroke_subtle"
+                        android:layout_marginVertical="12dp" />
+
+                    <!-- Inflow vs Outflow Ratio -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="(4 items)"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvTotalPurchases"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Delivered: $ 0"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvTotalDispatches"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Site Pouring: $ 0"
+                            android:textColor="@color/text_on_dark_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Quick Action Pills Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnScanChallanOcr"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="Scan Challan (AI OCR)"
+                    android:textColor="@color/forest_surface_deep"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_camera"
+                    app:iconSize="16dp"
+                    app:iconTint="@color/forest_surface_deep"
+                    app:iconGravity="textStart"
+                    app:backgroundTint="@color/peach_accent"
+                    app:cornerRadius="26dp"
+                    app:elevation="0dp"
+                    android:textAllCaps="false" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecordStockOut"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:text="Record Stock Out"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_stock_out"
+                    app:iconSize="16dp"
+                    app:iconTint="@color/peach_accent"
+                    app:iconGravity="textStart"
+                    app:backgroundTint="@color/forest_card_dark"
+                    app:strokeColor="@color/forest_stroke"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="26dp"
+                    app:elevation="0dp"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <!-- Action Buttons Row: Required Items (Chat-Extracted) & Export to Excel -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRequiredMaterialsMenu"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="Required Items"
+                    android:textColor="@color/forest_dark"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_checklist"
+                    app:iconTint="@color/forest_dark"
+                    app:iconSize="16dp"
+                    app:strokeColor="@color/forest_dark"
+                    app:strokeWidth="1.5dp"
+                    app:cornerRadius="24dp"
+                    android:textAllCaps="false" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExportExcelInventory"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:text="Export to Excel"
+                    android:textColor="@color/forest_dark"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:icon="@drawable/ic_document"
+                    app:iconTint="@color/forest_dark"
+                    app:iconSize="16dp"
+                    app:strokeColor="@color/forest_dark"
+                    app:strokeWidth="1.5dp"
+                    app:cornerRadius="24dp"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <!-- Analytical Material Valuation Card with Left Pie & Right Legend -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/forest_stroke"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Header Row: Title + "View All" Button -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="STOCK VALUATION BREAKDOWN"
+                                android:textColor="@color/text_on_dark_muted"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.08" />
+
+                            <TextView
+                                android:id="@+id/tvPieChartSubtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Top Materials by Value"
+                                android:textColor="@color/peach_accent"
+                                android:textSize="12sp"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+
+                        <!-- View All Bar Chart Action -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnViewAllStocksChart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:paddingHorizontal="14dp"
+                            android:paddingVertical="0dp"
+                            android:text="View All"
+                            android:textColor="@color/forest_surface_deep"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:icon="@drawable/ic_bar_chart"
+                            app:iconSize="14dp"
+                            app:iconTint="@color/forest_surface_deep"
+                            app:iconGravity="textStart"
+                            app:backgroundTint="@color/peach_accent"
+                            app:cornerRadius="18dp"
+                            app:elevation="0dp"
+                            android:textAllCaps="false" />
+                    </LinearLayout>
+
+                    <!-- Horizontal Split: Pie Chart (Left) + Legend (Right) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- Pie Chart Container (Left) -->
+                        <FrameLayout
+                            android:layout_width="130dp"
+                            android:layout_height="130dp">
+
+                            <com.github.mikephil.charting.charts.PieChart
+                                android:id="@+id/pieChartValuation"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+                        </FrameLayout>
+
+                        <!-- Legend Container (Right) -->
+                        <LinearLayout
+                            android:id="@+id/layoutPieLegend"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="14dp"
+                            android:orientation="vertical">
+                            <!-- Populated dynamically with color pill + product name + value -->
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Active Stock Items Section Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
 
                 <TextView
-                    android:id="@+id/btnAddInventoryItem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Site Material Stocks"
+                    android:textColor="@color/text_on_light_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTotalItemsTracked"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="+ Add Item"
-                    android:textColor="@color/oxide_blue_light"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:padding="4dp"
-                    android:background="?attr/selectableItemBackgroundBorderless" />
-            </RelativeLayout>
+                    android:text="5 Materials"
+                    android:textColor="@color/text_on_light_secondary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            <!-- Inventory Cards RecyclerView -->
+            <!-- Active Materials Recycler View -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvInventory"
+                android:id="@+id/rvActiveStockItems"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="24dp"
+                tools:listitem="@layout/item_inventory_stock_card" />
 
-            <!-- Recent Consumption Log Card -->
+            <!-- Site Movement Ledger Section Header & Filter Chips -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/bg_card_outlined"
-                android:padding="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="12dp">
 
-                <!-- Header -->
-                <RelativeLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Movement Ledger"
+                    android:textColor="@color/text_on_light_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Filter Chips Row -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupLedgerFilter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp">
+                    app:singleSelection="true">
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipFilterAll"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:text="Recent Usage"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:checked="true"
+                        android:text="All Movements"
+                        app:chipCornerRadius="16dp"
+                        app:chipBackgroundColor="@color/forest_card_dark"
+                        android:textColor="@color/text_on_dark_primary" />
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipFilterStockIn"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:text="7 DAYS"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:background="@drawable/bg_pill_inactive"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingTop="3dp"
-                        android:paddingBottom="3dp" />
-                </RelativeLayout>
+                        android:text="Stock IN (Challans)"
+                        app:chipCornerRadius="16dp"
+                        app:chipBackgroundColor="@color/forest_card_dark"
+                        android:textColor="@color/text_on_dark_primary" />
 
-                <!-- Log Row 1 -->
-                <LinearLayout
-                    android:id="@+id/rowLog1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
-
-                    <TextView
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipFilterStockOut"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Today 09:30 AM"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="12dp"
-                        android:text="-45 Bags Cement"
-                        android:textColor="@color/status_red"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="By: Marco D."
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gauge_track_ash"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp" />
-
-                <!-- Log Row 2 -->
-                <LinearLayout
-                    android:id="@+id/rowLog2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Yesterday 03:15 PM"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="12dp"
-                        android:text="-3.2 Tons Rebar"
-                        android:textColor="@color/status_red"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="By: Elena R."
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gauge_track_ash"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp" />
-
-                <!-- Log Row 3 -->
-                <LinearLayout
-                    android:id="@+id/rowLog3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingTop="6dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="06 Nov 11:20 AM"
-                        android:textColor="@color/text_oxide_secondary"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="12dp"
-                        android:text="-120 cft Sand"
-                        android:textColor="@color/status_red"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="By: Crew B"
-                        android:textColor="@color/text_oxide_primary"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:text="Stock OUT (Dispatches)"
+                        app:chipCornerRadius="16dp"
+                        app:chipBackgroundColor="@color/forest_card_dark"
+                        android:textColor="@color/text_on_dark_primary" />
+                </com.google.android.material.chip.ChipGroup>
             </LinearLayout>
+
+            <!-- Movement Ledger Recycler View -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMovementLedger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_stock_ledger_card" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

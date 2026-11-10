@@ -136,7 +136,7 @@ public class MatchAngleCameraDialog extends DialogFragment {
                         public void onSuccess(File capturedFile, Uri fileUri) {
                             if (!isAdded()) return;
                             HapticFeedbackUtil.scanSuccess(requireContext());
-                            Toast.makeText(requireContext(), "Photo verified & forensic watermark burned ✓", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), "Photo verified & forensic watermark burned", Toast.LENGTH_SHORT).show();
                             dismissAllowingStateLoss();
                             if (callback != null) {
                                 callback.onPhotoVerified(capturedFile, fileUri);

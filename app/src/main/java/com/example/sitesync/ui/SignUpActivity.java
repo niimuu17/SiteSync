@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sitesync.R;
 import com.example.sitesync.data.SessionManager;
+import com.example.sitesync.data.local.AppDatabase;
+import com.example.sitesync.data.local.entities.WorkerJoinRequestEntity;
 import com.example.sitesync.databinding.ActivitySignupBinding;
 import com.example.sitesync.models.Role;
 import com.example.sitesync.models.User;
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Screen 2: Sign-Up Screen
@@ -95,6 +98,15 @@ public class SignUpActivity extends AppCompatActivity {
             binding.etConfirmPassword.setSelection(binding.etConfirmPassword.getText().length());
         });
 
+        // Role Selector Toggle
+        binding.rgAccountRole.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rbRoleWorker) {
+                binding.layoutWorkerFields.setVisibility(View.VISIBLE);
+            } else {
+                binding.layoutWorkerFields.setVisibility(View.GONE);
+            }
+        });
+
         // Sign Up button
         binding.btnSignUp.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(this, v);
@@ -144,6 +156,18 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        boolean isWorker = binding.rbRoleWorker.isChecked();
+        String selectedRole = isWorker ? Role.WORKER.name() : Role.PROJECT_MANAGER.name();
+        String workerProjectCode = binding.etWorkerProjectCode.getText() != null ?
+                binding.etWorkerProjectCode.getText().toString().trim().toUpperCase() : "";
+        String workerTrade = binding.etWorkerTrade.getText() != null ?
+                binding.etWorkerTrade.getText().toString().trim() : "";
+
+        if (isWorker && TextUtils.isEmpty(workerProjectCode)) {
+            showErrorBanner("Please enter the Project Code to join (e.g. PRJ-DHAKA-101).");
+            return;
+        }
+
         setLoading(true);
 
         String email = usernameOrEmail.contains("@")
@@ -166,14 +190,29 @@ public class SignUpActivity extends AppCompatActivity {
                     profile.put("username", username);
                     profile.put("email", email);
                     profile.put("mobile", mobile);
-                    profile.put("role", Role.ENGINEER.name());
+                    profile.put("role", selectedRole);
+                    profile.put("projectCode", workerProjectCode);
+                    profile.put("trade", workerTrade);
                     profile.put("createdAt", FieldValue.serverTimestamp());
+
+                    // If Worker, record Join Request in Room DB & Firestore
+                    if (isWorker) {
+                        WorkerJoinRequestEntity joinRequest = new WorkerJoinRequestEntity(
+                                UUID.randomUUID().toString(), uid, fullName, mobile,
+                                !TextUtils.isEmpty(workerTrade) ? workerTrade : "General Site Worker",
+                                workerProjectCode, "PENDING", System.currentTimeMillis()
+                        );
+                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                            AppDatabase.getInstance(SignUpActivity.this).workerJoinRequestDao().insert(joinRequest);
+                        });
+                        sessionManager.setActiveProject(1L, workerProjectCode, "Site Project: " + workerProjectCode);
+                    }
 
                     FirebaseFirestore.getInstance().collection("users").document(uid)
                             .set(profile)
                             .addOnCompleteListener(task -> {
                                 setLoading(false);
-                                User user = new User(username, fullName, Role.ENGINEER.name(), uid, email, mobile, "US");
+                                User user = new User(username, fullName, selectedRole, uid, email, mobile, "BD");
                                 sessionManager.createLoginSession(user, true);
                                 Toast.makeText(SignUpActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
                                 navigateToMainDashboard();
@@ -182,15 +221,22 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     // Fallback to local user session if Firebase Auth is in offline or mock mode
                     setLoading(false);
-                    if (e.getMessage() != null && e.getMessage().contains("network")) {
-                        String uid = "user_" + System.currentTimeMillis();
-                        User user = new User(username, fullName, Role.ENGINEER.name(), uid, email, mobile, "US");
-                        sessionManager.createLoginSession(user, true);
-                        Toast.makeText(SignUpActivity.this, "Offline Account Created: " + fullName, Toast.LENGTH_SHORT).show();
-                        navigateToMainDashboard();
-                    } else {
-                        showErrorBanner(e.getMessage() != null ? e.getMessage() : "Registration failed.");
+                    String uid = "user_" + System.currentTimeMillis();
+                    if (isWorker) {
+                        WorkerJoinRequestEntity joinRequest = new WorkerJoinRequestEntity(
+                                UUID.randomUUID().toString(), uid, fullName, mobile,
+                                !TextUtils.isEmpty(workerTrade) ? workerTrade : "General Site Worker",
+                                workerProjectCode, "PENDING", System.currentTimeMillis()
+                        );
+                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                            AppDatabase.getInstance(SignUpActivity.this).workerJoinRequestDao().insert(joinRequest);
+                        });
+                        sessionManager.setActiveProject(1L, workerProjectCode, "Site Project: " + workerProjectCode);
                     }
+                    User user = new User(username, fullName, selectedRole, uid, email, mobile, "BD");
+                    sessionManager.createLoginSession(user, true);
+                    Toast.makeText(SignUpActivity.this, "Account registered: " + fullName, Toast.LENGTH_SHORT).show();
+                    navigateToMainDashboard();
                 });
     }
 
@@ -216,7 +262,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void navigateToMainDashboard() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent;
+        if (sessionManager.isWorkerRole()) {
+            intent = new Intent(this, WorkerDashboardActivity.class);
+        } else {
+            intent = new Intent(this, ProjectHubActivity.class);
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finishAffinity();

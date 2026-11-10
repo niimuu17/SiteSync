@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/warm_ash_base"
+    android:background="@color/canvas_cream"
+    android:clipToPadding="false"
+    android:paddingBottom="120dp"
     android:fillViewport="true">
 
     <LinearLayout
@@ -13,7 +15,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
-        android:paddingBottom="100dp">
+        android:paddingBottom="16dp">
 
         <!-- Top Section Header -->
         <TextView
@@ -52,19 +54,26 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <ImageView
-                        android:id="@+id/ivNoiseIcon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_mic"
-                        app:tint="@color/oxide_blue_primary"
-                        android:layout_marginEnd="8dp" />
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_squircle_brand"
+                        android:layout_marginEnd="10dp">
+
+                        <ImageView
+                            android:id="@+id/ivNoiseIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_mic"
+                            app:tint="@color/forest_surface_deep" />
+                    </FrameLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Noise Level"
-                        android:textColor="@color/text_oxide_primary"
+                        android:text="Acoustic Decibel Meter"
+                        android:textColor="@color/forest_surface_deep"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -74,23 +83,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     android:text="68 dB (Safe)"
                     android:textColor="#065F46"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     android:background="@drawable/bg_badge_optimal"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp" />
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp" />
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/tvNoisePpeWarning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Normal noise. Hearing protection required above 85 dB."
-                android:textColor="@color/text_oxide_secondary"
+                android:text="Nominal background sound level. Hearing protection mandatory above 85 dB."
+                android:textColor="@color/forest_muted"
                 android:textSize="12sp"
                 android:layout_marginBottom="10dp" />
 
@@ -128,18 +136,26 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:text="🚨"
-                        android:textSize="14sp"
-                        android:layout_marginEnd="8dp" />
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_pill_alert_coral"
+                        android:layout_marginEnd="10dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_warning_hazard"
+                            app:tint="@color/alert_coral_text"
+                            android:contentDescription="Fall Impact Sensor" />
+                    </FrameLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fall &amp; Impact Sensor"
-                        android:textColor="@color/text_oxide_primary"
+                        android:text="Fall &amp; Impact Accelerometer"
+                        android:textColor="@color/forest_surface_deep"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -174,26 +190,38 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSimulateFallTest"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="44dp"
                     android:layout_weight="1"
-                    android:text="Simulate Fall Event"
+                    android:text="Simulate Fall"
                     android:textColor="@color/status_red"
                     android:textSize="12sp"
-                    android:background="@drawable/btn_secondary_outline"
+                    android:textStyle="bold"
+                    app:strokeColor="@color/status_red"
+                    app:strokeWidth="1.5dp"
+                    app:cornerRadius="22dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
                     android:layout_marginEnd="6dp" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnTestFcmPush"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="44dp"
                     android:layout_weight="1"
                     android:text="Test Hazard Push"
                     android:textColor="@color/oxide_blue_primary"
                     android:textSize="12sp"
-                    android:background="@drawable/btn_secondary_outline"
+                    android:textStyle="bold"
+                    app:strokeColor="@color/stroke_oxide_blue"
+                    app:strokeWidth="1.5dp"
+                    app:cornerRadius="22dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
                     android:layout_marginStart="6dp" />
             </LinearLayout>
         </LinearLayout>
@@ -220,18 +248,26 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:text="📐"
-                        android:textSize="14sp"
-                        android:layout_marginEnd="8dp" />
+                    <FrameLayout
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_squircle_brand"
+                        android:layout_marginEnd="10dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_construction"
+                            app:tint="@color/forest_surface_deep"
+                            android:contentDescription="Digital Spirit Level" />
+                    </FrameLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Digital Spirit Level &amp; Inclinometer"
-                        android:textColor="@color/text_oxide_primary"
+                        android:textColor="@color/forest_surface_deep"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -259,15 +295,21 @@
                 android:textSize="12sp"
                 android:layout_marginBottom="10dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnOpenSpiritLevel"
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:text="📐  OPEN DIGITAL SPIRIT LEVEL"
-                android:textColor="#FFFFFF"
+                android:layout_height="48dp"
+                android:text="Open Digital Spirit Level"
+                android:textColor="@color/text_on_oxide_white"
                 android:textStyle="bold"
                 android:textSize="13sp"
-                android:background="@drawable/btn_primary_oxide" />
+                app:icon="@drawable/ic_construction"
+                app:iconTint="@color/text_on_oxide_white"
+                app:iconGravity="textStart"
+                app:backgroundTint="@color/oxide_blue_primary"
+                app:cornerRadius="24dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp" />
         </LinearLayout>
 
         <!-- 2. Site Hazard & Safety Ticketing Feed Header -->
@@ -408,10 +450,11 @@
                 android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <!-- 3. Offline Cache & Cloud Sync Telemetry Card -->
+        <!-- 3. Offline Cache & Cloud Sync Telemetry Card (Hidden per user requirement) -->
         <include
             android:id="@+id/incSyncTelemetry"
-            layout="@layout/layout_sync_telemetry" />
+            layout="@layout/layout_sync_telemetry"
+            android:visibility="gone" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

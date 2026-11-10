@@ -214,7 +214,9 @@ public class LoginActivity extends AppCompatActivity {
         if ("sitesync123".equals(password) || "password".equals(password) || "123456".equals(password)) {
             setLoading(false);
             User demoUser;
-            if (credential.contains("manager")) {
+            if (credential.contains("worker")) {
+                demoUser = new User("worker_rafiq", "Md. Rafiqul Islam", Role.WORKER.name(), "DEMO-TOKEN", "rafiq@sitesync.io", "+880 1712-345678", "BD");
+            } else if (credential.contains("manager")) {
                 demoUser = new User("manager_1", "Marcus Vance", Role.PROJECT_MANAGER.name(), "DEMO-TOKEN", "marcus@sitesync.com", "+1-555-0101", "US");
             } else if (credential.contains("supervisor")) {
                 demoUser = new User("super_1", "Alex Chen", Role.SITE_SUPERVISOR.name(), "DEMO-TOKEN", "alex@sitesync.com", "+1-555-0102", "US");
@@ -257,7 +259,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void navigateToMainDashboard() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent;
+        if (sessionManager.isWorkerRole()) {
+            intent = new Intent(this, WorkerDashboardActivity.class);
+        } else {
+            intent = new Intent(this, ProjectHubActivity.class);
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

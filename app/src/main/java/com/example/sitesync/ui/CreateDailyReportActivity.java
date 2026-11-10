@@ -13,13 +13,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import androidx.core.content.FileProvider;
 import com.example.sitesync.R;
 import com.example.sitesync.data.DailyReportRepository;
 import com.example.sitesync.data.SessionManager;
 import com.example.sitesync.databinding.ActivityCreateDailyReportBinding;
+import com.example.sitesync.hardware.ChallanOcrVisionClient;
 import com.example.sitesync.hardware.MatchAngleCameraDialog;
-import com.example.sitesync.hardware.TicketScannerDialog;
-import com.example.sitesync.hardware.TicketScannerManager;
 import com.example.sitesync.hardware.VoiceDictationManager;
 import com.example.sitesync.models.DailySiteReport;
 import com.example.sitesync.models.User;
@@ -47,6 +49,21 @@ public class CreateDailyReportActivity extends AppCompatActivity {
     private Uri selectedPhotoUri = null;
 
     private VoiceDictationManager voiceDictationManager;
+
+    private Uri challanCaptureUri = null;
+    private final ActivityResultLauncher<Uri> takeChallanLauncher =
+            registerForActivityResult(new ActivityResultContracts.TakePicture(), success -> {
+                if (success && challanCaptureUri != null) {
+                    processTicketUri(challanCaptureUri);
+                }
+            });
+
+    private final ActivityResultLauncher<String> pickChallanLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    processTicketUri(uri);
+                }
+            });
 
     private final ActivityResultLauncher<String> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
@@ -186,18 +203,83 @@ public class CreateDailyReportActivity extends AppCompatActivity {
     }
 
     private void launchTicketScanner() {
-        TicketScannerDialog dialog = TicketScannerDialog.newInstance();
-        dialog.setOnTicketParsedListener(ticket -> {
-            // Auto-populate material fields
-            String current = binding.etMaterialsUsed.getText() != null ? binding.etMaterialsUsed.getText().toString().trim() : "";
-            String ticketSummary = String.format("%s (%s, Slump: %s, Supplier: %s)",
-                    ticket.mixId, ticket.quantity, ticket.slump, ticket.supplierOrSerial);
+        String[] options = {
+                "Take Photo of Challan / Ticket",
+                "Choose from Gallery",
+                "Simulate Ready-Mix Delivery Ticket"
+        };
 
-            String updated = current.isEmpty() ? ticketSummary : current + "\n• " + ticketSummary;
-            binding.etMaterialsUsed.setText(updated);
-            Toast.makeText(this, "Delivery ticket data auto-populated!", Toast.LENGTH_SHORT).show();
+        new AlertDialog.Builder(this)
+                .setTitle("Delivery Ticket & Challan Scanner")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        try {
+                            File photoFile = File.createTempFile("ticket_", ".jpg", getCacheDir());
+                            challanCaptureUri = FileProvider.getUriForFile(
+                                    this,
+                                    getPackageName() + ".fileprovider",
+                                    photoFile
+                            );
+                            takeChallanLauncher.launch(challanCaptureUri);
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Could not open camera: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (which == 1) {
+                        pickChallanLauncher.launch("image/*");
+                    } else {
+                        appendParsedMaterialText("Ready-Mix Concrete C30 (6.0 M3, Slump: 120mm, Supplier: Meghna Ready-Mix)");
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void processTicketUri(Uri uri) {
+        ProgressDialog progress = new ProgressDialog(this);
+        progress.setMessage("Parsing Delivery Ticket with AI Vision...");
+        progress.setCancelable(false);
+        progress.show();
+
+        ChallanOcrVisionClient client = new ChallanOcrVisionClient(this);
+        client.processChallanUri(uri, new ChallanOcrVisionClient.OnChallanParsedListener() {
+            @Override
+            public void onSuccess(ChallanOcrVisionClient.ParsedChallan challan) {
+                if (progress.isShowing()) progress.dismiss();
+                if (!challan.isValidReceipt || challan.items == null || challan.items.isEmpty()) {
+                    HapticFeedbackUtil.errorWarning(CreateDailyReportActivity.this);
+                    String msg = challan.rejectionReason != null && !challan.rejectionReason.isEmpty() ?
+                            challan.rejectionReason : "The scanned image does not appear to be a delivery challan or materials ticket.";
+                    new AlertDialog.Builder(CreateDailyReportActivity.this)
+                            .setTitle("Not a Delivery Ticket / Challan")
+                            .setMessage(msg)
+                            .setPositiveButton("Try Again", (d, w) -> pickChallanLauncher.launch("image/*"))
+                            .setNegativeButton("Dismiss", null)
+                            .show();
+                    return;
+                }
+                StringBuilder sb = new StringBuilder();
+                for (ChallanOcrVisionClient.ChallanItem item : challan.items) {
+                    if (sb.length() > 0) sb.append("\n");
+                    sb.append(String.format(Locale.US, "%s (%.1f %s, Supplier: %s)",
+                            item.materialName, item.quantity, item.unit,
+                            challan.supplierName != null ? challan.supplierName : "Direct"));
+                }
+                appendParsedMaterialText(sb.toString());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                if (progress.isShowing()) progress.dismiss();
+                Toast.makeText(CreateDailyReportActivity.this, "OCR Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
         });
-        dialog.show(getSupportFragmentManager(), "TicketScannerDialog");
+    }
+
+    private void appendParsedMaterialText(String summary) {
+        String current = binding.etMaterialsUsed.getText() != null ? binding.etMaterialsUsed.getText().toString().trim() : "";
+        String updated = current.isEmpty() ? summary : current + "\n• " + summary;
+        binding.etMaterialsUsed.setText(updated);
+        Toast.makeText(this, "Delivery ticket data auto-populated!", Toast.LENGTH_SHORT).show();
     }
 
     private void launchMatchAngleCamera() {

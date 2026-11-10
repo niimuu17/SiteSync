@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sitesync.R;
 import com.example.sitesync.data.DailyReportRepository;
-import com.example.sitesync.hardware.TicketScannerDialog;
+import com.example.sitesync.ui.MainActivity;
 import com.example.sitesync.hardware.VoiceDictationManager;
 import com.example.sitesync.models.DailySiteReport;
 import com.example.sitesync.models.TechnicalIssue;
@@ -85,17 +85,29 @@ public class DailyLogTabFragment extends Fragment {
 
         setupVoiceDictation();
 
-        // Scan Delivery Ticket ML Kit Integration
+        // Scan Delivery Ticket Integration
         btnScanTicketMaterials.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(requireContext(), v);
-            TicketScannerDialog dialog = TicketScannerDialog.newInstance();
-            dialog.setOnTicketParsedListener(ticket -> {
-                String existing = etDailyMaterials.getText() != null ? etDailyMaterials.getText().toString().trim() : "";
-                String scannedNote = "[DELIVERY TICKET: " + ticket.getSummary() + "]";
-                etDailyMaterials.setText(existing.isEmpty() ? scannedNote : existing + "\n" + scannedNote);
-                Toast.makeText(requireContext(), "Ticket Appended to Materials", Toast.LENGTH_SHORT).show();
-            });
-            dialog.show(getParentFragmentManager(), "TicketScannerDialog");
+            String[] options = {
+                "Simulate Verified Challan (Shah Cement & BSRM)",
+                "Open Full Inventory Dashboard"
+            };
+            new android.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Challan & Delivery Ticket")
+                    .setItems(options, (d, which) -> {
+                        if (which == 0) {
+                            String scannedNote = "[DELIVERY CHALAN: Shah Cement Special - 120 Bags, BSRM 16mm - 4.5 Ton, Supplier: Meghna Mills]";
+                            String existing = etDailyMaterials.getText() != null ? etDailyMaterials.getText().toString().trim() : "";
+                            etDailyMaterials.setText(existing.isEmpty() ? scannedNote : existing + "\n" + scannedNote);
+                            Toast.makeText(requireContext(), "Ticket Appended to Materials", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (getActivity() instanceof MainActivity) {
+                                ((MainActivity) getActivity()).selectNavigationTab(R.id.nav_resource);
+                            }
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         // Save Draft Report

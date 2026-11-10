@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99000000"
+    android:padding="24dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="@color/forest_card_dark"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:strokeColor="@color/forest_stroke"
+        app:strokeWidth="1.5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <!-- Title & Status Header -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
+
+                <ImageView
+                    android:id="@+id/ivHeaderShield"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_shield"
+                    app:tint="@color/peach_accent"
+                    android:contentDescription="Shield" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Voice Emergency Alerter"
+                    android:textColor="@color/canvas_cream"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvVoiceAlerterInstruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Speak your emergency or status (e.g. 'tin tolay agun lagse', 'scaffolding collapsed'). AI evaluates instantly."
+                android:textColor="@color/text_on_dark_secondary"
+                android:textSize="12sp"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Animated Mic Squircle Button -->
+            <FrameLayout
+                android:id="@+id/btnVoiceMicTrigger"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:background="@drawable/bg_squircle_brand"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/ivVoiceMicIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_mic"
+                    app:tint="@color/forest_surface_deep"
+                    android:contentDescription="Microphone" />
+            </FrameLayout>
+
+            <!-- Spoken Text Display Container -->
+            <TextView
+                android:id="@+id/tvSpokenTranscript"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_forest_input"
+                android:padding="14dp"
+                android:gravity="center"
+                android:text="Tap microphone to speak..."
+                android:textColor="@color/peach_accent"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+
+            <!-- Evaluation Status Spinner / Indicator -->
+            <TextView
+                android:id="@+id/tvEvaluationStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="AI Safety Classifier Ready"
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="11sp" />
+
+            <!-- Siren Mute & Cancel Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDismissVoiceAlerter"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="Close"
+                    android:textColor="@color/text_on_dark_secondary"
+                    android:textSize="13sp"
+                    app:cornerRadius="22dp"
+                    app:strokeColor="@color/forest_stroke"
+                    app:strokeWidth="1dp"
+                    android:textAllCaps="false" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSilenceSiren"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:text="Silence Siren"
+                    android:textColor="@color/canvas_cream"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="22dp"
+                    app:backgroundTint="@color/status_red"
+                    app:icon="@drawable/ic_close"
+                    app:iconSize="16dp"
+                    app:iconTint="@color/canvas_cream"
+                    android:textAllCaps="false"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

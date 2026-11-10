@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:padding="22dp">
+
+    <!-- Header: Icon, Title & Close Button -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <FrameLayout
+            android:id="@+id/iconContainer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_squircle_amber">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_construction"
+                app:tint="@color/oxide_blue_dark"
+                android:contentDescription="Project Icon" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iconContainer"
+            android:layout_toStartOf="@+id/btnCloseCreateProject"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Project"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Initialize a new site telemetry ledger"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnCloseCreateProject"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_pill_inactive"
+            android:src="@drawable/ic_cancel_circle"
+            app:tint="@color/text_oxide_primary"
+            android:contentDescription="Close" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gauge_track_ash"
+        android:layout_marginBottom="18dp" />
+
+    <!-- Project Code Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Project Code"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp" />
+
+    <EditText
+        android:id="@+id/etProjectCode"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:hint="e.g. MCT-2026"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
+        android:textSize="13sp"
+        android:paddingHorizontal="14dp"
+        android:inputType="textCapCharacters"
+        android:maxLines="1"
+        android:layout_marginBottom="14dp" />
+
+    <!-- Project Name Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Project Name"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp" />
+
+    <EditText
+        android:id="@+id/etProjectName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:hint="e.g. Metro Central Tower"
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
+        android:textSize="13sp"
+        android:paddingHorizontal="14dp"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+        android:layout_marginBottom="14dp" />
+
+    <!-- Client / Contractor Field -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Client / General Contractor"
+        android:textColor="@color/text_oxide_primary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp" />
+
+    <EditText
+        android:id="@+id/etProjectContractor"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_rounded_input"
+        android:hint="e.g. Skyline Infrastructure Ltd."
+        android:textColor="@color/text_oxide_primary"
+        android:textColorHint="@color/text_oxide_muted"
+        android:textSize="13sp"
+        android:paddingHorizontal="14dp"
+        android:inputType="textCapWords"
+        android:maxLines="1"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Action Buttons Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelCreateProject"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="@color/oxide_blue_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:strokeColor="@color/stroke_oxide_blue"
+            app:strokeWidth="1.5dp"
+            app:cornerRadius="24dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:layout_marginEnd="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmitCreateProject"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.4"
+            android:text="Create Project"
+            android:textColor="@color/text_on_oxide_white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/oxide_blue_primary"
+            app:cornerRadius="24dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+</LinearLayout>

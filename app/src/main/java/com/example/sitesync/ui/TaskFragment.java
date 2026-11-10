@@ -112,38 +112,38 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
 
         List<TaskEntity> seed = new ArrayList<>();
         seed.add(new TaskEntity(
-                "TSK-401",
-                "Rebar Clearance Inspection - Grid 4B",
-                "Check bottom steel cover before slab pour. Verify rebar chairs.",
-                "Elena Rostova (Lead Eng)",
+                "TSK-BD-501",
+                "Bending & Binding Rebar Rings (10mm Ring / Churi for Beams)",
+                "Bend 10mm deformed rebar into square stirrup rings for 2nd floor lintel and roof beams with 6-inch pitch spacing.",
+                "Habib Mistry (Lead Rod Binder)",
                 "URGENT",
                 "IN_PROGRESS",
-                now - (day / 2), // overdue
+                now - (day / 3),
                 true,
                 now - (2 * day),
                 true
         ));
 
         seed.add(new TaskEntity(
-                "TSK-402",
-                "Conduit Pulling - Floor 3 Corridors",
-                "Electrical subcontractor conduit runs and junction boxes.",
-                "ElectroCorp Crew A",
+                "TSK-BD-502",
+                "Wall Plastering (1:4 Cement Sand Ratio) - 2nd Floor Unit A",
+                "Apply 12mm thick sand cement plaster on brick masonry walls. Ensure straight spirit level plumb line finish.",
+                "Jalal Uddin (Head Raj Mistry)",
                 "MEDIUM",
                 "TODO",
-                now + (3 * day),
+                now + (2 * day),
                 true,
                 now - day,
                 true
         ));
 
         seed.add(new TaskEntity(
-                "TSK-403",
-                "Perimeter Fall Netting Verification",
-                "Inspect safety netting along North cantilever slab edge.",
-                "Safety & Compliance Lead",
-                "URGENT",
-                "TODO",
+                "TSK-BD-503",
+                "Thai Aluminum Sliding Window Fitting & Glass Sealant",
+                "Fit heavy-grade bronze Thai aluminum window frames, install 5mm tinted glass panels, and apply silicone weather sealant.",
+                "Alamgir Hossain (Thai Fabricator)",
+                "HIGH",
+                "IN_PROGRESS",
                 now + day,
                 true,
                 now - day,
@@ -151,15 +151,41 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
         ));
 
         seed.add(new TaskEntity(
-                "TSK-404",
-                "Core Column Formwork Stripping",
-                "Verify 7-day cylinder compressive strength test before strip.",
-                "Skyline Concrete Team",
-                "LOW",
+                "TSK-BD-504",
+                "Floor Porcelain Tiles Setting (600x600mm) with Grouting",
+                "Lay 24x24 inch mirror-polished porcelain floor tiles with 2mm tile leveling spacers and epoxy waterproof grout.",
+                "Sumon Mia (Master Tile Setter)",
+                "MEDIUM",
                 "REVIEW",
-                now + (5 * day),
+                now + (3 * day),
                 true,
-                now - (3 * day),
+                now - (2 * day),
+                true
+        ));
+
+        seed.add(new TaskEntity(
+                "TSK-BD-505",
+                "Concealed Electrical Conduit Wall Chipping & Box Fixing",
+                "Cut wall grooves for 25mm PVC electrical conduits, fix 8-module metal gang boxes at 4-foot height, and run draw wires.",
+                "Mizanur Rahman (Senior Electrician)",
+                "HIGH",
+                "TODO",
+                now + (4 * day),
+                true,
+                now - day,
+                true
+        ));
+
+        seed.add(new TaskEntity(
+                "TSK-BD-506",
+                "Roof Slab Concrete Water Ponding & Curing Inspection",
+                "Construct 2-inch cement mortar bunds around roof slab perimeter and maintain 14 continuous days of clean water ponding.",
+                "Rafiqul Islam (Site Supervisor)",
+                "LOW",
+                "COMPLETED",
+                now - day,
+                true,
+                now - (7 * day),
                 true
         ));
 

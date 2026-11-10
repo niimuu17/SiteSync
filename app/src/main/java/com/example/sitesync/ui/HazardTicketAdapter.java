@@ -97,7 +97,7 @@ public class HazardTicketAdapter extends RecyclerView.Adapter<HazardTicketAdapte
 
             b.tvHazardCategory.setText(item.getCategory() != null ? item.getCategory().toUpperCase(Locale.ROOT) : "GENERAL HAZARD");
             b.tvHazardDescription.setText(item.getDescription());
-            b.tvHazardLocation.setText("📍 " + (item.getLocationName() != null ? item.getLocationName() : "Active Site"));
+            b.tvHazardLocation.setText(item.getLocationName() != null ? item.getLocationName() : "Active Site");
             b.tvHazardTimestamp.setText(dateFormat.format(new Date(item.getReportedAt())));
 
             // Priority badge
@@ -116,7 +116,7 @@ public class HazardTicketAdapter extends RecyclerView.Adapter<HazardTicketAdapte
 
             boolean isResolved = "RESOLVED".equalsIgnoreCase(item.getStatus());
             if (isResolved) {
-                b.tvHazardStatus.setText("Resolved ✓");
+                b.tvHazardStatus.setText("Resolved");
                 b.tvHazardStatus.setTextColor(ContextCompat.getColor(context, R.color.status_green));
                 b.btnResolveHazard.setVisibility(View.GONE);
                 b.tvResolutionNote.setVisibility(View.VISIBLE);

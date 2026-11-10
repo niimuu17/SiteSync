@@ -108,7 +108,8 @@ public class ReportHazardBottomSheetDialog extends BottomSheetDialogFragment {
                 "Heavy Equipment Clearance",
                 "General Housekeeping"
         };
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), R.layout.item_spinner_task_status, categories);
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         binding.spinnerHazardCategory.setAdapter(adapter);
     }
 
@@ -218,8 +219,8 @@ public class ReportHazardBottomSheetDialog extends BottomSheetDialogFragment {
 
                     binding.layoutPhotoPreviewContainer.setVisibility(View.VISIBLE);
                     binding.ivHazardPhotoPreview.setImageURI(fileUri);
-                    binding.tvGpsWatermarkBadge.setText("📍 GPS Verified");
-                    binding.tvCapturePhotoLabel.setText("✓ Photo Attached");
+                    binding.tvGpsWatermarkBadge.setText("GPS Verified");
+                    binding.tvCapturePhotoLabel.setText("Photo Attached");
                     Toast.makeText(requireContext(), "Photo captured", Toast.LENGTH_SHORT).show();
                 }
 
@@ -227,7 +228,7 @@ public class ReportHazardBottomSheetDialog extends BottomSheetDialogFragment {
                 public void onError(String errorMessage) {
                     if (binding == null) return;
                     Toast.makeText(requireContext(), "Capture failed: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    binding.tvCapturePhotoLabel.setText("📷 Add Photo");
+                    binding.tvCapturePhotoLabel.setText("Add Photo Evidence");
                 }
             });
         });

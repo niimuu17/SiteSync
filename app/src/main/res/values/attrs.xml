@@ -14,6 +14,10 @@
     </declare-styleable>
 
     <declare-styleable name="HatchedProgressBar">
+        <attr name="hpbProgress" format="integer" />
+        <attr name="hpbTargetMilestone" format="integer" />
+        <attr name="hpbProgressColor" format="color" />
+        <attr name="hpbTrackColor" format="color" />
         <attr name="hatchedProgress" format="integer" />
         <attr name="hatchedColor" format="color" />
         <attr name="hazardStripeColor" format="color" />

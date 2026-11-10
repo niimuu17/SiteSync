@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.sitesync.R;
 import com.example.sitesync.data.repository.UnifiedProjectRepository;
 import com.example.sitesync.hardware.CheckLevelDialog;
-import com.example.sitesync.hardware.TicketScannerDialog;
+import com.example.sitesync.ui.MainActivity;
 import com.example.sitesync.models.ConstructionActivity;
 import com.example.sitesync.ui.custom.SemiCircleGaugeView;
 import com.example.sitesync.ui.dialogs.UpdateProgressBottomSheet;
@@ -93,11 +93,10 @@ public class WorkAreasTabFragment extends Fragment {
         // Quick Hardware Tool: Scan Delivery Ticket
         btnQuickScanTicket.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(requireContext(), v);
-            TicketScannerDialog dialog = TicketScannerDialog.newInstance();
-            dialog.setOnTicketParsedListener(ticket -> {
-                Toast.makeText(requireContext(), "Ticket Scanned: " + ticket.getSummary(), Toast.LENGTH_LONG).show();
-            });
-            dialog.show(getParentFragmentManager(), "TicketScannerDialog");
+            Toast.makeText(requireContext(), "Navigating to Delivery Challan Scanner...", Toast.LENGTH_SHORT).show();
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).selectNavigationTab(R.id.nav_resource);
+            }
         });
     }
 

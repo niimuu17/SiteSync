@@ -61,8 +61,8 @@ public class HatchedProgressBar extends View {
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
-        stripeColor = ContextCompat.getColor(context, R.color.brand_amber);
-        trackColor = ContextCompat.getColor(context, R.color.warm_ash_surface);
+        stripeColor = ContextCompat.getColor(context, R.color.peach_accent);
+        trackColor = ContextCompat.getColor(context, R.color.forest_pill_bg);
 
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HatchedProgressBar);
@@ -97,15 +97,15 @@ public class HatchedProgressBar extends View {
         trackPaint.setStyle(Paint.Style.FILL);
 
         trackStripePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        trackStripePaint.setColor(ContextCompat.getColor(context, R.color.warm_ash_surface_alt));
+        trackStripePaint.setColor(ContextCompat.getColor(context, R.color.forest_stroke_subtle));
         trackStripePaint.setStrokeWidth(dpToPx(3f));
 
         borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        borderPaint.setColor(ContextCompat.getColor(context, R.color.stroke_oxide_blue));
+        borderPaint.setColor(ContextCompat.getColor(context, R.color.forest_stroke));
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setStrokeWidth(dpToPx(1.5f));
+        borderPaint.setStrokeWidth(dpToPx(1f));
 
-        int pinColor = ContextCompat.getColor(context, R.color.oxide_blue_primary);
+        int pinColor = ContextCompat.getColor(context, R.color.peach_accent);
 
         pinPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         pinPaint.setColor(pinColor);
@@ -128,7 +128,7 @@ public class HatchedProgressBar extends View {
         Canvas patternCanvas = new Canvas(patternBitmap);
 
         Paint bgTilePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bgTilePaint.setColor(ContextCompat.getColor(getContext(), R.color.brand_amber_light));
+        bgTilePaint.setColor(ContextCompat.getColor(getContext(), R.color.peach_accent_pressed));
         patternCanvas.drawRect(0, 0, tileWidth, tileWidth, bgTilePaint);
 
         Paint tileStripePaint = new Paint(Paint.ANTI_ALIAS_FLAG);

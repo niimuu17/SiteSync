@@ -22,6 +22,9 @@ public class SessionManager {
     private static final String KEY_COUNTRY = "country";
     private static final String KEY_REMEMBER_ME = "rememberMe";
     private static final String KEY_SAVED_USERNAME = "savedUsername";
+    private static final String KEY_ACTIVE_PROJECT_ID = "activeProjectId";
+    private static final String KEY_ACTIVE_PROJECT_CODE = "activeProjectCode";
+    private static final String KEY_ACTIVE_PROJECT_NAME = "activeProjectName";
 
     private final SharedPreferences pref;
     private final SharedPreferences.Editor editor;
@@ -84,6 +87,60 @@ public class SessionManager {
         User user = new User(username, fullName, role, token, email, phone, country);
         user.setUid(uid);
         return user;
+    }
+
+    public void setActiveProject(long id, String code, String name) {
+        setActiveProject(String.valueOf(id), code, name);
+    }
+
+    public void setActiveProject(String id, String code, String name) {
+        editor.putString(KEY_ACTIVE_PROJECT_ID, id);
+        editor.putString(KEY_ACTIVE_PROJECT_CODE, code);
+        editor.putString(KEY_ACTIVE_PROJECT_NAME, name);
+        editor.apply();
+    }
+
+    public String getActiveProjectId() {
+        return pref.getString(KEY_ACTIVE_PROJECT_ID, "PRJ-MCT-2026");
+    }
+
+    public String getActiveProjectCode() {
+        return pref.getString(KEY_ACTIVE_PROJECT_CODE, "MCT-2026");
+    }
+
+    public String getActiveProjectName() {
+        return pref.getString(KEY_ACTIVE_PROJECT_NAME, "Metro Central Tower");
+    }
+
+    public boolean isWorkerRole() {
+        User user = getCurrentUser();
+        return user != null && "WORKER".equalsIgnoreCase(user.getRole());
+    }
+
+    public long getLastChatAnalysisTimestamp(String projectCode) {
+        String key = "last_chat_analysis_" + (projectCode != null ? projectCode : "default");
+        return pref.getLong(key, 0L);
+    }
+
+    public void setLastChatAnalysisTimestamp(String projectCode, long timestamp) {
+        String key = "last_chat_analysis_" + (projectCode != null ? projectCode : "default");
+        editor.putLong(key, timestamp).apply();
+    }
+
+    public String getProfilePhotoPath() {
+        return pref.getString("user_profile_photo_path", null);
+    }
+
+    public void setProfilePhotoPath(String path) {
+        editor.putString("user_profile_photo_path", path).apply();
+    }
+
+    public boolean isFloatingVoiceAlerterEnabled() {
+        return pref.getBoolean("floating_voice_alerter_enabled", false);
+    }
+
+    public void setFloatingVoiceAlerterEnabled(boolean enabled) {
+        editor.putBoolean("floating_voice_alerter_enabled", enabled).apply();
     }
 
     public void clearSession() {

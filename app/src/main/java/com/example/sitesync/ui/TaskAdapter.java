@@ -77,7 +77,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         void bind(TaskEntity task) {
             binding.tvTaskTitle.setText(task.getTitle());
             binding.tvTaskDescription.setText(task.getDescription());
-            binding.tvAssignee.setText(task.getAssignedTo() != null ? "👤 " + task.getAssignedTo() : "👤 Elena Rostova");
+            binding.tvAssignee.setText(task.getAssignedTo() != null ? task.getAssignedTo() : "Elena Rostova");
 
             // Priority Badge Styling
             String priority = task.getPriority() != null ? task.getPriority().toUpperCase() : "MEDIUM";
@@ -99,22 +99,23 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             if (due > 0) {
                 String dateStr = dateFormat.format(new Date(due));
                 if (now > due && !"COMPLETED".equals(task.getStatus())) {
-                    binding.tvDueDate.setText("📅 Overdue (" + dateStr + ")");
+                    binding.tvDueDate.setText("Overdue (" + dateStr + ")");
                     binding.tvDueDate.setTextColor(ContextCompat.getColor(context, R.color.status_red));
                 } else {
                     long diffDays = Math.max(0, (due - now) / (24L * 60 * 60 * 1000));
-                    binding.tvDueDate.setText("📅 " + dateStr + " (" + diffDays + "d left)");
+                    binding.tvDueDate.setText(dateStr + " (" + diffDays + "d left)");
                     binding.tvDueDate.setTextColor(ContextCompat.getColor(context, R.color.text_oxide_secondary));
                 }
             } else {
-                binding.tvDueDate.setText("📅 Flexible");
+                binding.tvDueDate.setText("Flexible");
                 binding.tvDueDate.setTextColor(ContextCompat.getColor(context, R.color.text_oxide_secondary));
             }
 
             // Status Spinner Setup
             String[] statuses = new String[]{"To-Do", "In-Progress", "Under Review", "Completed"};
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                    context, android.R.layout.simple_spinner_dropdown_item, statuses);
+                    context, R.layout.item_spinner_task_status, statuses);
+            spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
             binding.spinnerStatus.setAdapter(spinnerAdapter);
 
             int selectedIndex = 0;

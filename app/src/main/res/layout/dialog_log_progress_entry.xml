@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet_forest"
+    android:padding="22dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true">
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_squircle_brand"
+                    android:backgroundTint="@color/peach_accent"
+                    android:src="@drawable/ic_edit"
+                    app:tint="@color/forest_dark"
+                    android:padding="10dp"
+                    android:contentDescription="Daily Log" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Daily Progress Entry"
+                        android:textColor="@color/text_on_dark_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvLogProjectSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AI Progress &amp; Milestone Evaluator"
+                        android:textColor="@color/peach_accent"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btnCloseLogModal"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Close"
+                android:padding="6dp"
+                android:src="@drawable/ic_close"
+                app:tint="@color/text_on_dark_muted" />
+        </RelativeLayout>
+
+        <!-- Project Plan Baseline Context Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_inset_forest"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACTIVE BUILDING PLAN SCOPE"
+                android:textColor="@color/peach_accent"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <TextView
+                android:id="@+id/tvLogBaselineScope"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2-Room Building • 10ft Walls • 6 Windows • 4 Doors • Floor Tiles"
+                android:textColor="@color/text_on_dark_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="3dp" />
+        </LinearLayout>
+
+        <!-- What was done today prompt -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WHAT WAS ACCOMPLISHED TODAY?"
+            android:textColor="@color/peach_accent"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.06"
+            android:layout_marginBottom="6dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:hint="Describe site work (e.g., added Thai glass in 4 windows, laid floor tiles in master bed)"
+            app:boxStrokeColor="@color/forest_stroke"
+            app:hintTextColor="@color/peach_accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDailyLogInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="4"
+                android:text="Installed 4 Thai aluminum sliding glass windows on the north wall and completed conduit electrical wiring in bedroom 1. Laid 60 sq ft porcelain floor tiles with cement mortar."
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="13sp"
+                android:gravity="top|start" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Optional Trade Volume / Area -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:hint="Trade / Discipline"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDailyTrade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Thai Glass &amp; Finishing"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:hint="Volume / Quantity"
+                app:boxStrokeColor="@color/forest_stroke"
+                app:hintTextColor="@color/peach_accent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDailyVolume"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4 Windows, 60 SFT"
+                    android:textColor="@color/text_on_dark_primary"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- AI Evaluation Result Box (Hidden until evaluated) -->
+        <LinearLayout
+            android:id="@+id/layoutAiResultContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_inset_forest"
+            android:padding="14dp"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvAiModelBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AI QUANTITY SURVEYOR ANALYSIS"
+                android:textColor="@color/peach_accent"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <TextView
+                android:id="@+id/tvAiEstimatedOverall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Overall Progress: 72% (+4.0%)"
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/tvAiTradeBreakdownText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thai Glass: 66% • Tiles: 35% • Electrical: 50%"
+                android:textColor="@color/peach_accent"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/tvAiCompletedSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Completed 4 of 6 Thai sliding windows and bedroom 1 floor tile laying."
+                android:textColor="@color/text_on_dark_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/tvAiRemainingSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remaining: 2 windows, room 2 tiling, final coat plastering, and sanitary fittings."
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="11sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelDailyLog"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="Cancel"
+                android:textColor="@color/text_on_dark_secondary"
+                android:textStyle="bold"
+                app:strokeColor="@color/forest_stroke"
+                app:cornerRadius="25dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnalyzeAndSaveLog"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="2"
+                android:layout_marginStart="6dp"
+                android:text="Evaluate &amp; Save Entry"
+                android:textColor="@color/forest_dark"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_electric_bolt"
+                app:iconTint="@color/forest_dark"
+                app:iconGravity="textStart"
+                app:backgroundTint="@color/peach_accent"
+                app:cornerRadius="25dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

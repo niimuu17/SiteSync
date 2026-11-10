@@ -205,7 +205,7 @@ public class EmergencyConfirmationDialog extends BottomSheetDialogFragment {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_warning_amber)
-                .setContentTitle("🚨 EMERGENCY EVACUATION ALERT")
+                .setContentTitle("EMERGENCY EVACUATION ALERT")
                 .setContentText(emergencyType + " reported on site. Evacuate to assembly point.")
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)

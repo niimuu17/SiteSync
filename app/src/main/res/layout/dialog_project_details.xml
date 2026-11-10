@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_outlined"
+    android:padding="22dp">
+
+    <!-- Header: Project Icon, Title & Status -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <FrameLayout
+            android:id="@+id/iconDetailsContainer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_squircle_amber">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_construction"
+                app:tint="@color/oxide_blue_dark"
+                android:contentDescription="Project Icon" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/iconDetailsContainer"
+            android:layout_toStartOf="@+id/btnCloseProjectDetails"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvProjectDetailsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Metro Central Tower"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvProjectDetailsStatusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="ACTIVE • 68% ON SCHEDULE"
+                android:textColor="#065F46"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_badge_optimal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnCloseProjectDetails"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_pill_inactive"
+            android:src="@drawable/ic_cancel_circle"
+            app:tint="@color/text_oxide_primary"
+            android:contentDescription="Close" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gauge_track_ash"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Metadata Attributes Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_rounded_input"
+        android:padding="14dp"
+        android:layout_marginBottom="18dp">
+
+        <!-- Client -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Client"
+                android:drawableStart="@drawable/ic_business"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/text_oxide_secondary"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDetailClient"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Metro Urban Development Corp."
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- General Contractor -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Contractor"
+                android:drawableStart="@drawable/ic_construction"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/text_oxide_secondary"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDetailContractor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Skyline Infrastructure Ltd."
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Location -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Coordinates"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/text_oxide_secondary"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDetailLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="40.7128° N, 74.0060° W (NYC)"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Budget -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Budget"
+                android:drawableStart="@drawable/ic_currency_dollar"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/text_oxide_secondary"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDetailBudget"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="$42.5M USD"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Active Floor Level -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="Active Floor"
+                android:drawableStart="@drawable/ic_straighten"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/text_oxide_secondary"
+                android:gravity="center_vertical"
+                android:textColor="@color/text_oxide_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDetailFloor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Level 3 (Perimeter Concrete Columns)"
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Close Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDoneProjectDetails"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Close Details"
+        android:textColor="@color/text_on_oxide_white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/oxide_blue_primary"
+        app:cornerRadius="24dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp" />
+
+</LinearLayout>

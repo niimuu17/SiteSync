@@ -95,6 +95,27 @@ public class HapticFeedbackUtil {
     }
 
     /**
+     * Warning / Error haptic pulse for invalid scans or rejected documents.
+     */
+    public static void errorWarning(Context context) {
+        if (context == null) return;
+        try {
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null && vibrator.hasVibrator()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    long[] timings = new long[]{0, 120, 80, 160};
+                    int[] amplitudes = new int[]{0, 255, 0, 255};
+                    VibrationEffect effect = VibrationEffect.createWaveform(timings, amplitudes, -1);
+                    vibrator.vibrate(effect);
+                } else {
+                    vibrator.vibrate(new long[]{0, 120, 80, 160}, -1);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
      * Continuous vibration buzz for emergency button hold.
      */
     public static void continuousBuzz(Context context, long durationMs) {

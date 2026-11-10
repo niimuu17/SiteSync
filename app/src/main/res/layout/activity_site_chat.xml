@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/canvas_cream">
+
+    <!-- Top Action Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/forest_card_dark"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBackFromChat"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/text_on_dark_primary" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvChatProjectTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Site Crew Chat"
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/bg_badge_green"
+                    android:layout_marginEnd="6dp" />
+
+                <TextView
+                    android:id="@+id/tvChatSubtitleCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PRJ-DHAKA-101 • Live Field Room"
+                    android:textColor="@color/text_on_dark_secondary"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGenerateChatReport"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:text="AI Report"
+            android:textColor="@color/forest_surface_deep"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:cornerRadius="19dp"
+            app:backgroundTint="@color/peach_accent"
+            app:icon="@drawable/ic_flash_on"
+            app:iconTint="@color/forest_surface_deep"
+            app:iconSize="14dp"
+            android:textAllCaps="false"
+            android:layout_marginEnd="6dp" />
+
+        <ImageView
+            android:id="@+id/btnChatFilterUrgent"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_shield"
+            app:tint="@color/peach_accent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Urgent filter" />
+    </LinearLayout>
+
+    <!-- Chat Body with App Brand Watermark -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Watermark in Background -->
+        <ImageView
+            android:id="@+id/ivChatWatermark"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_sitesync_logo"
+            app:tint="@color/forest_card_inset"
+            android:alpha="0.09"
+            android:contentDescription="Watermark" />
+
+        <!-- Message RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChatMessages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp" />
+
+        <!-- Live Real-Time Typing Indicator -->
+        <LinearLayout
+            android:id="@+id/layoutTypingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bg_badge_pill_teal"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvTypingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Worker is typing..."
+                android:textColor="@color/peach_accent"
+                android:textSize="11sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Bottom Input Dock -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/forest_card_dark"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp">
+
+        <!-- Attach Photo Button -->
+        <ImageButton
+            android:id="@+id/btnAttachPhoto"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_pill_forest_action"
+            android:src="@drawable/ic_camera"
+            app:tint="@color/peach_accent"
+            android:contentDescription="Attach Photo" />
+
+        <!-- Voice-to-Text Button -->
+        <ImageButton
+            android:id="@+id/btnVoiceToText"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_pill_forest_action"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/peach_accent"
+            android:contentDescription="Voice to text" />
+
+        <!-- Toggle Urgent Flag -->
+        <ImageButton
+            android:id="@+id/btnToggleUrgent"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_pill_forest_action"
+            android:src="@drawable/ic_warning_hazard"
+            app:tint="@color/text_on_dark_secondary"
+            android:contentDescription="Toggle Urgent" />
+
+        <EditText
+            android:id="@+id/etChatMessageInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/bg_forest_input"
+            android:hint="Type site update or speak..."
+            android:textColorHint="@color/text_on_dark_muted"
+            android:textColor="@color/text_on_dark_primary"
+            android:textSize="13sp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="9dp"
+            android:maxLines="3" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnSendChatMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabCustomSize="40dp"
+            app:elevation="0dp"
+            app:backgroundTint="@color/peach_accent"
+            app:tint="@color/forest_surface_deep"
+            android:src="@drawable/ic_send"
+            android:contentDescription="Send" />
+    </LinearLayout>
+</LinearLayout>
