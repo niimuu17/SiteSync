@@ -36,11 +36,13 @@ public class AudioDecibelManager {
     private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
 
-    // Acoustic calibration: standard mobile MEMS microphone Acoustic Overload Point ~105 dB SPL.
-    // dB_SPL = 20 * log10(RMS / 32767) + 105.0 = 20 * log10(RMS) + 14.69 dB.
-    private static final double CALIBRATION_OFFSET_DB = 16.0;
-    private static final double MIN_DB_SPL = 32.0;
-    private static final double MAX_DB_SPL = 120.0;
+    // Standard acoustic reference calibration for raw MEMS mobile microphones without AGC.
+    // Quiet indoor room ambient (RMS ~ 400): ~40 - 44 dB SPL (Safe)
+    // Normal conversation (RMS ~ 2000): ~56 - 65 dB SPL (Safe / Elevated)
+    // Heavy machinery / shouting / power drill (RMS > 15000): >= 85 dB SPL (OSHA PPE Hazard Alert)
+    private static final double CALIBRATION_OFFSET_DB = -10.0;
+    private static final double MIN_DB_SPL = 35.0;
+    private static final double MAX_DB_SPL = 115.0;
 
     private final Context context;
     private final ExecutorService audioExecutor = Executors.newSingleThreadExecutor();
@@ -51,7 +53,7 @@ public class AudioDecibelManager {
     private int bufferSize;
     private OnNoiseLevelListener activeListener;
 
-    private double smoothedDb = 45.0; // Nominal indoor baseline
+    private double smoothedDb = 42.0; // Nominal quiet indoor baseline
 
     public AudioDecibelManager(Context context) {
         this.context = context.getApplicationContext();
@@ -84,16 +86,33 @@ public class AudioDecibelManager {
         }
 
         try {
-            audioRecord = new AudioRecord(
-                    MediaRecorder.AudioSource.MIC,
-                    SAMPLE_RATE,
-                    CHANNEL_CONFIG,
-                    AUDIO_FORMAT,
-                    bufferSize
-            );
+            // Attempt VOICE_RECOGNITION source first (bypasses aggressive AGC distortion on Android)
+            int audioSource = MediaRecorder.AudioSource.VOICE_RECOGNITION;
+            try {
+                audioRecord = new AudioRecord(
+                        audioSource,
+                        SAMPLE_RATE,
+                        CHANNEL_CONFIG,
+                        AUDIO_FORMAT,
+                        bufferSize
+                );
+            } catch (Exception e) {
+                audioRecord = null;
+            }
+
+            if (audioRecord == null || audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
+                Log.w(TAG, "VOICE_RECOGNITION source unavailable, falling back to MIC source");
+                audioRecord = new AudioRecord(
+                        MediaRecorder.AudioSource.MIC,
+                        SAMPLE_RATE,
+                        CHANNEL_CONFIG,
+                        AUDIO_FORMAT,
+                        bufferSize
+                );
+            }
 
             if (audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
-                Log.e(TAG, "AudioRecord failed to initialize");
+                Log.e(TAG, "AudioRecord failed to initialize with all sources");
                 if (activeListener != null) {
                     activeListener.onError("AudioRecord initialization failed.");
                 }
@@ -121,13 +140,14 @@ public class AudioDecibelManager {
     private void recordingLoop() {
         short[] audioBuffer = new short[bufferSize / 2];
         long lastUiPostTime = 0;
+        long lastLogTime = 0;
 
         while (isMonitoring.get() && audioRecord != null) {
             int readCount = audioRecord.read(audioBuffer, 0, audioBuffer.length);
 
             if (readCount <= 0) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(80);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -142,9 +162,9 @@ public class AudioDecibelManager {
             }
             double rms = Math.sqrt(sumOfSquares / readCount);
 
-            // Convert RMS to dB SPL with physical MEMS microphone reference
+            // Calibrated Sound Pressure Level (dB SPL)
             double instantDb;
-            if (rms > 1.0) {
+            if (rms > 2.0) {
                 instantDb = 20.0 * Math.log10(rms) + CALIBRATION_OFFSET_DB;
             } else {
                 instantDb = MIN_DB_SPL;
@@ -153,16 +173,21 @@ public class AudioDecibelManager {
             // Clamp instant value
             instantDb = Math.max(MIN_DB_SPL, Math.min(MAX_DB_SPL, instantDb));
 
-            // Fast-attack (alpha=0.45), Slow-decay (alpha=0.18) filtering
+            // Fast-attack (alpha=0.35) for impact sounds, Smooth-decay (alpha=0.08) for stable readings
             if (instantDb > smoothedDb) {
-                smoothedDb = 0.45 * instantDb + 0.55 * smoothedDb;
+                smoothedDb = 0.35 * instantDb + 0.65 * smoothedDb;
             } else {
-                smoothedDb = 0.18 * instantDb + 0.82 * smoothedDb;
+                smoothedDb = 0.08 * instantDb + 0.92 * smoothedDb;
             }
 
             long now = System.currentTimeMillis();
-            // Throttle UI callbacks to ~150ms intervals to eliminate lag and prevent UI thread thrashing
-            if (now - lastUiPostTime >= 150) {
+            if (now - lastLogTime >= 2000) {
+                lastLogTime = now;
+                Log.d(TAG, String.format(java.util.Locale.US, "Acoustic Telemetry: RMS=%.1f -> Instant=%.1fdB -> Smoothed=%.1fdB", rms, instantDb, smoothedDb));
+            }
+
+            // Update UI at ~350ms intervals (prevents main thread event starvation)
+            if (now - lastUiPostTime >= 350) {
                 lastUiPostTime = now;
                 final double finalDb = Math.round(smoothedDb * 10.0) / 10.0;
                 final boolean isHazardous = finalDb >= OSHA_HAZARD_THRESHOLD_DB;

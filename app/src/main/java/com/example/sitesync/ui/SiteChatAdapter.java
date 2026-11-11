@@ -181,18 +181,16 @@ public class SiteChatAdapter extends RecyclerView.Adapter<SiteChatAdapter.ChatVi
 
                 View.OnClickListener openMapListener = v -> {
                     try {
-                        Uri mapUri = Uri.parse("geo:" + coords[0] + "," + coords[1] + "?q=" + coords[0] + "," + coords[1] + "(Fallen Crew Location)");
+                        Uri mapUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=" + coords[0] + "," + coords[1]);
                         android.content.Intent mapIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, mapUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
                         mapIntent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(mapIntent);
                     } catch (Exception e) {
-                        // Fallback to web browser Google Maps
                         try {
-                            Uri webMapUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=" + coords[0] + "," + coords[1]);
-                            android.content.Intent webIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, webMapUri);
-                            webIntent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(webIntent);
+                            Uri geoUri = Uri.parse("geo:" + coords[0] + "," + coords[1] + "?q=" + coords[0] + "," + coords[1]);
+                            android.content.Intent geoIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, geoUri);
+                            geoIntent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(geoIntent);
                         } catch (Exception err) {
                             Toast.makeText(context, "Cannot open map: " + err.getMessage(), Toast.LENGTH_SHORT).show();
                         }

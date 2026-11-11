@@ -30,12 +30,14 @@ public class FallDetectionManager implements SensorEventListener {
         void onAccelerationMagnitude(float magnitudeMps2, String stateDescription);
     }
 
-    private static final float FREE_FALL_THRESHOLD = 4.2f;       // Free-fall threshold (m/s² < 0.43G)
-    private static final float IMPACT_THRESHOLD = 21.0f;         // Impact spike threshold (m/s² > 2.14G)
-    private static final float SEVERE_IMPACT_THRESHOLD = 25.0f;  // Severe instant shock threshold
-    private static final long IMPACT_WINDOW_MS = 1500;           // Impact must follow free fall within 1.5s
-    private static final long DAMPING_WINDOW_MS = 500;           // Post-impact shockwave settling window
-    private static final long IMMOBILITY_DURATION_MS = 1500;     // Post-impact immobility verification duration
+    private static final String TAG = "FallDetectionManager";
+
+    private static final float FREE_FALL_THRESHOLD = 5.2f;       // Free-fall threshold (m/s² < 0.53G)
+    private static final float IMPACT_THRESHOLD = 16.5f;         // Impact spike threshold (m/s² > 1.68G)
+    private static final float SEVERE_IMPACT_THRESHOLD = 22.0f;  // Severe instant shock threshold
+    private static final long IMPACT_WINDOW_MS = 1800;           // Impact must follow free fall within 1.8s
+    private static final long DAMPING_WINDOW_MS = 400;           // Post-impact shockwave settling window
+    private static final long IMMOBILITY_DURATION_MS = 1200;     // Post-impact immobility verification duration
 
     private final Context context;
     private final SensorManager sensorManager;
@@ -109,11 +111,13 @@ public class FallDetectionManager implements SensorEventListener {
                     // True free-fall: gravitational normal force drops near 0
                     currentState = State.FREE_FALL;
                     freeFallTimestamp = now;
+                    android.util.Log.i(TAG, "Phase 1: Free Fall Triggered! Mag=" + totalMag + " m/s²");
                 } else if (totalMag > SEVERE_IMPACT_THRESHOLD) {
                     // Sudden violent impact or shock without registered free fall
                     currentState = State.IMPACT_DETECTED;
                     impactTimestamp = now;
                     peakImpactG = totalMag / SensorManager.GRAVITY_EARTH;
+                    android.util.Log.i(TAG, "Phase 2 (Severe Shock): Mag=" + totalMag + " m/s² (" + peakImpactG + "G)");
                     scheduleImmobilityVerification(peakImpactG);
                 }
                 break;
@@ -126,15 +130,17 @@ public class FallDetectionManager implements SensorEventListener {
                     currentState = State.IMPACT_DETECTED;
                     impactTimestamp = now;
                     peakImpactG = totalMag / SensorManager.GRAVITY_EARTH;
+                    android.util.Log.i(TAG, "Phase 2 (Impact after Free Fall): Mag=" + totalMag + " m/s² (" + peakImpactG + "G)");
                     scheduleImmobilityVerification(peakImpactG);
                 }
                 break;
 
             case IMPACT_DETECTED:
-                // Only evaluate motion AFTER the initial impact shockwave and phone bounce have settled (500ms)
+                // Only evaluate motion AFTER the initial impact shockwave and phone bounce have settled
                 if (now - impactTimestamp > DAMPING_WINDOW_MS) {
                     // If worker moves vigorously post-impact (standing up / walking), cancel false alarm
-                    if (Math.abs(totalMag - SensorManager.GRAVITY_EARTH) > 6.5f) {
+                    if (Math.abs(totalMag - SensorManager.GRAVITY_EARTH) > 6.0f) {
+                        android.util.Log.d(TAG, "Post-impact motion detected (" + totalMag + " m/s²). Resetting to IDLE.");
                         if (immobilityChecker != null) {
                             mainHandler.removeCallbacks(immobilityChecker);
                             immobilityChecker = null;

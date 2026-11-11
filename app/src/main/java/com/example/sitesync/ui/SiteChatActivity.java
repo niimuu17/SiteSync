@@ -607,6 +607,10 @@ public class SiteChatActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().collection("projects").document(projectCode)
                     .collection("chat_messages").document(message.getId())
                     .set(data);
+
+            FirebaseFirestore.getInstance().collection("site_chat_messages")
+                    .document(message.getId())
+                    .set(data);
         } catch (Exception ignored) {}
     }
 

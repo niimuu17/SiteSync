@@ -265,6 +265,46 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
     }
 
     private void setupEmergencyBroadcast() {
+        // Real-Time Firebase WebSocket listener for Emergency Hazard Broadcasts
+        try {
+            com.google.firebase.database.DatabaseReference ref =
+                    com.google.firebase.database.FirebaseDatabase.getInstance()
+                            .getReference("projects/metro_central/emergency_broadcast");
+
+            ref.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot snapshot) {
+                    if (!isAdded() || binding == null) return;
+                    if (snapshot.exists()) {
+                        String action = snapshot.child("action").getValue(String.class);
+                        String status = snapshot.child("status").getValue(String.class);
+                        String type = snapshot.child("type").getValue(String.class);
+                        String worker = snapshot.child("workerName").getValue(String.class);
+                        String mapsUrl = snapshot.child("mapsUrl").getValue(String.class);
+
+                        if ("BROADCAST".equals(action) && "ACTIVE".equals(status)) {
+                            binding.incEmergency.bannerActiveEmergency.setVisibility(View.VISIBLE);
+                            String alertText = "🚨 " + (type != null ? type : "Emergency");
+                            if (worker != null) alertText += " (" + worker + ")";
+                            binding.incEmergency.tvActiveEmergencyInfo.setText(alertText);
+
+                            if (mapsUrl != null && !mapsUrl.isEmpty()) {
+                                binding.incEmergency.bannerActiveEmergency.setOnClickListener(v -> {
+                                    android.content.Intent mapIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(mapsUrl));
+                                    startActivity(mapIntent);
+                                });
+                            }
+                        } else {
+                            binding.incEmergency.bannerActiveEmergency.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull com.google.firebase.database.DatabaseError error) {}
+            });
+        } catch (Exception ignored) {}
+
         binding.incEmergency.btnTriggerEmergency.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(requireContext(), v);
             EmergencyConfirmationDialog dialog = EmergencyConfirmationDialog.newInstance();
@@ -278,6 +318,11 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         binding.incEmergency.btnCancelEmergency.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(requireContext(), v);
             binding.incEmergency.bannerActiveEmergency.setVisibility(View.GONE);
+            try {
+                com.google.firebase.database.FirebaseDatabase.getInstance()
+                        .getReference("projects/metro_central/emergency_broadcast/status")
+                        .setValue("RESOLVED");
+            } catch (Exception ignored) {}
             Toast.makeText(requireContext(), "Emergency broadcast cleared", Toast.LENGTH_SHORT).show();
         });
     }

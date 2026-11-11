@@ -272,8 +272,11 @@ public class FallAlertCountdownDialog extends DialogFragment {
 
             db.siteChatMessageDao().insert(chatMsg);
 
-            // 3. Sync with Firebase Firestore
+            // 3. Sync with Firebase Firestore (both root collection and subcollection)
             try {
+                String cleanCode = finalProjectCode.replaceAll("[.#$\\[\\]/]", "_");
+                if (cleanCode.isEmpty()) cleanCode = "metro_central";
+
                 java.util.Map<String, Object> map = new java.util.HashMap<>();
                 map.put("id", chatMsg.getId());
                 map.put("projectCode", finalProjectCode);
@@ -286,11 +289,24 @@ public class FallAlertCountdownDialog extends DialogFragment {
                 map.put("mediaType", "LOCATION");
                 map.put("mediaUrl", mapsUrl);
 
+                // Write to root collection
                 com.google.firebase.firestore.FirebaseFirestore.getInstance()
                         .collection("site_chat_messages")
                         .document(chatMsg.getId())
                         .set(map);
-            } catch (Exception ignored) {}
+
+                // Write to project subcollection
+                com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                        .collection("projects")
+                        .document(cleanCode)
+                        .collection("chat_messages")
+                        .document(chatMsg.getId())
+                        .set(map);
+
+                android.util.Log.i("FallAlertCountdown", "Dispatched fall emergency chat message to Firestore.");
+            } catch (Exception e) {
+                android.util.Log.e("FallAlertCountdown", "Firestore fall dispatch error", e);
+            }
 
             // 4. Dispatch Instant Emergency Broadcast to Firebase Realtime Database
             try {
@@ -322,7 +338,11 @@ public class FallAlertCountdownDialog extends DialogFragment {
                             .getReference("projects/metro_central/emergency_broadcast")
                             .setValue(rtdbMap);
                 }
-            } catch (Exception ignored) {}
+
+                android.util.Log.i("FallAlertCountdown", "Dispatched fall emergency broadcast to RTDB (/projects/" + cleanCode + "/emergency_broadcast).");
+            } catch (Exception e) {
+                android.util.Log.e("FallAlertCountdown", "RTDB fall dispatch error", e);
+            }
         });
 
         if (listener != null) {
