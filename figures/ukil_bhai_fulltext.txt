@@ -1,0 +1,501 @@
+=== PAGE 1 ===
+Abstract
+Over 80% of citizens in Bangladesh avoid pursuing formal legal remedies for common disputes
+due to cost barriers, complex terminology, and unfamiliar procedural requirements.Ukil Bhaiis an
+enterprise-grade native Android legal companion engineered to democratize statutory justice. The
+system features a deterministic on-deviceRetrieval-Augmented Generation (RAG)pipeline
+backed by the Bangladesh Penal Code, CrPC, Negotiable Instruments Act 1881, and Consumer
+Rights Protection Act 2009. It introduces a three-tier legal triage system, automated administrative
+complaint drafting, motion-triggered emergency SOS foreground services, and an advocate chamber
+workspace. The persistence layer implements a multi-tier hybrid architecture combining cloud services
+(Firebase Authentication,Cloud Firestore,Firebase Realtime Database, andFirebase
+Cloud Storagefor legal PDF binaries) with an on-deviceSQLite FTS5 Local Storageengine for
+offline statutory indexing. This report details the system architecture, RAG design, database schemas,
+and Android component implementations accompanied by production verification screenshots.
+1 Introduction & Problem Motivation
+Access to statutory justice in developing legal jurisdictions like Bangladesh is constrained by three
+critical friction points:
+1. The Jargon & Information Barrier:Primary statutes (e.g., The Code of Criminal Procedure
+1898 and The Penal Code 1860) remain opaque to ordinary citizens. Citizens frequently struggle
+to assess whether a dispute is civil, cognizable, or compoundable.
+2. The Consultation Cost Barrier:Routine disputes–such as residential tenancy disagreements,
+unpaid wages, and dishonored banking cheques–often escalate because citizens cannot afford
+preliminary legal advice from certified advocates.
+3. The Procedural Template Barrier:Filing a formal General Diary (GD) with the police or
+a complaint with the Directorate of National Consumer Rights Protection (DNCRP) requires
+specific statutory terminology that non-specialists cannot draft independently.
+Ukil Bhaisolves these barriers by functioning as a complete citizen companion and advocate
+workspace. For citizens, it translates complex statutory clauses into plain Bengali, issues actionable triage
+guidance, and auto-drafts administrative complaints. For advocates, it digitizes chamber consultations
+with real-time briefing queues and client chat rooms.
+2 The Legal RAG (Retrieval-Augmented Generation) Pipeline
+General-purpose Large Language Models (LLMs) frequently fabricate legal provisions or cite Indian,
+Pakistani, or British legal sections when queried in Bengali. To guarantee statutory accuracy, Ukil Bhai
+implements a deterministic2-Tier Hybrid Retrieval-Augmented Generation (Hybrid RAG)
+architecture combining on-device statutory grounding with live web search:
+• Tier 1: On-Device Verified Statutory Corpus:Curated primary statutes (Penal Code 1860,
+CrPC 1898, NI Act 1881, Consumer Rights 2009, Rent Control 1991). Guarantees zero latency
+and mathematical guardrails against hallucinated penalties.
+• Tier 2: Dynamic Live Web Grounding:Powered byBraveSearchClient.java. When the
+web toggle is enabled inChatActivity, the app dispatches HTTPS GET queries toapi.search.
+brave.com, retrieves the top 3 live Bangladesh legal gazettes and Supreme Court precedents, and
+injects them under[Live Legal Web Search Context].
+1
+
+=== PAGE 2 ===
+Figure 1 illustrates the 2-Tier Hybrid statutory and web augmentation process:
+1. Citizen Legal Query (Bangla/EN)
+2. Normalization & Keyword Extraction
+3. Legal Domain & Web Search Router
+4. Context Aug-
+mentation Engine
+Query + Tier 1
+Statutes + Tier 2 Web
+5. HTTPS REST API Inference
+Groq Cloud (qwen/qwen-2.5-32b)
+/ Gemini 2.5 Flash
+6. Interactive UI: Pills•Citations•Links
+Tier 1: Local Corpus
+•Penal Code 1860
+• CrPC 1898 (Bail &
+GD)
+•NI Act 1881 § 138
+•DNCRP Act 2009
+•Rent Control 1991
+Tier 2: Brave Search
+•api.search.brave.com
+•Live Legal Gazettes
+•Case Precedents
+•Web Toggle Switch
+•Clickable Citations
+Statute
+Query
+Statute
+Clauses
+Web
+Toggle
+Live
+Snippets
+Figure 1: The Ukil Bhai 2-Tier Hybrid RAG Architecture (Local Statutes + Brave Search API).
+2.1 Step-by-Step Hybrid Execution
+1. Query Preprocessing:Normalizes Bengali characters, converts numerals, and isolates procedural
+keywords (e.g.,Bhara(Rent),Cheque,Protarona(Fraud),GD).
+2. Dual Retrieval & Routing:Matches intent to governing acts. In parallel, if the chat toggle is
+active,BraveSearchClient.javaissues an HTTP GET query toapi.search.brave.com.
+3. Prompt Augmentation:Injects exact section numbers, statutory limitation windows, punish-
+ment maximums, and live web snippets directly into the prompt context.
+4. LLM Inference:Dispatches the multi-source augmented payload via TLS 1.3 to Groq Cloud
+(qwen/qwen-2.5-32b) or Google Gemini 2.5 Flash.
+5. Client-Side Rendering:The mobile UI renders triage badges, statutory citation pills, clickable
+external web citations, and emergency dialer links.
+3 Feature Walkthrough & Exclusive Module Capabilities
+Figure 2 and Figure 3 illustrate the native mobile user interfaces and specialized module capabilities
+across citizen and advocate experiences.
+2
+
+=== PAGE 3 ===
+(a) Auth & 2-Step Gate
+ (b) Home & Startup Tips
+(c) Dictionary (OBST En-
+gine)
+ (d) AI Chat & Triage
+Figure 2: Citizen Onboarding, Navigation Hub, Bangla Legal Dictionary with OBST, and Real-Time
+AI Legal Chat.
+3.1 Core Modules & Exclusive Engineering Capabilities
+Each module incorporates specialized, production-hardened engineering solutions:
+1. Dual-Tier RAG Legal Chat & Multimodal Vision Analyzer (ChatActivity.java):Fea-
+tures an integrated multimodal document reader allowing citizens to snap live camera photos or
+select gallery images of court summons, legal notices, or eviction letters. The analyzer implements
+a dual-processing pipeline: cloud-level multimodal vision (Google Gemini Flash) with instant offline
+fallback to on-deviceGoogle ML Kit Text Recognition. Every query is classified into a 3-tier color
+triagesystem: Green (Self-Remedy), Amber (Mediation), orRed (Advocate Mandatory).
+Interactive in-text phone numbers (e.g., 16430, 999) auto-launch Intent.ACTION_DIAL, physical
+court locations launch Google Maps with routed navigation, and in-line citation pills open a modal
+StatuteDetailBottomSheetwithout losing chat scroll position.
+2. Automated Administrative Complaint Drafter (AdminWizardActivity.java):A 4-step
+guided draftsman generating formal legal complaints conforming to statutory standards: Thana General
+Diaries under CrPC Section 44 and Police Regulations Bengal (PRB) Rule 377, and Consumer Rights
+complaints under Section 76 of the Consumer Rights Protection Act 2009. The module features a
+One-Tap Government Email Dispatcherthat pre-fills the official recipient (nccc@dncrp.com),
+statutory subject line, and complete Bengali complaint text, automatically attaching the generated
+PDF binary via Android’s secureFileProvider. Additionally, an integrated NI Act 138 countdown
+calculator tracks mandatory statutory limitation windows (30-day notice, 30-day grace, and court filing
+deadlines).
+3. Case Brief Handoff Pipeline (CitizenConsultationsActivity.java):Empowers citizens to
+forward AI-triaged legal consultation briefs directly from the chat 3-dot overflow menu to a selected
+3
+
+=== PAGE 4 ===
+advocate’s chamber inbox. Consultation briefs are formatted with rich Markdown tables, statutory
+citations, and factual timelines using theMarkwon engine, ensuring synchronized, high-fidelity legal
+presentations across both citizen and lawyer screens.
+4. Multi-Tier Security & Privacy Architecture:Engineered for strict attorney-client privi-
+lege. Enforces hardware-level anti-screenshot protection inDirectChatActivity via WindowManager.
+LayoutParams.FLAG_SECURE, completely preventing screen capture, screen recording, and task-switcher
+previews of confidential discussions. Authentication enforces a mandatory 2-Step verification require-
+ment via FirebasesendEmailVerification(), disallowing session access until the verification link is
+confirmed. Sensitive biometric actions and credential autofill are guarded byandroidx.biometric.
+BiometricPrompt, requiring device PIN or fingerprint authentication.
+5. Bangla Legal Dictionary & 2D DP OBST Engine ( LegalDictionaryActivity.java):
+Houses 114+ statutory legal terms. Operates a hybrid search architecture: an in-memory Prefix Trie for
+instant character-by-character autocomplete alongside an Optimal Binary Search Tree (OBST). The
+OBST is computed via 2D Dynamic Programming with Knuth’s Monotonicity Optimization (O(N2)),
+weighting terms by citizen query frequencies to minimize expected search depth. An academic diagnostic
+sheet (dialog_obst_metrics.xml) displays live depth levels, root node keys, and tree access costs.
+6. Cloud Document Vault (VaultActivity.java & PdfVaultManager.java):Provides an en-
+crypted on-device and cloud-synced document repository. Generated PDF complaint binaries are cached
+locally and uploaded to Firebase Cloud Storage underusers/{uid}/pdfs/, with metadata indexed
+in Cloud Firestore collectiongenerated_documents. Supports offline caching, document viewing via
+securecontent://URIs, and native Android print spooler management.
+7. Emergency Foreground SOS Service (LegalSosService.java):Continuously monitors ac-
+celerometer shake vectors (g-force> 2.4g or > 12.5 m/s2). When triggered, it promotes itself to an
+Android Foreground Service with an ongoing notification tray alert (START_STICKY). The service simul-
+taneously records ambient audio evidence viaMediaRecorder and dispatches GPS distress coordinates
+via SMS to designated emergency contacts even while the device is locked.
+4
+
+=== PAGE 5 ===
+(a) Complaint Drafter
+ (b) Biometric Vault
+ (c) Advocate Workspace
+ (d) Consultation Queue
+Figure 3: Production UI of Administrative Complaint Drafter (with One-Tap Email Dispatcher), Cloud
+Document Vault (Firebase Storage), Advocate Chamber Workspace, and Case Brief Consultation Queue.
+4 External APIs & Multi-Firebase Architecture
+The system architecture combines an external REST AI inference cloud with a complete quad-part
+Google Firebase backend (Auth, Firestore, Realtime Database, and Cloud Storage) alongside embedded
+on-device SQLite local storage.
+1. External REST APIs:
+• LLM:Groq Cloud (qwen/qwen-2.5-32b) &
+Gemini 2.5 Flash
+• W eb RAG:Brave Search REST API
+(api.search.brave.com)
+• TLS 1.3 JSONPOST / GET with Bearer & To-
+ken Auth
+2. Firebase Authentication:
+• Encrypted Email/Password & 2-Step Email
+Verification
+• Role-Based JWT Tokens & Claims (Citizen vs.
+Advocate)
+• Persistent Session State & Biometric Gate
+Synchronization
+Ukil Bhai Native Android Client (Java 8 / AndroidX Engine Coordinator)
+Presentation & Engine Coordinator: LiveData • View Binding • Foreground SOS • 2-Tier RAG Pipeline
+On-Device SQLite Local Storage: legal_acts.db with
+FTS5 Virtual Table (3,518 statutory clauses, 0ms latency)
+4. Realtime Database:
+•Live Online/Offline Presence
+•.info/connectedState Hooks
+•Server-sideonDisconnect()
+3. Cloud Firestore (NoSQL):
+•Collections:users,lawyers
+•Case Briefs & Chat Rooms
+•Realtime Snapshot Listeners
+5. Firebase Cloud Storage:
+•Bucket:users/{uid}/pdfs/
+• Encrypted Binary Complaint
+PDFs
+•Cryptographic Tokenized URIs
+REST APIs (POST/GET) Credentials & JWT
+NoSQL Sync Presence PDF Vault Up/Down
+Figure 4: System Architecture: External REST APIs, Quad-Firebase Cloud, & On-Device SQLite.
+5
+
+=== PAGE 6 ===
+4.1 External REST API Payloads (LLM Inference & Brave Search)
+The mobile application interfaces with two distinct cloud REST infrastructures:
+1. LLM Inference Cloud (Groq & Google Gemini):Employs HTTPSPOST requests with
+Bearer tokens to dispatch prompt-augmented legal queries.
+2. Brave Search Web RAG (api.search.brave.com):When activated via the chat toggle,
+BraveSearchClient.java issues HTTPS GET requests with headerX-Subscription-Token. The
+client parses the JSON response (web.results) to extract verified snippets, titles, and clickable
+URLs.
+Listing 1: Sample LLM POST & Brave Search GET Payloads
+# 1. LLM Chat C o m p l e t i o n Request ( Groq Cloud qwen / qwen -2.5 -32 b / Gemini 2.5 Flash )
+POST / openai / v1 / chat / c o m p l e t i o n s HTTP /1.1
+Host : api . groq . com
+A u t h o r i z a t i o n : Bearer g sk _p ro d_ ...
+Content - Type : a p p l i c a t i o n / json
+{ " model " : " qwen / qwen -2.5 -32 b " , " t e m p e r a t u r e " : 0.2 , " messages " : [{ " role " : " user " , "
+content " : " ... " }]}
+# 2. Live Web G ro un di ng Request ( Brave Search REST API )
+GET / res / v1 / web / search ? q = Section +138+ NI + Act + B a n g l a d e s h + Cheque + D is ho no ur & count =3 HTTP
+/1.1
+Host : api . search . brave . com
+X - Subscription - Token : BSA ...
+4.2 Multi-Tier Database Architecture (Quad-Firebase Cloud & On-Device SQLite)
+• Firebase Authentication (com.google.firebase:firebase-auth):Manages encrypted token
+issuance and session persistence, routing advocates toLawyerDashboardActivity and citizens to
+MainActivity.
+• Cloud Firestore (com.google.firebase:firebase-firestore):Primary NoSQL document
+database:
+–users: Citizen profile attributes and emergency contacts.
+–lawyers: Advocate credentials, bar affiliations, and rates.
+–consultation_requests: Incoming citizen case briefs (PENDING,ACCEPTED,DECLINED).
+–chat_rooms: Real-time 1-on-1 direct consultation metadata and message sub-collections.
+–generated_documents: Legal document metadata and vault histories.
+• Firebase Realtime Database (com.google.firebase:firebase-database):Powers the live
+online/offline presence system (RealtimePresenceManager.java) using .info/connected and
+native onDisconnect() handlers. This ensures green status indicators turn off immediately if a
+device experiences battery exhaustion or network failure.
+• Firebase Cloud Storage (com.google.firebase:firebase-storage):Securely hosts gener-
+ated PDF legal complaint binaries (Thana GDs, DNCRP forms, and case briefs) under cloud bucket
+path users/{uid}/pdfs/{documentId}.pdf. Implemented through PdfVaultManager.java,
+which generates cryptographic tokenized download URLs and stores them in Cloud Firestore
+collectiongenerated_documents.
+6
+
+=== PAGE 7 ===
+• On-DeviceSQLiteLocalStorage( legal_acts.db):Managedby LegalDatabaseHelper.java,
+this embedded SQLite database serves as the app’s persistent on-device local storage, housing
+3,518 statutory sections across 38 National Acts of Bangladesh. Pre-indexed with anFTS5 full-text
+search virtual table (sections_fts), it delivers sub-millisecond keyword retrieval completely
+offline without server costs or network latency.
+4.3 Backend Console, API & Database Verification Screenshots
+Figure 5 presents production verification captures from the external REST APIs, cloud Firebase services,
+and the on-device SQLite database:
+(a) External REST APIs: Groq POST & Brave Search
+GET
+ (b) Firebase Authentication: Citizen & Lawyer Users
+(c) Cloud Firestore: Case Briefs & Chat Rooms
+ (d) Realtime Database: Live Online Presence Tree
+(e) Firebase Cloud Storage: PDF Complaint Vault
+Bucket
+(f) On-Device SQLite Local Storage:legal_acts.db
+(3,518 Sections)
+Figure 5: Production Verification of External REST APIs, Quad-Firebase Cloud Backend, and On-
+Device SQLite Local Storage.
+7
+
+=== PAGE 8 ===
+5 Android System Components & Security
+5.1 Advocate Consultation State Diagram
+Figure 6 shows the lifecycle of an online citizen-advocate consultation:
+1. Citizen Submits
+Consultation Brief
+2. Stored in Firestore Col-
+lection (status: PENDING )
+3. Advocate Reviews Case Details
+(AdvocateNewRequestsActivity)
+Request Declined
+(status: DECLINED )
+4. Request Accepted
+(status: ACCEPTED )
+Auto-Generate Room inchat_rooms
+5. Direct 1-on-1 Consulta-
+tion (DirectChatActivity
++ RTDB Presence)
+Decline
+Accept
+Figure 6: Advocate Consultation Request and Realtime Room Creation Lifecycle.
+5.2 System Services & Receivers
+• Foreground Emergency SOS Service (LegalSosService.java):Triggered by an accelerome-
+ter shake vector (> 12.5 m/s2). Elevates to a Foreground Service with an ongoing notification
+tray alert ("Emergency Recording Active"), records ambient audio evidence viaMediaRecorder,
+and dispatches GPS distress SMS messages to designated contacts.
+• Quick Settings Tile Service (QuickGdTileService.java):Extends Android’s TileService,
+integrating an instant General Diary draftsman button directly into the Android notification
+pull-down shade.
+• Broadcast Receivers:Dynamically registered AirplaneModeReceiver intercepts broadcast
+event ACTION_AIRPLANE_MODE_CHANGED to pause network calls and display an offline banner.
+NetworkConnectivityReceiverhandles cellular/WiFi transitions.
+• Content Providers ( FileProvider):Defined in AndroidManifest.xml with authority
+${applicationId}.fileprovider. Exposes securecontent:// URIs with temporary read grants
+for external PDF sharing.
+6 Academic Syllabus Compliance & Implementation Matrix
+Table 1 provides an exhaustive mapping between the laboratory lecture plan (Weeks 8–11) and the
+technical implementations across theUkil Bhaicodebase.
+8
+
+=== PAGE 9 ===
+Table 1: Laboratory Syllabus Topics Mapped to Ukil Bhai Technical Implementations.
+Syllabus T opic Where It Is Used (Class /
+File)
+Why & T echnical Rationale (Purpose)
+W eek 8: Project Archi-
+tecture & Gradle
+build.gradle (Project & App
+modules), gradle.properties,
+local.properties
+Configures compileSdk 33 , minSdk 26 , Java 8, and de-
+pendencies (Firebase BoM 31.2.0, CameraX 1.2.3, ML
+Kit OCR, Markwon, Play Services Location). Injects
+API keys viabuildConfigFieldto prevent secret leakage
+in version control.
+W eek 8: AndroidMani-
+fest & Permissions
+AndroidManifest.xml Declares all 10 application activities, runtime
+hardware permissions ( CAMERA, RECORD_AUDIO,
+ACCESS_FINE_LOCATION, SEND_SMS), foreground ser-
+vice types (microphone, location), TileService, and
+FileProvider authorities.
+W eek 8: Activity Life-
+cycle Callbacks
+MainActivity.java,
+ChatActivity.java,
+DirectChatActivity.java,
+LawyerDashboardActivity.java
+Overrides onCreate, onResume, onPause, onDestroy.
+Specifically in DirectChatActivity, onResume() at-
+taches presence listeners and marks online;onPause()
+detaches listeners and updates last-seen timestamps to
+prevent memory leaks and battery drain.
+W eek 8: Explicit & Im-
+plicit Intents
+MainActivity.java,
+AdminWizardActivity.java,
+VaultActivity.java
+Explicit Intents:Navigate application screens carrying
+parcelable extras (lawyerUid,caseCategory).
+Implicit Intents:Dispatchessystemcalls( ACTION_DIAL
+to Legal Aid16430 / 999, ACTION_SENDTO for DNCRP,
+ACTION_VIEWfor external statutory links).
+W eek 9: Responsive
+Layouts & Material UX
+activity_main.xml,
+activity_chat.xml,
+activity_lawyer_dashboard.xml,
+colors.xml
+Employs ConstraintLayout for flat hierarchies,
+CoordinatorLayout with NestedScrollView for col-
+lapsible headers, MaterialCardView, and dark-theme
+high-contrast color palettes adhering to mobile usability
+standards.
+W eek 9: RecyclerView,
+Adapters & ViewHold-
+ers
+ChatAdapter.java
+(item_chat_user, item_chat_ai,
+item_chat_typing),
+DirectChatAdapter.java,
+ConsultationRequestAdapter.java,
+VaultDocumentAdapter.java
+Reuses view holders to render high-performance scrol-
+lable legal message streams, interactive statutory citation
+pills, typing indicator animations, incoming consultation
+queues, and legal document vaults without frame skips
+or memory bloat.
+W eek 9: Custom Views
+& UI F eedback
+LegalTriageBadgeView,
+CitationPillView,
+layout_empty_state.xml
+Provides dynamic UI feedback via color-coded triage
+badges (Green/Amber/Red), expandable legal citation
+chips that display statutory clauses, and empty-state
+placeholders with retry actions.
+W eek 10: Android F ore-
+ground Services
+LegalSosService.java
+(Service),AndroidManifest.xml
+Triggered by accelerometer shake (> 12.5 m/s2). Pro-
+motes to a Foreground Service with an ongoing notifica-
+tion tray alert (START_STICKY), records ambient audio
+via MediaRecorder, and dispatches GPS distress SMS
+messages even when locked.
+W eek 10: Quick Set-
+tings TileService
+QuickGdTileService.java ex-
+tendsTileService
+Integrates an instant General Diary (GD) draftsman
+shortcut directly into Android’s native system pull-down
+Quick Settings shade for one-tap emergency access during
+hostile situations.
+W eek 10: Broadcast Re-
+ceivers
+AirplaneModeReceiver.java,
+NetworkConnectivityReceiver.java
+Dynamically registered broadcast receivers that
+intercept ACTION_AIRPLANE_MODE_CHANGED and
+CONNECTIVITY_ACTION. Automatically pauses cloud
+network sync and displays an offline banner directing
+citizens to on-device SQLite RAG.
+Continued on next page. . .
+9
+
+=== PAGE 10 ===
+Table 1 (continued from previous page)
+Syllabus T opic Where It Is Used (Class /
+File)
+Why & T echnical Rationale (Purpose)
+W eek 10: Con-
+tent Providers
+(FileProvider)
+androidx.core.content.
+FileProvider,
+res/xml/file_paths.xml
+Exposes sandboxed legal PDF documents to ex-
+ternal applications (Gmail, WhatsApp, Google
+Drive) via secure content:// URIs with tempo-
+rary FLAG_GRANT_READ_URI_PERMISSION, preventing
+FileUriExposedException.
+W eek 11: HTTP REST
+Networking & TLS
+BraveSearchClient.java,
+AiLegalClient.java
+Executes asynchronous HTTPS POST requests to
+Groq Cloud LLM (OpenAI-compatible inference)
+and HTTPS GET requests to Brave Search API
+(api.search.brave.com) with Bearer tokens and TLS
+1.3 encryption.
+W eek 11: JSON Data
+Serialization & Parsing
+AiLegalClient.java,
+BraveSearchClient.java
+Parses nested cloud JSON response trees
+(choices[0].message.content, web.results[]) us-
+ing native JSONObject and JSONArray, deserializing
+statutory snippets and triage tags into typed domain
+models.
+W eek 11: On-Device
+SQLite Local Storage
+LegalDatabaseHelper.java,
+assets/legal_acts.db
+Houses 3,518 statutory clauses across 38 National Acts
+of Bangladesh. Pre-indexed with an FTS5 virtual ta-
+ble (sections_fts), enabling sub-millisecond keyword
+retrieval completely offline with zero latency or cloud
+costs.
+W eek 11: Cloud Fire-
+base Authentication
+com.google.firebase:
+firebase-auth
+Manages user registration, session tokens, password hash-
+ing, and role-based access control, routing authenticated
+advocates to the chamber dashboard and citizens to the
+legal assistant.
+W eek 11: Cloud Fire-
+store NoSQL Database
+com.google.firebase:
+firebase-firestore
+Persists real-time relational collections for users,
+lawyers, consultation_requests, chat_rooms, and
+generated_documents with snapshot listeners for instant
+synchronization.
+W eek 11: Firebase Re-
+altime Database
+RealtimePresenceManager.java,
+com.google.firebase:
+firebase-database
+Low-latency presence tracker utilizing.info/connected
+and native server-sideonDisconnect() handlers to syn-
+chronize online/offline advocate badges across mobile
+clients.
+W eek 11: Firebase
+Cloud Storage
+PdfVaultManager.java,
+com.google.firebase:
+firebase-storage
+Securely stores generated PDF complaint binaries under
+users/{uid}/pdfs/, generating cryptographically tok-
+enized download URLs recorded in Firestore.
+7 Verification, Results & Conclusion
+• Automated Unit Testing:54 local unit tests covering business logic, citation extraction, triage
+routing, and intent dispatching executed with zero errors (BUILD SUCCESSFUL in 27s).
+• Physical Device Validation:Successfully deployed and verified on physical hardware (Device
+ID:645b534d0605, Android 12).
+Ukil Bhaidemonstrates how modern native Android architecture, combined with structured RAG
+pipelines and a multi-tiered cloud database, can demystify the law and make justice accessible to every
+citizen.
+10
+
