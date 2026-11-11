@@ -10,9 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import android.net.Uri;
 
 import com.example.sitesync.R;
 import com.example.sitesync.data.SessionManager;
@@ -34,12 +37,22 @@ public class ProjectPeopleActivity extends AppCompatActivity implements ProjectP
     private ProjectPeopleAdapter adapter;
     private String projectCode;
     private String projectName;
+    private ActivityResultLauncher<Void> contactPickerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityProjectPeopleBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        contactPickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.PickContact(),
+                uri -> {
+                    if (uri != null) {
+                        importContactFromUri(uri);
+                    }
+                }
+        );
 
         sessionManager = new SessionManager(this);
         projectCode = sessionManager.getActiveProjectCode();
@@ -228,6 +241,25 @@ public class ProjectPeopleActivity extends AppCompatActivity implements ProjectP
         int pad = (int) (18 * getResources().getDisplayMetrics().density);
         layout.setPadding(pad, pad, pad, pad);
 
+        // ContentProvider Quick Action: Pick directly from shared device contacts
+        MaterialButton btnPick = new MaterialButton(this, null, com.google.android.material.R.attr.materialButtonOutlinedStyle);
+        btnPick.setText("Pick from Device Contacts (ContentProvider)");
+        btnPick.setIconResource(R.drawable.ic_person);
+        btnPick.setIconTint(getColorStateList(R.color.forest_dark));
+        btnPick.setTextColor(getColor(R.color.forest_dark));
+        btnPick.setStrokeColor(getColorStateList(R.color.forest_stroke));
+        btnPick.setCornerRadius((int) (18 * getResources().getDisplayMetrics().density));
+        btnPick.setOnClickListener(v -> contactPickerLauncher.launch(null));
+        layout.addView(btnPick);
+
+        TextView tvDivider = new TextView(this);
+        tvDivider.setText("— OR ENTER MANUALLY —");
+        tvDivider.setGravity(android.view.Gravity.CENTER);
+        tvDivider.setTextSize(10f);
+        tvDivider.setTextColor(getColor(R.color.forest_muted));
+        tvDivider.setPadding(0, pad / 2, 0, pad / 2);
+        layout.addView(tvDivider);
+
         EditText etName = new EditText(this);
         etName.setHint("Worker Full Name (e.g. Abdur Rahim)");
         layout.addView(etName);
@@ -255,26 +287,66 @@ public class ProjectPeopleActivity extends AppCompatActivity implements ProjectP
                         return;
                     }
 
-                    WorkerJoinRequestEntity req = new WorkerJoinRequestEntity(
-                            UUID.randomUUID().toString(),
-                            "worker_" + System.currentTimeMillis(),
-                            name,
-                            phone.isEmpty() ? "+880 1700-000000" : phone,
-                            trade.isEmpty() ? "General Site Worker" : trade,
-                            projectCode,
-                            "APPROVED",
-                            System.currentTimeMillis()
-                    );
-
-                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                        AppDatabase.getInstance(this).workerJoinRequestDao().insert(req);
-                        runOnUiThread(() -> {
-                            HapticFeedbackUtil.confirm(ProjectPeopleActivity.this);
-                            Toast.makeText(ProjectPeopleActivity.this, name + " added to " + projectCode + "!", Toast.LENGTH_SHORT).show();
-                        });
-                    });
+                    addWorkerToProject(name, phone.isEmpty() ? "+880 1700-000000" : phone, trade.isEmpty() ? "General Site Worker" : trade);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void importContactFromUri(Uri contactUri) {
+        try {
+            android.content.ContentResolver cr = getContentResolver();
+            String name = "";
+            String phone = "";
+
+            try (android.database.Cursor cursor = cr.query(contactUri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIdx = cursor.getColumnIndex(android.provider.ContactsContract.Contacts.DISPLAY_NAME);
+                    if (nameIdx >= 0) name = cursor.getString(nameIdx);
+                    int idIdx = cursor.getColumnIndex(android.provider.ContactsContract.Contacts._ID);
+                    String id = idIdx >= 0 ? cursor.getString(idIdx) : null;
+
+                    if (id != null) {
+                        try (android.database.Cursor pCur = cr.query(
+                                android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null,
+                                android.provider.ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                new String[]{id}, null)) {
+                            if (pCur != null && pCur.moveToFirst()) {
+                                int pIdx = pCur.getColumnIndex(android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER);
+                                if (pIdx >= 0) phone = pCur.getString(pIdx);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!name.isEmpty()) {
+                addWorkerToProject(name, phone.isEmpty() ? "+880 1700-000000" : phone, "Craftsman (Contacts ContentProvider)");
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Could not import contact: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addWorkerToProject(String name, String phone, String trade) {
+        WorkerJoinRequestEntity req = new WorkerJoinRequestEntity(
+                UUID.randomUUID().toString(),
+                "worker_" + System.currentTimeMillis(),
+                name,
+                phone,
+                trade,
+                projectCode,
+                "APPROVED",
+                System.currentTimeMillis()
+        );
+
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            AppDatabase.getInstance(this).workerJoinRequestDao().insert(req);
+            runOnUiThread(() -> {
+                HapticFeedbackUtil.confirm(ProjectPeopleActivity.this);
+                Toast.makeText(ProjectPeopleActivity.this, name + " added to " + projectCode + "!", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

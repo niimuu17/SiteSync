@@ -137,6 +137,19 @@ public class ProjectPeopleAdapter extends RecyclerView.Adapter<ProjectPeopleAdap
             }
         });
 
+        // Implicit Intent: Tap contact row to dial site personnel directly
+        holder.itemView.setOnClickListener(v -> {
+            if (p.phone != null && !p.phone.isEmpty()) {
+                try {
+                    android.content.Intent dialIntent = new android.content.Intent(
+                            android.content.Intent.ACTION_DIAL,
+                            android.net.Uri.parse("tel:" + p.phone.replaceAll("[^0-9+]", ""))
+                    );
+                    context.startActivity(dialIntent);
+                } catch (Exception ignored) {}
+            }
+        });
+
         // Alternating row background
         if (position % 2 == 1) {
             holder.itemView.setBackgroundColor(Color.parseColor("#082B443E"));

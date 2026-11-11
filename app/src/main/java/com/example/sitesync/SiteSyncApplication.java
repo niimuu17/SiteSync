@@ -51,6 +51,11 @@ public class SiteSyncApplication extends Application {
 
             // Schedule WorkManager periodic offline background sync
             com.example.sitesync.data.sync.SyncManager.schedulePeriodicSync(this);
+
+            // Register System Broadcast Receiver for Battery and Airplane Mode transitions
+            com.example.sitesync.utils.SystemEventBroadcastReceiver.register(
+                    this, new com.example.sitesync.utils.SystemEventBroadcastReceiver());
+            Log.d(TAG, "SiteSync system broadcast receiver registered.");
         } catch (Exception e) {
             Log.e(TAG, "Error initializing Firebase ecosystem: " + e.getMessage(), e);
         }
