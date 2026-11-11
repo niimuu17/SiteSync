@@ -28,15 +28,14 @@ public class FallDetectionManager implements SensorEventListener {
         void onAccelerationMagnitude(float magnitudeMps2, String stateDescription);
     }
 
-    private static final float FREE_FALL_THRESHOLD = 2.8f;      // Free-fall threshold (m/s²)
-    private static final float IMPACT_THRESHOLD = 25.0f;        // Impact spike threshold (m/s²)
-    private static final float IMMOBILITY_THRESHOLD = 2.0f;     // Immobility threshold (m/s²)
+    private static final float FREE_FALL_THRESHOLD = 4.0f;      // Free-fall threshold (m/s² < 0.4G)
+    private static final float IMPACT_THRESHOLD = 22.0f;        // Impact spike threshold (m/s² > 2.25G)
+    private static final float SEVERE_IMPACT_THRESHOLD = 26.5f; // Severe instant shock threshold
     private static final long IMPACT_WINDOW_MS = 1500;          // Impact must follow free fall within 1.5s
-    private static final long IMMOBILITY_DURATION_MS = 1500;    // Immobility must persist for 1.5s
+    private static final long IMMOBILITY_DURATION_MS = 1200;    // Immobility verification duration
 
     private final Context context;
     private final SensorManager sensorManager;
-    private Sensor linearAccelSensor;
     private Sensor rawAccelSensor;
 
     private boolean isMonitoring = false;
@@ -59,10 +58,7 @@ public class FallDetectionManager implements SensorEventListener {
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
 
         if (sensorManager != null) {
-            linearAccelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-            if (linearAccelSensor == null) {
-                rawAccelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            }
+            rawAccelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
     }
 
@@ -72,11 +68,8 @@ public class FallDetectionManager implements SensorEventListener {
 
         if (sensorManager == null || isMonitoring) return;
 
-        if (linearAccelSensor != null) {
-            sensorManager.registerListener(this, linearAccelSensor, SensorManager.SENSOR_DELAY_GAME);
-            isMonitoring = true;
-        } else if (rawAccelSensor != null) {
-            sensorManager.registerListener(this, rawAccelSensor, SensorManager.SENSOR_DELAY_GAME);
+        if (rawAccelSensor != null) {
+            sensorManager.registerListener(this, rawAccelSensor, SensorManager.SENSOR_DELAY_UI);
             isMonitoring = true;
         }
     }
@@ -97,45 +90,46 @@ public class FallDetectionManager implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER) return;
+
         float ax = event.values[0];
         float ay = event.values[1];
         float az = event.values[2];
 
-        // For raw accelerometer, subtract 1G (9.8 m/s²) baseline
-        float mag;
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float totalMag = (float) Math.sqrt(ax * ax + ay * ay + az * az);
-            mag = Math.abs(totalMag - SensorManager.GRAVITY_EARTH);
-        } else {
-            mag = (float) Math.sqrt(ax * ax + ay * ay + az * az);
-        }
-
+        // Total proper acceleration magnitude (includes gravity baseline 9.8 m/s² when stationary)
+        float totalMag = (float) Math.sqrt(ax * ax + ay * ay + az * az);
         long now = System.currentTimeMillis();
 
         switch (currentState) {
             case IDLE:
-                if (mag < FREE_FALL_THRESHOLD) {
+                if (totalMag < FREE_FALL_THRESHOLD) {
+                    // True free-fall: gravitational normal force drops near 0
                     currentState = State.FREE_FALL;
                     freeFallTimestamp = now;
+                } else if (totalMag > SEVERE_IMPACT_THRESHOLD) {
+                    // Sudden violent impact or shock without registered free fall
+                    currentState = State.IMPACT_DETECTED;
+                    impactTimestamp = now;
+                    peakImpactG = totalMag / SensorManager.GRAVITY_EARTH;
+                    scheduleImmobilityVerification(peakImpactG);
                 }
                 break;
 
             case FREE_FALL:
                 if (now - freeFallTimestamp > IMPACT_WINDOW_MS) {
-                    currentState = State.IDLE; // Window expired
-                } else if (mag > IMPACT_THRESHOLD) {
+                    currentState = State.IDLE; // Free-fall window expired
+                } else if (totalMag > IMPACT_THRESHOLD) {
+                    // Impact following free fall
                     currentState = State.IMPACT_DETECTED;
                     impactTimestamp = now;
-                    peakImpactG = mag / SensorManager.GRAVITY_EARTH;
-
-                    // Schedule immobility check
+                    peakImpactG = totalMag / SensorManager.GRAVITY_EARTH;
                     scheduleImmobilityVerification(peakImpactG);
                 }
                 break;
 
             case IMPACT_DETECTED:
-                if (mag > IMMOBILITY_THRESHOLD * 2) {
-                    // Worker is moving / struggling -> cancel immobility alarm
+                // If worker moves violently post-impact (standing up / moving), cancel false alarm
+                if (Math.abs(totalMag - SensorManager.GRAVITY_EARTH) > 7.0f) {
                     if (immobilityChecker != null) {
                         mainHandler.removeCallbacks(immobilityChecker);
                         immobilityChecker = null;
@@ -145,9 +139,9 @@ public class FallDetectionManager implements SensorEventListener {
                 break;
         }
 
-        if (telemetryListener != null && (now - lastTelemetryPost > 300)) {
+        if (telemetryListener != null && (now - lastTelemetryPost > 250)) {
             lastTelemetryPost = now;
-            final float currentMag = mag;
+            final float currentMag = totalMag;
             final String stateStr = currentState.name();
             mainHandler.post(() -> {
                 if (telemetryListener != null) {

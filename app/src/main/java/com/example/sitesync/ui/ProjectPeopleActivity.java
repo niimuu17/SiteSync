@@ -76,6 +76,12 @@ public class ProjectPeopleActivity extends AppCompatActivity implements ProjectP
             HapticFeedbackUtil.lightClick(this, v);
             startActivity(new Intent(this, AttendanceTableActivity.class));
         });
+
+        binding.btnPendingApprovals.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            WorkerRequestsBottomSheetDialog.newInstance(projectCode)
+                    .show(getSupportFragmentManager(), "WorkerRequestsDialog");
+        });
     }
 
     private void seedDefaultPersonnelIfEmpty() {
@@ -128,9 +134,13 @@ public class ProjectPeopleActivity extends AppCompatActivity implements ProjectP
 
                     // 3. Registered Workers
                     int workerCount = 0;
+                    int pendingCount = 0;
                     if (requests != null) {
                         for (WorkerJoinRequestEntity req : requests) {
-                            if (!"REMOVED".equalsIgnoreCase(req.getStatus())) {
+                            if ("PENDING".equalsIgnoreCase(req.getStatus())) {
+                                pendingCount++;
+                            }
+                            if ("APPROVED".equalsIgnoreCase(req.getStatus())) {
                                 workerCount++;
                                 list.add(new ProjectPeopleAdapter.ProjectPerson(
                                         req.getId(),
@@ -143,6 +153,13 @@ public class ProjectPeopleActivity extends AppCompatActivity implements ProjectP
                                 ));
                             }
                         }
+                    }
+
+                    if (pendingCount > 0) {
+                        binding.btnPendingApprovals.setVisibility(View.VISIBLE);
+                        binding.btnPendingApprovals.setText("Review Pending Join Requests (" + pendingCount + ")");
+                    } else {
+                        binding.btnPendingApprovals.setVisibility(View.GONE);
                     }
 
                     adapter.setPeople(list);

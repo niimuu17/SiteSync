@@ -40,4 +40,7 @@ public interface WorkerJoinRequestDao {
 
     @Query("SELECT * FROM worker_join_requests WHERE workerId = :workerId LIMIT 1")
     WorkerJoinRequestEntity getRequestByWorkerId(String workerId);
+
+    @Query("SELECT * FROM worker_join_requests WHERE workerId = :workerId AND projectCode = :projectCode LIMIT 1")
+    WorkerJoinRequestEntity getRequestByWorkerAndProject(String workerId, String projectCode);
 }

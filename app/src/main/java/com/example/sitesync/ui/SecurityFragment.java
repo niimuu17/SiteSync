@@ -91,6 +91,7 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
 
     private void setupFallDetection() {
         fallDetectionManager = new FallDetectionManager(requireContext());
+        startFallMonitoring();
 
         binding.btnSimulateFallTest.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(requireContext(), v);

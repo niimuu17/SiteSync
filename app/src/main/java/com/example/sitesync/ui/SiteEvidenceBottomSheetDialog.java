@@ -37,6 +37,8 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
     private DialogSiteEvidenceGalleryBinding binding;
     private SitePhotoStorageManager storageManager;
     private SessionManager sessionManager;
+    private SiteEvidenceDumpAdapter dumpAdapter;
+    private SiteEvidencePhotoEntity latestPhoto;
     private Uri tempPhotoUri;
     private File tempPhotoFile;
 
@@ -96,6 +98,7 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
         storageManager = new SitePhotoStorageManager(requireContext());
         sessionManager = new SessionManager(requireContext());
 
+        setupDumpRecyclerView();
         loadRecentPhotos();
 
         binding.btnCloseEvidenceModal.setOnClickListener(v -> dismiss());
@@ -104,6 +107,33 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
             HapticFeedbackUtil.lightClick(requireContext(), v);
             galleryPhotoLauncher.launch("image/*");
         });
+
+        // Clicking on the main preview opens the full-screen image viewer
+        binding.ivEvidenceMainPreview.setOnClickListener(v -> {
+            if (latestPhoto != null) {
+                openImageViewer(latestPhoto);
+            }
+        });
+    }
+
+    private void setupDumpRecyclerView() {
+        dumpAdapter = new SiteEvidenceDumpAdapter(requireContext(), this::openImageViewer);
+        binding.rvEvidencePhotosDump.setLayoutManager(
+                new androidx.recyclerview.widget.LinearLayoutManager(requireContext(), androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
+        );
+        binding.rvEvidencePhotosDump.setAdapter(dumpAdapter);
+    }
+
+    private void openImageViewer(SiteEvidencePhotoEntity photo) {
+        HapticFeedbackUtil.lightClick(requireContext(), null);
+        String path = photo.getLocalFilePath() != null ? photo.getLocalFilePath() : photo.getCloudStorageUrl();
+        ChatImageViewerDialog dialog = ChatImageViewerDialog.newInstance(
+                path,
+                photo.getCapturedBy() != null ? photo.getCapturedBy() : "Site Photo",
+                photo.getLocationLabel() != null ? photo.getLocationLabel() : "GPS Tagged",
+                photo.getTimestamp()
+        );
+        dialog.show(getParentFragmentManager(), "ImageViewerDialog");
     }
 
     private void loadRecentPhotos() {
@@ -113,14 +143,19 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
                 .observe(getViewLifecycleOwner(), photos -> {
                     if (binding == null) return;
                     if (photos != null && !photos.isEmpty()) {
-                        SiteEvidencePhotoEntity latest = photos.get(0);
+                        latestPhoto = photos.get(0);
                         binding.layoutEvidencePlaceholder.setVisibility(View.GONE);
-                        binding.ivEvidenceMainPreview.setImageURI(Uri.fromFile(new File(latest.getLocalFilePath())));
-                        binding.tvEvidenceGpsBadge.setText(latest.getLocationLabel() + " • Synced");
-                        binding.tvEvidenceCounter.setText("Archived: " + photos.size() + " photos in Firebase Cloud Storage");
+                        binding.ivEvidenceMainPreview.setImageURI(Uri.fromFile(new File(latestPhoto.getLocalFilePath())));
+                        binding.tvEvidenceGpsBadge.setText(latestPhoto.getLocationLabel() + " • Synced");
+                        binding.tvEvidenceCounter.setText("Archived Dump: " + photos.size() + " photos in Firebase Cloud Storage");
+                        dumpAdapter.setPhotos(photos);
+                        binding.rvEvidencePhotosDump.setVisibility(View.VISIBLE);
                     } else {
+                        latestPhoto = null;
                         binding.layoutEvidencePlaceholder.setVisibility(View.VISIBLE);
-                        binding.tvEvidenceCounter.setText("No photos archived for " + pCode);
+                        binding.tvEvidenceCounter.setText("No evidence photos in dump for " + pCode);
+                        dumpAdapter.setPhotos(null);
+                        binding.rvEvidencePhotosDump.setVisibility(View.GONE);
                     }
                 });
     }
@@ -168,7 +203,12 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
 
     private void processCapturedPhoto(File file) {
         String pCode = sessionManager.getActiveProjectCode();
-        String engineer = sessionManager.getCurrentUser() != null ? sessionManager.getCurrentUser().getFullName() : "Engineer";
+        String engineer = sessionManager.getCurrentUser() != null ? sessionManager.getCurrentUser().getFullName() : "Site Worker";
+        if (sessionManager.isWorkerRole()) {
+            engineer = engineer + " (Site Worker)";
+        } else {
+            engineer = engineer + " (Lead / Manager)";
+        }
         double lat = 23.8103;
         double lng = 90.4125;
         double elev = 14.5;

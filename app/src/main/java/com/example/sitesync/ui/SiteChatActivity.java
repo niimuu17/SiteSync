@@ -62,6 +62,14 @@ public class SiteChatActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<String> pickImageLauncher;
     private ActivityResultLauncher<Intent> speechRecognizerLauncher;
+    private ActivityResultLauncher<String> recordAudioLauncher;
+
+    private android.media.MediaRecorder mediaRecorder;
+    private File currentVoiceFile;
+    private boolean isRecordingAudio = false;
+    private final Handler voiceTimerHandler = new Handler(Looper.getMainLooper());
+    private int voiceSeconds = 0;
+    private Runnable voiceTimerRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +135,18 @@ public class SiteChatActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        // Audio Recording Permission Launcher
+        recordAudioLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        startVoiceRecording();
+                    } else {
+                        Toast.makeText(this, "Microphone permission required for voice notes", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void setupViews() {
@@ -168,11 +188,41 @@ public class SiteChatActivity extends AppCompatActivity {
             sendTextMessage();
         });
 
-        // "Report on Today's Chat" LLM Intelligence Button
-        binding.btnGenerateChatReport.setOnClickListener(v -> {
-            HapticFeedbackUtil.heavyClick(this, v);
-            generateChatIntelligenceReport();
+        // Record Voice Note Button
+        binding.btnRecordVoiceNote.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
+                    == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                if (isRecordingAudio) {
+                    stopAndSendVoiceRecording();
+                } else {
+                    startVoiceRecording();
+                }
+            } else {
+                recordAudioLauncher.launch(android.Manifest.permission.RECORD_AUDIO);
+            }
         });
+
+        binding.btnCancelVoiceRecording.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            cancelVoiceRecording();
+        });
+
+        binding.btnSendVoiceRecording.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(this, v);
+            stopAndSendVoiceRecording();
+        });
+
+        // "Report on Today's Chat" LLM Intelligence Button (Manager/Supervisor only)
+        if (sessionManager.isWorkerRole()) {
+            binding.btnGenerateChatReport.setVisibility(View.GONE);
+        } else {
+            binding.btnGenerateChatReport.setVisibility(View.VISIBLE);
+            binding.btnGenerateChatReport.setOnClickListener(v -> {
+                HapticFeedbackUtil.heavyClick(this, v);
+                generateChatIntelligenceReport();
+            });
+        }
     }
 
     private void startSpeechRecognition() {
@@ -185,6 +235,141 @@ public class SiteChatActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Voice dictation not available: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void startVoiceRecording() {
+        try {
+            File dir = new File(getCacheDir(), "voice_notes");
+            if (!dir.exists()) dir.mkdirs();
+            currentVoiceFile = File.createTempFile("voice_" + System.currentTimeMillis() + "_", ".m4a", dir);
+
+            mediaRecorder = new android.media.MediaRecorder();
+            mediaRecorder.setAudioSource(android.media.MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(android.media.MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setAudioEncoder(android.media.MediaRecorder.AudioEncoder.AAC);
+            mediaRecorder.setAudioEncodingBitRate(64000);
+            mediaRecorder.setAudioSamplingRate(44100);
+            mediaRecorder.setOutputFile(currentVoiceFile.getAbsolutePath());
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+
+            isRecordingAudio = true;
+            voiceSeconds = 0;
+            binding.layoutVoiceRecordingPanel.setVisibility(View.VISIBLE);
+            binding.tvVoiceRecordingTimer.setText("Recording Voice Note... 00:00");
+            binding.btnRecordVoiceNote.setImageResource(R.drawable.ic_pause);
+
+            voiceTimerRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (isRecordingAudio) {
+                        voiceSeconds++;
+                        int mins = voiceSeconds / 60;
+                        int secs = voiceSeconds % 60;
+                        binding.tvVoiceRecordingTimer.setText(
+                                String.format(Locale.US, "Recording Voice Note... %02d:%02d", mins, secs)
+                        );
+                        voiceTimerHandler.postDelayed(this, 1000);
+                    }
+                }
+            };
+            voiceTimerHandler.postDelayed(voiceTimerRunnable, 1000);
+            HapticFeedbackUtil.lightClick(this, null);
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to start recording: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            cancelVoiceRecording();
+        }
+    }
+
+    private void cancelVoiceRecording() {
+        try {
+            if (mediaRecorder != null) {
+                if (isRecordingAudio) {
+                    try { mediaRecorder.stop(); } catch (Exception ignored) {}
+                }
+                mediaRecorder.release();
+                mediaRecorder = null;
+            }
+        } catch (Exception ignored) {}
+
+        isRecordingAudio = false;
+        voiceTimerHandler.removeCallbacksAndMessages(null);
+        if (currentVoiceFile != null && currentVoiceFile.exists()) {
+            currentVoiceFile.delete();
+            currentVoiceFile = null;
+        }
+
+        binding.layoutVoiceRecordingPanel.setVisibility(View.GONE);
+        binding.btnRecordVoiceNote.setImageResource(R.drawable.ic_mic);
+    }
+
+    private void stopAndSendVoiceRecording() {
+        if (!isRecordingAudio || currentVoiceFile == null) {
+            cancelVoiceRecording();
+            return;
+        }
+
+        try {
+            if (mediaRecorder != null) {
+                try { mediaRecorder.stop(); } catch (Exception ignored) {}
+                mediaRecorder.release();
+                mediaRecorder = null;
+            }
+        } catch (Exception ignored) {}
+
+        isRecordingAudio = false;
+        voiceTimerHandler.removeCallbacksAndMessages(null);
+        binding.layoutVoiceRecordingPanel.setVisibility(View.GONE);
+        binding.btnRecordVoiceNote.setImageResource(R.drawable.ic_mic);
+
+        int finalDuration = Math.max(1, voiceSeconds);
+        String voicePath = currentVoiceFile.getAbsolutePath();
+
+        User user = sessionManager.getCurrentUser();
+        String senderId = user != null ? user.getUid() : "anon_user";
+        String senderName = user != null ? user.getFullName() : "Site Crew";
+        boolean isWorker = sessionManager.isWorkerRole();
+        String role = isWorker ? "WORKER" : (user != null && user.getRole() != null ? user.getRole() : "PROJECT_MANAGER");
+
+        SiteChatMessageEntity voiceMessage = new SiteChatMessageEntity(
+                UUID.randomUUID().toString(),
+                projectCode,
+                senderId,
+                senderName,
+                role,
+                "Voice Note (" + finalDuration + "s)",
+                System.currentTimeMillis(),
+                isUrgentSelected
+        );
+        voiceMessage.setMediaType("AUDIO");
+        voiceMessage.setMediaUrl(voicePath);
+
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            chatDao.insert(voiceMessage);
+        });
+
+        // Sync with Firebase Firestore
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", voiceMessage.getId());
+        map.put("projectCode", projectCode);
+        map.put("senderId", senderId);
+        map.put("senderName", senderName);
+        map.put("senderRole", role);
+        map.put("messageText", voiceMessage.getMessageText());
+        map.put("timestamp", voiceMessage.getTimestamp());
+        map.put("isUrgent", isUrgentSelected);
+        map.put("mediaType", "AUDIO");
+        map.put("mediaUrl", voicePath);
+
+        FirebaseFirestore.getInstance()
+                .collection("site_chat_messages")
+                .document(voiceMessage.getId())
+                .set(map)
+                .addOnSuccessListener(aVoid -> {})
+                .addOnFailureListener(e -> {});
+
+        HapticFeedbackUtil.confirm(this);
+        Toast.makeText(this, "Voice note sent!", Toast.LENGTH_SHORT).show();
     }
 
     private void handlePickedPhoto(Uri uri) {

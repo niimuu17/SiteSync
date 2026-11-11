@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="10dp"
+    android:layout_marginVertical="4dp"
+    app:cardBackgroundColor="@color/forest_card_dark"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp">
+
+            <ImageView
+                android:id="@+id/ivDumpThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Evidence Thumbnail" />
+
+            <TextView
+                android:id="@+id/tvDumpGpsBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_pill_forest"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:text="GPS Stamped"
+                android:textColor="@color/peach_accent"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tvDumpWorkerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Md. Rafiqul (Worker)"
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvDumpTimestamp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="11 Nov • 10:45 AM"
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

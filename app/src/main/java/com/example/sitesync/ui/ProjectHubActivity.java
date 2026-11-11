@@ -162,7 +162,7 @@ public class ProjectHubActivity extends AppCompatActivity implements ProjectCard
                             runOnUiThread(() -> {
                                 if (project != null) {
                                     sessionManager.addWorkerProjectCode(project.getProjectCode());
-                                    // Record worker join request in database
+                                    // Record worker join request in database as PENDING
                                     User user = sessionManager.getCurrentUser();
                                     String uid = user != null ? user.getUid() : "worker_" + System.currentTimeMillis();
                                     String name = user != null ? user.getFullName() : "Site Worker";
@@ -177,9 +177,12 @@ public class ProjectHubActivity extends AppCompatActivity implements ProjectCard
                                                 .workerJoinRequestDao().insert(req);
                                     });
 
-                                    Toast.makeText(ProjectHubActivity.this, "Authorized for [" + project.getName() + "]!", Toast.LENGTH_SHORT).show();
+                                    new AlertDialog.Builder(ProjectHubActivity.this)
+                                            .setTitle("Join Request Submitted")
+                                            .setMessage("Your request to join [" + project.getName() + " (" + project.getProjectCode() + ")] has been submitted to the site manager.\n\nStatus: PENDING APPROVAL\n\nYou cannot access this project until approved by the site manager.")
+                                            .setPositiveButton("Understood", null)
+                                            .show();
                                     observeProjects();
-                                    selectAndLaunchProject(project);
                                 } else {
                                     Toast.makeText(ProjectHubActivity.this, "Project code '" + code + "' not found. Check with your manager.", Toast.LENGTH_LONG).show();
                                 }
@@ -243,6 +246,47 @@ public class ProjectHubActivity extends AppCompatActivity implements ProjectCard
     }
 
     private void selectAndLaunchProject(ProjectEntity project) {
+        if (sessionManager.isWorkerRole()) {
+            User user = sessionManager.getCurrentUser();
+            String uid = user != null ? user.getUid() : "";
+            com.example.sitesync.data.local.AppDatabase.databaseWriteExecutor.execute(() -> {
+                com.example.sitesync.data.local.entities.WorkerJoinRequestEntity req =
+                        com.example.sitesync.data.local.AppDatabase.getInstance(this)
+                                .workerJoinRequestDao()
+                                .getRequestByWorkerAndProject(uid, project.getProjectCode());
+
+                boolean isDemo = "PRJ-DHAKA-101".equalsIgnoreCase(project.getProjectCode()) || "MCT-2026".equalsIgnoreCase(project.getProjectCode());
+
+                runOnUiThread(() -> {
+                    if (req != null && "PENDING".equalsIgnoreCase(req.getStatus())) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Approval Pending")
+                                .setMessage("Your request to join [" + project.getName() + " (" + project.getProjectCode() + ")] is awaiting site manager approval.\n\nYou cannot access this workspace until authorized.")
+                                .setPositiveButton("OK", null)
+                                .show();
+                    } else if (req != null && "REJECTED".equalsIgnoreCase(req.getStatus())) {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Access Denied")
+                                .setMessage("Your request to join [" + project.getName() + "] was declined by the project manager.")
+                                .setPositiveButton("OK", null)
+                                .show();
+                    } else if ((req != null && "APPROVED".equalsIgnoreCase(req.getStatus())) || isDemo) {
+                        launchProjectInternal(project);
+                    } else {
+                        new AlertDialog.Builder(this)
+                                .setTitle("Join Request Required")
+                                .setMessage("You must submit a join code for [" + project.getName() + "] and receive manager approval before accessing.")
+                                .setPositiveButton("OK", null)
+                                .show();
+                    }
+                });
+            });
+        } else {
+            launchProjectInternal(project);
+        }
+    }
+
+    private void launchProjectInternal(ProjectEntity project) {
         sessionManager.setActiveProject(project.getId(), project.getProjectCode(), project.getName());
         projectRepository.recordProjectOpened(project.getId());
 

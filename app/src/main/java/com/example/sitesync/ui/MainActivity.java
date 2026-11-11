@@ -529,6 +529,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         ((ResourceFragment) current).showCompleteStockBarChart();
                     }
                 }, 800);
+            } else if ("evidence_dump".equalsIgnoreCase(openDialog)) {
+                binding.bottomNavigationView.setSelectedItemId(R.id.nav_progress);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    SiteEvidenceBottomSheetDialog dialog = SiteEvidenceBottomSheetDialog.newInstance();
+                    dialog.show(getSupportFragmentManager(), "SiteEvidenceDialog");
+                }, 400);
             }
         }
 

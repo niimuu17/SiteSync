@@ -136,7 +136,38 @@ public class FallAlertCountdownDialog extends DialogFragment {
         HapticFeedbackUtil.heavyClick(context, null);
         Toast.makeText(context, "RESCUE DISPATCHED: Safety Officer & First Aid Notified!", Toast.LENGTH_LONG).show();
 
-        // Queue high-priority safety hazard in Room DB
+        com.example.sitesync.data.SessionManager sessionManager = new com.example.sitesync.data.SessionManager(context);
+        String projectCode = sessionManager.getActiveProjectCode();
+        if (projectCode == null || projectCode.isEmpty()) projectCode = "PRJ-DHAKA-101";
+
+        com.example.sitesync.models.User user = sessionManager.getCurrentUser();
+        String workerName = user != null ? user.getFullName() : "Site Worker";
+        String workerId = user != null ? user.getUid() : "fall_sensor";
+
+        // Query best available GPS coordinates (or fallback to Metro Central Tower location)
+        double lat = 23.8103;
+        double lng = 90.4125;
+        try {
+            android.location.LocationManager lm = (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            if (lm != null && androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                android.location.Location loc = lm.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER);
+                if (loc == null) {
+                    loc = lm.getLastKnownLocation(android.location.LocationManager.NETWORK_PROVIDER);
+                }
+                if (loc != null) {
+                    lat = loc.getLatitude();
+                    lng = loc.getLongitude();
+                }
+            }
+        } catch (Exception ignored) {}
+
+        final double finalLat = lat;
+        final double finalLng = lng;
+        final String finalProjectCode = projectCode;
+        final String finalWorkerName = workerName;
+        final String finalWorkerId = workerId;
+
+        // 1. Queue high-priority safety hazard in Room DB
         Executors.newSingleThreadExecutor().execute(() -> {
             AppDatabase db = AppDatabase.getDatabase(context);
             String ticketId = "HAZ-FALL-" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
@@ -148,7 +179,7 @@ public class FallAlertCountdownDialog extends DialogFragment {
                     "CRITICAL: Sudden Impact / Worker Fall Detected (" + String.format(Locale.US, "%.1fG", impactG) + ")",
                     "URGENT",
                     "OPEN",
-                    "Sector 4 - Active Pour Perimeter",
+                    String.format(Locale.US, "GPS: %.4f° N, %.4f° E", finalLat, finalLng),
                     null,
                     "Automated Fall Sensor",
                     now,
@@ -168,6 +199,49 @@ public class FallAlertCountdownDialog extends DialogFragment {
                     now
             );
             db.pendingSyncDao().insert(syncItem);
+
+            // 2. Dispatch Emergency Man-Down Location Alert to Site Chat Room
+            String mapsUrl = String.format(Locale.US, "https://maps.google.com/?q=%.5f,%.5f", finalLat, finalLng);
+            String chatAlertText = String.format(Locale.US,
+                    "🚨 [MAN DOWN / FALL DETECTED]\nWorker: %s\nPeak Impact: %.1fG\n📍 Location: %.5f, %.5f\nTap below to open Google Maps navigation.",
+                    finalWorkerName, impactG, finalLat, finalLng
+            );
+
+            com.example.sitesync.data.local.entities.SiteChatMessageEntity chatMsg =
+                    new com.example.sitesync.data.local.entities.SiteChatMessageEntity(
+                            UUID.randomUUID().toString(),
+                            finalProjectCode,
+                            finalWorkerId,
+                            finalWorkerName + " (FALL SENSOR)",
+                            "SAFETY_SENSOR",
+                            chatAlertText,
+                            now,
+                            true
+                    );
+            chatMsg.setMediaType("LOCATION");
+            chatMsg.setMediaUrl(mapsUrl);
+
+            db.siteChatMessageDao().insert(chatMsg);
+
+            // Sync with Firebase Firestore
+            try {
+                java.util.Map<String, Object> map = new java.util.HashMap<>();
+                map.put("id", chatMsg.getId());
+                map.put("projectCode", finalProjectCode);
+                map.put("senderId", finalWorkerId);
+                map.put("senderName", finalWorkerName + " (FALL SENSOR)");
+                map.put("senderRole", "SAFETY_SENSOR");
+                map.put("messageText", chatAlertText);
+                map.put("timestamp", now);
+                map.put("isUrgent", true);
+                map.put("mediaType", "LOCATION");
+                map.put("mediaUrl", mapsUrl);
+
+                com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                        .collection("site_chat_messages")
+                        .document(chatMsg.getId())
+                        .set(map);
+            } catch (Exception ignored) {}
         });
 
         if (listener != null) {

@@ -45,6 +45,17 @@ public class ChatImageViewerDialog extends DialogFragment {
         return dialog;
     }
 
+    public static ChatImageViewerDialog newInstance(String mediaUrl, String title, String subtitle, long timestamp) {
+        ChatImageViewerDialog dialog = new ChatImageViewerDialog();
+        Bundle args = new Bundle();
+        args.putString(ARG_MEDIA_URL, mediaUrl);
+        args.putString(ARG_SENDER_NAME, title);
+        args.putString(ARG_SENDER_ROLE, subtitle);
+        args.putLong(ARG_TIMESTAMP, timestamp);
+        dialog.setArguments(args);
+        return dialog;
+    }
+
     @Override
     public void onStart() {
         super.onStart();

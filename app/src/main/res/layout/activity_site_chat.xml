@@ -172,6 +172,59 @@
             app:tint="@color/peach_accent"
             android:contentDescription="Voice to text" />
 
+        <!-- Recording Overlay Panel (Visible during active voice recording) -->
+        <LinearLayout
+            android:id="@+id/layoutVoiceRecordingPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/forest_dark"
+            android:paddingHorizontal="14dp"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@drawable/bg_badge_urgent"
+                android:backgroundTint="@color/status_red" />
+
+            <TextView
+                android:id="@+id/tvVoiceRecordingTimer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="Recording Voice Note... 00:00"
+                android:textColor="@color/text_on_dark_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelVoiceRecording"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="CANCEL"
+                android:textColor="@color/text_on_dark_muted"
+                android:textSize="11sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSendVoiceRecording"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="6dp"
+                android:text="SEND"
+                android:textColor="@color/forest_dark"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_send"
+                app:iconTint="@color/forest_dark"
+                app:iconSize="14dp"
+                app:backgroundTint="@color/peach_accent"
+                app:cornerRadius="18dp" />
+        </LinearLayout>
+
         <!-- Toggle Urgent Flag -->
         <ImageButton
             android:id="@+id/btnToggleUrgent"
@@ -197,6 +250,17 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="9dp"
             android:maxLines="3" />
+
+        <!-- Record Voice Note Button -->
+        <ImageButton
+            android:id="@+id/btnRecordVoiceNote"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_pill_forest_action"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/peach_accent"
+            android:contentDescription="Record Voice Message" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnSendChatMessage"
