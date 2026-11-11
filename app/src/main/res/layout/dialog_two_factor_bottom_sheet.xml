@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_card_outlined"
+    android:background="@drawable/bg_bottom_sheet_forest"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -13,16 +13,24 @@
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/bg_pill_inactive" />
+        android:background="@drawable/bg_pill_forest" />
 
     <!-- Shield Badge Icon -->
-    <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <FrameLayout
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="12dp"
-        android:src="@drawable/ic_check_circle"
-        app:tint="@color/oxide_blue_primary" />
+        android:background="@drawable/bg_squircle_brand"
+        android:layout_marginBottom="14dp">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_shield"
+            app:tint="@color/forest_surface_deep"
+            android:contentDescription="Security Shield" />
+    </FrameLayout>
 
     <!-- Title -->
     <TextView
@@ -30,7 +38,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="2-Step Verification"
-        android:textColor="@color/text_oxide_primary"
+        android:textColor="@color/text_on_dark_primary"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -41,19 +49,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:gravity="center"
-        android:text="Enter the 6-digit security code sent to your registered mobile device."
-        android:textColor="@color/text_oxide_secondary"
+        android:text="Enter the 6-digit security code sent to your registered device."
+        android:textColor="@color/text_on_dark_secondary"
         android:textSize="13sp" />
 
     <!-- 6-Digit OTP Code Input -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:boxBackgroundColor="@color/warm_ash_surface"
-        app:boxStrokeColor="@color/stroke_oxide_blue"
+        android:layout_marginTop="20dp"
+        app:boxBackgroundColor="@color/forest_card_inset"
+        app:boxStrokeColor="@color/peach_accent"
         app:boxStrokeWidth="1.5dp"
-        app:hintTextColor="@color/text_oxide_secondary">
+        app:hintTextColor="@color/text_on_dark_muted"
+        app:boxCornerRadiusTopStart="14dp"
+        app:boxCornerRadiusTopEnd="14dp"
+        app:boxCornerRadiusBottomStart="14dp"
+        app:boxCornerRadiusBottomEnd="14dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_otp_code"
@@ -64,12 +76,12 @@
             android:inputType="number"
             android:letterSpacing="0.4"
             android:maxLength="6"
-            android:textColor="@color/text_oxide_primary"
+            android:textColor="@color/text_on_dark_primary"
             android:textSize="24sp"
             android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Resend Timer / Action -->
+    <!-- Resend Action -->
     <TextView
         android:id="@+id/tv_resend"
         android:layout_width="match_parent"
@@ -77,18 +89,23 @@
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="Didn't receive code? Tap to resend"
-        android:textColor="@color/oxide_blue_primary"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textColor="@color/peach_accent"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:padding="6dp" />
 
     <!-- Verify Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_verify_otp"
-        style="@style/IndustrialButton"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:layout_marginTop="20dp"
-        android:text="Verify &amp; Sign In" />
+        android:layout_marginTop="16dp"
+        android:text="Verify &amp; Sign In"
+        android:textColor="@color/forest_dark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/peach_accent"
+        app:cornerRadius="26dp" />
 
     <!-- Demo bypass note -->
     <TextView
@@ -96,8 +113,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Field Demo Mode: Enter 123456 to verify instantly"
-        android:textColor="@color/text_oxide_muted"
+        android:text="Demo Security PIN: Enter 123456 to verify instantly"
+        android:textColor="@color/text_on_dark_muted"
         android:textSize="11sp" />
 
 </LinearLayout>

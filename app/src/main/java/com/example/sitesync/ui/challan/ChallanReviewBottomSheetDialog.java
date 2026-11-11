@@ -215,7 +215,7 @@ public class ChallanReviewBottomSheetDialog extends BottomSheetDialogFragment {
         }
 
         binding.tvItemsCountBadge.setText(items.size() + " Items");
-        binding.tvTotalChallanAmount.setText(String.format(Locale.US, "$ %s", bdtFormat.format(Math.round(total))));
+        binding.tvTotalChallanAmount.setText(String.format(Locale.US, "৳ %s", bdtFormat.format(Math.round(total))));
 
         binding.btnAddToInventory.setEnabled(!items.isEmpty());
     }

@@ -92,10 +92,15 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
     }
 
     private void loadAndSeedTasks() {
-        List<TaskEntity> existing = db.taskDao().getAllTasksSync();
-        if (existing == null || existing.isEmpty()) {
-            seedDefaultTasks();
-            existing = db.taskDao().getAllTasksSync();
+        com.example.sitesync.data.SessionManager sessionManager = new com.example.sitesync.data.SessionManager(requireContext());
+        String activeCode = sessionManager.getActiveProjectCode();
+        if (activeCode == null || activeCode.isEmpty()) activeCode = "PRJ-DHAKA-101";
+
+        List<TaskEntity> existing = db.taskDao().getTasksForProjectSync(activeCode);
+        // Only seed initial tasks if it is the cold-start demo project. New projects must be empty.
+        if ((existing == null || existing.isEmpty()) && ("PRJ-DHAKA-101".equalsIgnoreCase(activeCode) || "MCT-2026".equalsIgnoreCase(activeCode))) {
+            seedDefaultTasks(activeCode);
+            existing = db.taskDao().getTasksForProjectSync(activeCode);
         }
 
         allTasks.clear();
@@ -106,13 +111,14 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
         applyCurrentFilter();
     }
 
-    private void seedDefaultTasks() {
+    private void seedDefaultTasks(String projectCode) {
         long now = System.currentTimeMillis();
         long day = 24L * 60 * 60 * 1000;
 
         List<TaskEntity> seed = new ArrayList<>();
         seed.add(new TaskEntity(
                 "TSK-BD-501",
+                projectCode,
                 "Bending & Binding Rebar Rings (10mm Ring / Churi for Beams)",
                 "Bend 10mm deformed rebar into square stirrup rings for 2nd floor lintel and roof beams with 6-inch pitch spacing.",
                 "Habib Mistry (Lead Rod Binder)",
@@ -126,6 +132,7 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
 
         seed.add(new TaskEntity(
                 "TSK-BD-502",
+                projectCode,
                 "Wall Plastering (1:4 Cement Sand Ratio) - 2nd Floor Unit A",
                 "Apply 12mm thick sand cement plaster on brick masonry walls. Ensure straight spirit level plumb line finish.",
                 "Jalal Uddin (Head Raj Mistry)",
@@ -139,6 +146,7 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
 
         seed.add(new TaskEntity(
                 "TSK-BD-503",
+                projectCode,
                 "Thai Aluminum Sliding Window Fitting & Glass Sealant",
                 "Fit heavy-grade bronze Thai aluminum window frames, install 5mm tinted glass panels, and apply silicone weather sealant.",
                 "Alamgir Hossain (Thai Fabricator)",
@@ -152,6 +160,7 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
 
         seed.add(new TaskEntity(
                 "TSK-BD-504",
+                projectCode,
                 "Floor Porcelain Tiles Setting (600x600mm) with Grouting",
                 "Lay 24x24 inch mirror-polished porcelain floor tiles with 2mm tile leveling spacers and epoxy waterproof grout.",
                 "Sumon Mia (Master Tile Setter)",
@@ -165,6 +174,7 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
 
         seed.add(new TaskEntity(
                 "TSK-BD-505",
+                projectCode,
                 "Concealed Electrical Conduit Wall Chipping & Box Fixing",
                 "Cut wall grooves for 25mm PVC electrical conduits, fix 8-module metal gang boxes at 4-foot height, and run draw wires.",
                 "Mizanur Rahman (Senior Electrician)",
@@ -178,6 +188,7 @@ public class TaskFragment extends Fragment implements TaskAdapter.OnTaskActionLi
 
         seed.add(new TaskEntity(
                 "TSK-BD-506",
+                projectCode,
                 "Roof Slab Concrete Water Ponding & Curing Inspection",
                 "Construct 2-inch cement mortar bunds around roof slab perimeter and maintain 14 continuous days of clean water ponding.",
                 "Rafiqul Islam (Site Supervisor)",

@@ -19,23 +19,22 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- Geometric structural logo mark -->
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/bg_squircle_amber"
-            android:backgroundTint="@color/warm_ash_surface"
+        <!-- Official SiteSync App Launch Logo -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="2dp"
             android:layout_marginBottom="16dp">
 
             <ImageView
                 android:id="@+id/imgBrandLogo"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_app_brand_symbol"
-                app:tint="@color/oxide_blue_primary"
-                android:contentDescription="SiteSync Logo" />
-        </FrameLayout>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/app_icon"
+                android:contentDescription="SiteSync App Logo" />
+        </androidx.cardview.widget.CardView>
 
         <!-- Header: Centered bold text -->
         <TextView

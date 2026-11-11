@@ -197,9 +197,13 @@ public class CreateTaskBottomSheetDialog extends BottomSheetDialogFragment {
 
             String taskId = "TSK-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
             long now = System.currentTimeMillis();
+            com.example.sitesync.data.SessionManager sessionManager = new com.example.sitesync.data.SessionManager(requireContext());
+            String pCode = sessionManager.getActiveProjectCode();
+            if (pCode == null || pCode.isEmpty()) pCode = "PRJ-DHAKA-101";
 
             TaskEntity task = new TaskEntity(
                     taskId,
+                    pCode,
                     title,
                     description,
                     assignee,

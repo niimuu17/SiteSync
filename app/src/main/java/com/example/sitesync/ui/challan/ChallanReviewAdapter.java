@@ -72,17 +72,17 @@ public class ChallanReviewAdapter extends RecyclerView.Adapter<ChallanReviewAdap
         String qtyText = String.format(Locale.US, "%.1f %s", item.quantity, item.unit);
         holder.tvQuantityAndUnit.setText(qtyText);
 
-        String rateText = String.format(Locale.US, "$ %s / %s",
+        String rateText = String.format(Locale.US, "৳ %s / %s",
                 bdtFormat.format(Math.round(item.unitPrice)), item.unit);
         holder.tvBilledRate.setText(rateText);
 
-        String subtotalText = String.format(Locale.US, "$ %s",
+        String subtotalText = String.format(Locale.US, "৳ %s",
                 bdtFormat.format(Math.round(item.totalPrice)));
         holder.tvItemSubtotal.setText(subtotalText);
 
         // Bind Market Benchmark & Status
         if (item.priceEvaluation != null) {
-            String benchText = String.format(Locale.US, "Market Benchmark: $ %s",
+            String benchText = String.format(Locale.US, "Market Benchmark: ৳ %s",
                     bdtFormat.format(Math.round(item.priceEvaluation.benchmarkPrice)));
             holder.tvMarketBenchmark.setText(benchText);
 

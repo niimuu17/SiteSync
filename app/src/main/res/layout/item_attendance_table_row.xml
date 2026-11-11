@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="14dp"
+    android:background="@drawable/bg_table_row_selector">
+
+    <!-- 1. Date -->
+    <TextView
+        android:id="@+id/tvRowDate"
+        android:layout_width="95dp"
+        android:layout_height="wrap_content"
+        android:text="11 Nov 2026"
+        android:textColor="@color/forest_dark"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <!-- 2. Worker Name & ID -->
+    <LinearLayout
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRowWorkerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Md. Rafiqul Islam"
+            android:textColor="@color/forest_dark"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvRowWorkerId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WRK-9402"
+            android:textColor="@color/forest_muted"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- 3. Trade / Role -->
+    <TextView
+        android:id="@+id/tvRowRole"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Lead Rod Binder"
+        android:textColor="@color/forest_dark"
+        android:textSize="12sp"
+        android:singleLine="true"
+        android:ellipsize="end" />
+
+    <!-- 4. Clock In -->
+    <TextView
+        android:id="@+id/tvRowClockIn"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:text="08:00 AM"
+        android:textColor="@color/forest_dark"
+        android:textSize="12sp" />
+
+    <!-- 5. Clock Out -->
+    <TextView
+        android:id="@+id/tvRowClockOut"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:text="05:00 PM"
+        android:textColor="@color/forest_dark"
+        android:textSize="12sp" />
+
+    <!-- 6. Shift Duration -->
+    <TextView
+        android:id="@+id/tvRowDuration"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:text="9h 00m"
+        android:textColor="@color/forest_dark"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <!-- 7. Geofence GPS -->
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/ivGeofenceCheck"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/badge_green_text"
+            android:contentDescription="Verified" />
+
+        <TextView
+            android:id="@+id/tvRowGpsStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="Geofence Verified"
+            android:textColor="@color/forest_dark"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- 8. Status Pill -->
+    <TextView
+        android:id="@+id/tvRowStatusBadge"
+        android:layout_width="90dp"
+        android:layout_height="26dp"
+        android:gravity="center"
+        android:text="ON DUTY"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:background="@drawable/bg_badge_green"
+        android:textColor="@color/badge_green_text" />
+
+</LinearLayout>

@@ -122,7 +122,7 @@ public class LogProgressBottomSheetDialog extends BottomSheetDialogFragment {
 
         if (currentProject == null) {
             currentProject = new ProjectEntity("PRJ-MCT-2026", "MCT-2026", "Metro Central Tower",
-                    "Metro Urban Dev", "Skyline Infra", "Dhaka", "$42.5M", "Floor 3",
+                    "Metro Urban Dev", "Skyline Infra", "Dhaka", "৳ 42.5 Crore", "Floor 3",
                     "2-Room Building", 2, 10.0f, 6, 4, "Tiles", "Standard residential scope", 68.0f);
         }
 

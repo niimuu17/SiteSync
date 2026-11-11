@@ -79,6 +79,27 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             binding.tvTaskDescription.setText(task.getDescription());
             binding.tvAssignee.setText(task.getAssignedTo() != null ? task.getAssignedTo() : "Elena Rostova");
 
+            // Dynamic Category Vector Icon
+            String titleLower = (task.getTitle() != null ? task.getTitle() : "").toLowerCase(Locale.US);
+            String descLower = (task.getDescription() != null ? task.getDescription() : "").toLowerCase(Locale.US);
+            String combined = titleLower + " " + descLower;
+
+            if (combined.contains("rebar") || combined.contains("rod") || combined.contains("ring") || combined.contains("steel") || combined.contains("beam")) {
+                binding.ivTaskCategoryIcon.setImageResource(R.drawable.ic_construction);
+            } else if (combined.contains("plaster") || combined.contains("brick") || combined.contains("masonry") || combined.contains("wall")) {
+                binding.ivTaskCategoryIcon.setImageResource(R.drawable.ic_construction);
+            } else if (combined.contains("thai") || combined.contains("glass") || combined.contains("window") || combined.contains("aluminum")) {
+                binding.ivTaskCategoryIcon.setImageResource(R.drawable.ic_chart_toggle);
+            } else if (combined.contains("tile") || combined.contains("floor") || combined.contains("mosaic")) {
+                binding.ivTaskCategoryIcon.setImageResource(R.drawable.ic_grid);
+            } else if (combined.contains("electric") || combined.contains("conduit") || combined.contains("wire") || combined.contains("box")) {
+                binding.ivTaskCategoryIcon.setImageResource(R.drawable.ic_electric_bolt);
+            } else if (combined.contains("curing") || combined.contains("water") || combined.contains("slab") || combined.contains("concrete")) {
+                binding.ivTaskCategoryIcon.setImageResource(R.drawable.ic_checklist);
+            } else {
+                binding.ivTaskCategoryIcon.setImageResource(R.drawable.ic_check_circle);
+            }
+
             // Priority Badge Styling
             String priority = task.getPriority() != null ? task.getPriority().toUpperCase() : "MEDIUM";
             binding.tvPriorityBadge.setText(priority);

@@ -132,7 +132,7 @@
                     android:id="@+id/tvStockValuation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$ 240,800"
+                    android:text="৳ 240,800"
                     android:textColor="@color/peach_accent"
                     android:textSize="15sp"
                     android:textStyle="bold" />

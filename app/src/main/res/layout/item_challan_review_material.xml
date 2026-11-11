@@ -125,7 +125,7 @@
                     android:id="@+id/tvBilledRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$ 92,000 / TON"
+                    android:text="৳ 92,000 / TON"
                     android:textColor="@color/peach_accent"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -148,7 +148,7 @@
                     android:id="@+id/tvItemSubtotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$ 460,000"
+                    android:text="৳ 460,000"
                     android:textColor="@color/text_on_dark_primary"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -175,7 +175,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Market Benchmark: $ 92,000"
+                android:text="Market Benchmark: ৳ 92,000"
                 android:textColor="@color/text_on_dark_secondary"
                 android:textSize="12sp" />
 

@@ -207,7 +207,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="$42.5M USD"
+                android:text="৳ 42.5 Crore"
                 android:textColor="@color/text_oxide_primary"
                 android:textSize="12sp"
                 android:textStyle="bold" />

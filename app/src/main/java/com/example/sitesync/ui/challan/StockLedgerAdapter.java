@@ -72,7 +72,7 @@ public class StockLedgerAdapter extends RecyclerView.Adapter<StockLedgerAdapter.
 
         holder.tvTxItemName.setText(tx.getItemName());
         holder.tvTxDate.setText(dateFormat.format(new Date(tx.getTimestamp())));
-        holder.tvTxCost.setText(String.format(Locale.US, "$ %s", bdtFormat.format(Math.round(tx.getTotalCost()))));
+        holder.tvTxCost.setText(String.format(Locale.US, "৳ %s", bdtFormat.format(Math.round(tx.getTotalCost()))));
     }
 
     @Override

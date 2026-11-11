@@ -128,6 +128,13 @@ public class InventoryRepository {
         executor.execute(() -> {
             try {
                 String pCode = (projectCode != null && !projectCode.isEmpty()) ? projectCode : "PRJ-DHAKA-101";
+
+                // New projects must start with completely empty inventory. Only initial demo seed project gets starter stock.
+                if (!"PRJ-DHAKA-101".equalsIgnoreCase(pCode) && !"MCT-2026".equalsIgnoreCase(pCode)) {
+                    deliverSuccess(callback, false);
+                    return;
+                }
+
                 if (itemDao.getItemCountForProject(pCode) > 0) {
                     deliverSuccess(callback, false);
                     return;

@@ -86,6 +86,25 @@
                     android:contentDescription="Crew Chat Room" />
             </FrameLayout>
 
+            <!-- Project People & Worker Management Button -->
+            <FrameLayout
+                android:id="@+id/btnPeopleHeader"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="4dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_people"
+                    app:tint="@color/forest_surface_deep"
+                    android:contentDescription="Project People Directory" />
+            </FrameLayout>
+
             <!-- Notification Bell with Alert Dot -->
             <FrameLayout
                 android:id="@+id/btnNotificationsHeader"

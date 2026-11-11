@@ -47,6 +47,22 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
                 }
             });
 
+    private final ActivityResultLauncher<String> galleryPhotoLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    copyUriToTempAndProcess(uri);
+                }
+            });
+
+    private final ActivityResultLauncher<String> cameraPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    launchCameraCaptureInternal();
+                } else {
+                    Toast.makeText(requireContext(), "Camera permission required to capture evidence photos", Toast.LENGTH_SHORT).show();
+                }
+            });
+
     public static SiteEvidenceBottomSheetDialog newInstance() {
         return new SiteEvidenceBottomSheetDialog();
     }
@@ -84,6 +100,10 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
 
         binding.btnCloseEvidenceModal.setOnClickListener(v -> dismiss());
         binding.btnCaptureEvidenceModal.setOnClickListener(v -> launchCameraCapture());
+        binding.btnAddProjectPhotoModal.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(requireContext(), v);
+            galleryPhotoLauncher.launch("image/*");
+        });
     }
 
     private void loadRecentPhotos() {
@@ -106,6 +126,15 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     private void launchCameraCapture() {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            launchCameraCaptureInternal();
+        } else {
+            cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA);
+        }
+    }
+
+    private void launchCameraCaptureInternal() {
         try {
             tempPhotoFile = File.createTempFile("evidence_", ".jpg", requireContext().getCacheDir());
             tempPhotoUri = FileProvider.getUriForFile(
@@ -116,6 +145,24 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
             takePhotoLauncher.launch(tempPhotoUri);
         } catch (IOException e) {
             Toast.makeText(requireContext(), "Camera init error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void copyUriToTempAndProcess(Uri uri) {
+        try {
+            File dest = File.createTempFile("gallery_evidence_", ".jpg", requireContext().getCacheDir());
+            try (java.io.InputStream in = requireContext().getContentResolver().openInputStream(uri);
+                 java.io.FileOutputStream out = new java.io.FileOutputStream(dest)) {
+                if (in == null) return;
+                byte[] buffer = new byte[8192];
+                int read;
+                while ((read = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, read);
+                }
+            }
+            processCapturedPhoto(dest);
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "Could not import photo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

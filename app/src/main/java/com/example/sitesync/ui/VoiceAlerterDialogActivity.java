@@ -112,10 +112,12 @@ public class VoiceAlerterDialogActivity extends AppCompatActivity {
         try {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Site Emergency or Status...");
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD");
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "bn-BD");
+            intent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{"bn-BD", "en-US"});
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak in Bengali or English (e.g. '3 ta led bulb lagbe')");
             speechLauncher.launch(intent);
-            binding.tvSpokenTranscript.setText("Listening to speech...");
+            binding.tvSpokenTranscript.setText("Listening (Bengali / English)...");
             binding.tvEvaluationStatus.setText("Microphone active");
         } catch (Exception e) {
             binding.tvSpokenTranscript.setText("Voice recognition error: " + e.getMessage());
@@ -130,11 +132,34 @@ public class VoiceAlerterDialogActivity extends AppCompatActivity {
             if (classification.isEmergency) {
                 // TRIGGER EMERGENCY ALARM & SIREN
                 triggerEmergencyAlarm(classification);
+            } else if (classification.isMaterialRequest) {
+                // DISPATCH MATERIAL REQUISITION TO SITE CHAT ROOM
+                handleMaterialRequest(classification);
             } else {
-                // Casual chatter - show info and do not trigger siren
+                // Casual chatter - also post message to chat room as requested
                 handleCasualChatter(classification);
             }
         });
+    }
+
+    private void handleMaterialRequest(EmergencySpeechClassifier.EmergencyClassification result) {
+        binding.tvEvaluationStatus.setText("MATERIAL REQUISITION SENT TO CHAT ROOM");
+        binding.tvEvaluationStatus.setTextColor(Color.parseColor("#F5C29B"));
+        binding.tvSpokenTranscript.setTextColor(Color.parseColor("#F5C29B"));
+
+        postVoiceMessageToChat("[MATERIAL REQUEST] " + result.rawSpokenText, false);
+
+        Toast.makeText(this, "Material Request sent to Site Chat: \"" + result.rawSpokenText + "\"", Toast.LENGTH_LONG).show();
+    }
+
+    private void handleCasualChatter(EmergencySpeechClassifier.EmergencyClassification result) {
+        binding.tvEvaluationStatus.setText("Voice Update Dispatched to Site Chat (" + result.modelUsed + ")");
+        binding.tvEvaluationStatus.setTextColor(Color.parseColor("#10B981"));
+        binding.tvSpokenTranscript.setTextColor(Color.parseColor("#F5C29B"));
+
+        postVoiceMessageToChat("[VOICE NOTE] " + result.rawSpokenText, false);
+
+        Toast.makeText(this, "Message sent to Site Chat Room: \"" + result.rawSpokenText + "\"", Toast.LENGTH_SHORT).show();
     }
 
     private void triggerEmergencyAlarm(EmergencySpeechClassifier.EmergencyClassification result) {
@@ -156,12 +181,45 @@ public class VoiceAlerterDialogActivity extends AppCompatActivity {
         Toast.makeText(this, "EMERGENCY BROADCAST TRIGGERED: " + result.alertHeadline, Toast.LENGTH_LONG).show();
     }
 
-    private void handleCasualChatter(EmergencySpeechClassifier.EmergencyClassification result) {
-        binding.tvEvaluationStatus.setText("Normal Chatter (" + result.modelUsed + ") • Zero Safety Threat");
-        binding.tvEvaluationStatus.setTextColor(Color.parseColor("#10B981"));
-        binding.tvSpokenTranscript.setTextColor(Color.parseColor("#F5C29B"));
+    private void postVoiceMessageToChat(String messageText, boolean isUrgent) {
+        String pCode = sessionManager.getActiveProjectCode();
+        if (pCode == null || pCode.isEmpty()) pCode = "PRJ-DHAKA-101";
 
-        Toast.makeText(this, "Recognized: \"" + result.rawSpokenText + "\" • No emergency detected.", Toast.LENGTH_SHORT).show();
+        User currentUser = sessionManager.getCurrentUser();
+        String senderId = currentUser != null ? currentUser.getUsername() : "voice_alerter";
+        String senderName = currentUser != null ? currentUser.getFullName() : "Voice Alerter";
+        String senderRole = currentUser != null && currentUser.getRole() != null ? currentUser.getRole() : "WORKER";
+        String msgId = UUID.randomUUID().toString();
+        long now = System.currentTimeMillis();
+
+        SiteChatMessageEntity message = new SiteChatMessageEntity(
+                msgId, pCode, senderId, senderName, senderRole, messageText, now, isUrgent
+        );
+        message.setMediaType("TEXT");
+
+        // 1. Local Room DB Cache
+        String finalPCode = pCode;
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            AppDatabase.getInstance(VoiceAlerterDialogActivity.this).siteChatMessageDao().insert(message);
+        });
+
+        // 2. Realtime Cloud Sync via Firestore
+        try {
+            Map<String, Object> data = new HashMap<>();
+            data.put("id", msgId);
+            data.put("projectCode", finalPCode);
+            data.put("senderId", senderId);
+            data.put("senderName", senderName);
+            data.put("senderRole", senderRole);
+            data.put("messageText", messageText);
+            data.put("timestamp", now);
+            data.put("isUrgent", isUrgent);
+            data.put("mediaType", "TEXT");
+
+            FirebaseFirestore.getInstance().collection("projects").document(finalPCode)
+                    .collection("chat_messages").document(msgId)
+                    .set(data);
+        } catch (Exception ignored) {}
     }
 
     private void startBoldSiren() {

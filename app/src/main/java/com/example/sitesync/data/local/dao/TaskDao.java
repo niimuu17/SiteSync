@@ -27,6 +27,15 @@ public interface TaskDao {
     @Delete
     void delete(TaskEntity task);
 
+    @Query("SELECT * FROM tasks WHERE projectCode = :projectCode ORDER BY dueDate ASC")
+    LiveData<List<TaskEntity>> getTasksForProject(String projectCode);
+
+    @Query("SELECT * FROM tasks WHERE projectCode = :projectCode ORDER BY dueDate ASC")
+    List<TaskEntity> getTasksForProjectSync(String projectCode);
+
+    @Query("SELECT COUNT(*) FROM tasks WHERE projectCode = :projectCode")
+    int getTaskCountForProject(String projectCode);
+
     @Query("SELECT * FROM tasks ORDER BY dueDate ASC")
     LiveData<List<TaskEntity>> getAllTasks();
 

@@ -10,6 +10,7 @@ public class TaskEntity {
     @PrimaryKey
     @NonNull
     private String id;
+    private String projectCode;
     private String title;
     private String description;
     private String assignedTo;
@@ -20,10 +21,11 @@ public class TaskEntity {
     private long createdAt;
     private boolean isSynced;
 
-    public TaskEntity(@NonNull String id, String title, String description, String assignedTo,
+    public TaskEntity(@NonNull String id, String projectCode, String title, String description, String assignedTo,
                       String priority, String status, long dueDate, boolean reminderScheduled,
                       long createdAt, boolean isSynced) {
         this.id = id;
+        this.projectCode = projectCode != null ? projectCode : "PRJ-DHAKA-101";
         this.title = title;
         this.description = description;
         this.assignedTo = assignedTo;
@@ -35,9 +37,19 @@ public class TaskEntity {
         this.isSynced = isSynced;
     }
 
+    @androidx.room.Ignore
+    public TaskEntity(@NonNull String id, String title, String description, String assignedTo,
+                      String priority, String status, long dueDate, boolean reminderScheduled,
+                      long createdAt, boolean isSynced) {
+        this(id, "PRJ-DHAKA-101", title, description, assignedTo, priority, status, dueDate, reminderScheduled, createdAt, isSynced);
+    }
+
     @NonNull
     public String getId() { return id; }
     public void setId(@NonNull String id) { this.id = id; }
+
+    public String getProjectCode() { return projectCode; }
+    public void setProjectCode(String projectCode) { this.projectCode = projectCode; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

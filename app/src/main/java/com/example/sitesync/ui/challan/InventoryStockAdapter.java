@@ -64,7 +64,7 @@ public class InventoryStockAdapter extends RecyclerView.Adapter<InventoryStockAd
                 item.getCurrentBalance(), item.getUnit()));
 
         double val = item.getValuation();
-        holder.tvStockValuation.setText(String.format(Locale.US, "$ %s", bdtFormat.format(Math.round(val))));
+        holder.tvStockValuation.setText(String.format(Locale.US, "৳ %s", bdtFormat.format(Math.round(val))));
 
         // Low stock warning
         if (item.isLowStock()) {

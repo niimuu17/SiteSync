@@ -106,7 +106,7 @@
                 android:id="@+id/tvTxCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$ 460,000"
+                android:text="৳ 460,000"
                 android:textColor="@color/peach_accent"
                 android:textSize="12sp"
                 android:textStyle="bold" />

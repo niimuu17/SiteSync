@@ -40,8 +40,10 @@ public class EmergencySpeechClassifier {
 
     public static class EmergencyClassification implements Serializable {
         public boolean isEmergency;
-        public String emergencyType; // "FIRE", "COLLAPSE", "FALL", "ELECTRICAL", "MEDICAL", "NONE"
-        public String severity;      // "CRITICAL", "HIGH", "NONE"
+        public boolean isMaterialRequest;
+        public String requestedItemName;
+        public String emergencyType; // "FIRE", "COLLAPSE", "FALL", "ELECTRICAL", "MEDICAL", "MATERIAL_REQUEST", "NONE"
+        public String severity;      // "CRITICAL", "HIGH", "NORMAL", "NONE"
         public String alertHeadline;
         public String summary;
         public String rawSpokenText;
@@ -56,6 +58,7 @@ public class EmergencySpeechClassifier {
             this.summary = summary;
             this.rawSpokenText = rawSpokenText;
             this.modelUsed = modelUsed;
+            this.isMaterialRequest = false;
         }
 
         public static EmergencyClassification notAnEmergency(String rawText) {
@@ -189,6 +192,18 @@ public class EmergencySpeechClassifier {
                     "CRITICAL MEDICAL EMERGENCY",
                     "Spoken Report: \"" + text + "\" - Immediate first aid / ambulance required.",
                     text, "Instant Life-Safety Detector");
+        }
+
+        // Material / Product Requisition Detection (e.g. "3 ta led bulb lagbe", "10 bag cement lagbe", "50 kg rod lagbe")
+        Pattern reqPattern = Pattern.compile("(lagbe|dar kar|dorkar|need|bulb|cement|rod|sand|balu|brick|it|pipe|wire|cable|tiles|plaster|bring|kinte|anben)", Pattern.CASE_INSENSITIVE);
+        if (reqPattern.matcher(lower).find() || text.contains("লাগবে") || text.contains("দরকার") || text.contains("আনেন") || text.contains("কিনে")) {
+            EmergencyClassification matReq = new EmergencyClassification(false, "MATERIAL_REQUEST", "NORMAL",
+                    "PRODUCT REQUISITION DISPATCHED",
+                    "Material request recorded: \"" + text + "\" - Posted to site crew chat.",
+                    text, "Site Material Dispatcher");
+            matReq.isMaterialRequest = true;
+            matReq.requestedItemName = text;
+            return matReq;
         }
 
         return EmergencyClassification.notAnEmergency(text);

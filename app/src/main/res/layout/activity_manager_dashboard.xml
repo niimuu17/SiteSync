@@ -171,7 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="$3,420,000 / $5,000,000 (68.4%)"
+                        android:text="৳ 3,420,000 / ৳ 5,000,000 (68.4%)"
                         android:textColor="@color/text_primary"
                         android:textSize="17sp"
                         android:textStyle="bold" />

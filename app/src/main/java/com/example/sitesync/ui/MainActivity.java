@@ -161,6 +161,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             startActivity(chatIntent);
         });
 
+        // People Directory & Worker Management (Kick Out / Remove Workers)
+        binding.btnPeopleHeader.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            Intent peopleIntent = new Intent(this, ProjectPeopleActivity.class);
+            startActivity(peopleIntent);
+        });
+
         // Observe pending worker clearance requests to toggle alert badge dot
         String activeCode = sessionManager.getActiveProjectCode();
         if (activeCode == null || activeCode.isEmpty()) {

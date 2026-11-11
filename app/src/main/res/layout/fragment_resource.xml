@@ -116,7 +116,7 @@
                         android:id="@+id/tvTotalInventoryValuation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$ 0.00"
+                        android:text="৳ 0.00"
                         android:textColor="@color/peach_accent"
                         android:textSize="28sp"
                         android:textStyle="bold"
@@ -140,7 +140,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Delivered: $ 0"
+                            android:text="Delivered: ৳ 0"
                             android:textColor="@color/text_on_dark_secondary"
                             android:textSize="12sp" />
 
@@ -148,7 +148,7 @@
                             android:id="@+id/tvTotalDispatches"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Site Pouring: $ 0"
+                            android:text="Site Pouring: ৳ 0"
                             android:textColor="@color/text_on_dark_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>

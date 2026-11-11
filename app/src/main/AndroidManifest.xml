@@ -241,6 +241,16 @@
         <activity android:name=".ui.reports.CreateDailyReportActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.reports.DailyReportDetailActivity" android:exported="false" />
 
+        <activity
+            android:name=".ui.AttendanceTableActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SiteSync" />
+
+        <activity
+            android:name=".ui.ProjectPeopleActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SiteSync" />
+
         <receiver
             android:name=".utils.TaskReminderReceiver"
             android:exported="false" />

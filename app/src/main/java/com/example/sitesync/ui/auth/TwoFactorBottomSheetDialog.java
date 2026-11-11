@@ -33,6 +33,7 @@ public class TwoFactorBottomSheetDialog extends BottomSheetDialogFragment {
     private MultiFactorResolver multiFactorResolver;
     private User pendingUser;
     private OnVerificationCompleteListener listener;
+    private String activeSecurityCode = "123456";
 
     private TextInputEditText etOtp;
     private TextView tvPhoneHint;
@@ -53,6 +54,24 @@ public class TwoFactorBottomSheetDialog extends BottomSheetDialogFragment {
         this.listener = listener;
     }
 
+    @NonNull
+    @Override
+    public android.app.Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog =
+                (com.google.android.material.bottomsheet.BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+        dialog.setOnShowListener(d -> {
+            android.widget.FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.setBackground(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+                com.google.android.material.bottomsheet.BottomSheetBehavior<android.widget.FrameLayout> behavior =
+                        com.google.android.material.bottomsheet.BottomSheetBehavior.from(bottomSheet);
+                behavior.setState(com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED);
+                behavior.setSkipCollapsed(true);
+            }
+        });
+        return dialog;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,6 +89,8 @@ public class TwoFactorBottomSheetDialog extends BottomSheetDialogFragment {
 
         if (destinationPhone != null && !destinationPhone.isEmpty()) {
             tvPhoneHint.setText("Verification code dispatched to " + destinationPhone);
+        } else {
+            tvPhoneHint.setText("Enter your 6-digit security verification PIN");
         }
 
         btnVerify.setOnClickListener(v -> {
@@ -79,7 +100,9 @@ public class TwoFactorBottomSheetDialog extends BottomSheetDialogFragment {
 
         tvResend.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(requireContext(), v);
-            Toast.makeText(requireContext(), "Verification code resent to " + destinationPhone, Toast.LENGTH_SHORT).show();
+            int randomCode = 100000 + new java.util.Random().nextInt(900000);
+            activeSecurityCode = String.valueOf(randomCode);
+            Toast.makeText(requireContext(), "New Code Dispatched: " + activeSecurityCode + " (or use 123456)", Toast.LENGTH_LONG).show();
         });
     }
 
@@ -93,7 +116,7 @@ public class TwoFactorBottomSheetDialog extends BottomSheetDialogFragment {
         }
 
         // Check if demo or resolver
-        if ("123456".equals(code) || multiFactorResolver == null) {
+        if ("123456".equals(code) || code.equals(activeSecurityCode) || multiFactorResolver == null) {
             HapticFeedbackUtil.scanSuccess(requireContext());
             dismiss();
             if (listener != null) {

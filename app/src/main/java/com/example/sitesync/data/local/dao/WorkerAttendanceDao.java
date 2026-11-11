@@ -29,6 +29,9 @@ public interface WorkerAttendanceDao {
     @Query("SELECT * FROM worker_attendances WHERE projectCode = :projectCode ORDER BY clockInTime DESC")
     LiveData<List<WorkerAttendanceEntity>> getProjectAttendancesLive(String projectCode);
 
+    @Query("SELECT * FROM worker_attendances WHERE projectCode = :projectCode ORDER BY clockInTime DESC")
+    List<WorkerAttendanceEntity> getProjectAttendancesSync(String projectCode);
+
     @Query("UPDATE worker_attendances SET clockOutTime = :clockOutTime, isClockedIn = 0, shiftStatus = 'COMPLETED' WHERE id = :id")
     void clockOut(String id, long clockOutTime);
 }

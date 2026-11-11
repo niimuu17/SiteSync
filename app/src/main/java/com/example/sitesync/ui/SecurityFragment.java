@@ -74,11 +74,19 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         setupAcousticDecibelMonitoring();
         setupFallDetection();
         setupSpiritLevelUtility();
+        setupAttendanceTableButton();
         setupHazardList();
         setupFilterChips();
         setupSyncTelemetry();
         seedInitialHazardsIfEmpty();
         loadHazardTickets();
+    }
+
+    private void setupAttendanceTableButton() {
+        binding.cardEmployeeAttendanceTable.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(requireContext(), v);
+            startActivity(new android.content.Intent(requireContext(), AttendanceTableActivity.class));
+        });
     }
 
     private void setupFallDetection() {

@@ -23,6 +23,9 @@ public interface WorkerJoinRequestDao {
     @Query("SELECT * FROM worker_join_requests WHERE projectCode = :projectCode ORDER BY requestedAt DESC")
     LiveData<List<WorkerJoinRequestEntity>> getRequestsForProjectLive(String projectCode);
 
+    @Query("SELECT * FROM worker_join_requests WHERE projectCode = :projectCode ORDER BY requestedAt DESC")
+    List<WorkerJoinRequestEntity> getRequestsForProject(String projectCode);
+
     @Query("SELECT * FROM worker_join_requests WHERE projectCode = :projectCode AND status = 'PENDING' ORDER BY requestedAt DESC")
     LiveData<List<WorkerJoinRequestEntity>> getPendingRequestsForProjectLive(String projectCode);
 
@@ -31,6 +34,9 @@ public interface WorkerJoinRequestDao {
 
     @Query("UPDATE worker_join_requests SET status = :status, reviewedAt = :reviewedAt WHERE id = :requestId")
     void updateStatus(String requestId, String status, long reviewedAt);
+
+    @Query("UPDATE worker_join_requests SET status = :status WHERE id = :requestId")
+    void updateStatus(String requestId, String status);
 
     @Query("SELECT * FROM worker_join_requests WHERE workerId = :workerId LIMIT 1")
     WorkerJoinRequestEntity getRequestByWorkerId(String workerId);

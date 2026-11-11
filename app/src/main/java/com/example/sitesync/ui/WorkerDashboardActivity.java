@@ -116,19 +116,33 @@ public class WorkerDashboardActivity extends AppCompatActivity {
 
         binding.btnWorkerSignOut.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(this, v);
-            new AlertDialog.Builder(this)
-                    .setTitle("Sign Out")
-                    .setMessage("Are you sure you want to sign out of SiteSync?")
-                    .setPositiveButton("Sign Out", (dialog, which) -> {
-                        sessionManager.clearSession();
-                        FloatingVoiceAlerterService.stopAlerter(WorkerDashboardActivity.this);
-                        Intent intent = new Intent(WorkerDashboardActivity.this, LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .show();
+            com.example.sitesync.databinding.DialogSignOutConfirmBinding dialogBinding =
+                    com.example.sitesync.databinding.DialogSignOutConfirmBinding.inflate(getLayoutInflater());
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setView(dialogBinding.getRoot())
+                    .create();
+
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+            }
+
+            dialogBinding.btnCancelSignOut.setOnClickListener(cv -> {
+                HapticFeedbackUtil.lightClick(this, cv);
+                dialog.dismiss();
+            });
+
+            dialogBinding.btnConfirmSignOut.setOnClickListener(cv -> {
+                HapticFeedbackUtil.heavyClick(this, cv);
+                dialog.dismiss();
+                sessionManager.clearSession();
+                FloatingVoiceAlerterService.stopAlerter(WorkerDashboardActivity.this);
+                Intent intent = new Intent(WorkerDashboardActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+
+            dialog.show();
         });
 
         binding.btnWorkerChatHeader.setOnClickListener(v -> {

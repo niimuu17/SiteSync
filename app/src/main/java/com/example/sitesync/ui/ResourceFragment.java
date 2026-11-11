@@ -129,18 +129,21 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
         setupFilterChips();
         observeDatabaseData();
 
-        // Seed initial Bangladesh construction materials if Room database is empty for this project
-        repository.seedDefaultMaterialsForProjectIfEmpty(activeProjectCode, new InventoryRepository.ActionCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean seeded) {
-                // Observers will automatically refresh UI
-            }
+        // Only seed initial materials if it's the cold-start demo project (PRJ-DHAKA-101 or MCT-2026).
+        // New projects created by users must start with 0 items / empty inventory.
+        if ("PRJ-DHAKA-101".equalsIgnoreCase(activeProjectCode) || "MCT-2026".equalsIgnoreCase(activeProjectCode)) {
+            repository.seedDefaultMaterialsForProjectIfEmpty(activeProjectCode, new InventoryRepository.ActionCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean seeded) {
+                    // Observers will automatically refresh UI
+                }
 
-            @Override
-            public void onError(Exception error) {
-                // Ignore
-            }
-        });
+                @Override
+                public void onError(Exception error) {
+                    // Ignore
+                }
+            });
+        }
     }
 
     private void setupAdapters() {
@@ -296,7 +299,7 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
             }
         }
 
-        binding.tvTotalInventoryValuation.setText(String.format(Locale.US, "$ %s", bdtFormat.format(Math.round(totalValuation))));
+        binding.tvTotalInventoryValuation.setText(String.format(Locale.US, "৳ %s", bdtFormat.format(Math.round(totalValuation))));
 
         if (lowStockCount > 0) {
             binding.tvLowStockAlertBadge.setText(lowStockCount + " Items Low Stock");
@@ -318,8 +321,8 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
             }
         }
 
-        binding.tvTotalPurchases.setText(String.format(Locale.US, "Delivered: $ %s", bdtFormat.format(Math.round(totalInflow))));
-        binding.tvTotalDispatches.setText(String.format(Locale.US, "Site Pouring: $ %s", bdtFormat.format(Math.round(totalOutflow))));
+        binding.tvTotalPurchases.setText(String.format(Locale.US, "Delivered: ৳ %s", bdtFormat.format(Math.round(totalInflow))));
+        binding.tvTotalDispatches.setText(String.format(Locale.US, "Site Pouring: ৳ %s", bdtFormat.format(Math.round(totalOutflow))));
     }
 
     private void updatePieChart() {
@@ -347,18 +350,18 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
         List<PieEntry> entries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
         int[] palette = new int[]{
+                Color.parseColor("#3A86FF"), // Vivid Electric Blue
                 Color.parseColor("#F5C29B"), // Warm Peach
-                Color.parseColor("#4ECDC4"), // Bright Cyan / Aqua Teal
-                Color.parseColor("#F4A261"), // Amber Gold
-                Color.parseColor("#2EC4B6"), // Emerald Mint
-                Color.parseColor("#9B5DE5"), // Royal Violet / Purple
-                Color.parseColor("#E76F51"), // Terracotta / Crimson Coral
-                Color.parseColor("#48CAE4"), // Sky Blue
-                Color.parseColor("#FFD166"), // Solar Gold
-                Color.parseColor("#06D6A0"), // Neon Mint
-                Color.parseColor("#F15BB5"), // Magenta Pink
-                Color.parseColor("#3A86FF"), // Electric Blue
-                Color.parseColor("#FB5607")  // Sunset Orange
+                Color.parseColor("#06D6A0"), // Emerald Mint
+                Color.parseColor("#E63946"), // Vivid Crimson Red
+                Color.parseColor("#FFB703"), // Solar Gold
+                Color.parseColor("#8338EC"), // Royal Purple
+                Color.parseColor("#00BBF9"), // Sky Cyan
+                Color.parseColor("#FB5607"), // Sunset Orange
+                Color.parseColor("#90BE6D"), // Sage Green
+                Color.parseColor("#FF006E"), // Hot Pink
+                Color.parseColor("#4ECDC4"), // Aqua Teal
+                Color.parseColor("#FFD166")  // Sand Amber
         };
 
         float density = getResources().getDisplayMetrics().density;
@@ -415,11 +418,11 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
         // Donut Center Text: Formatted total
         String centerText;
         if (totalValuation >= 1_000_000) {
-            centerText = String.format(Locale.US, "$%.2fM\nTotal", totalValuation / 1_000_000.0);
+            centerText = String.format(Locale.US, "৳%.2fM\nTotal", totalValuation / 1_000_000.0);
         } else if (totalValuation >= 1_000) {
-            centerText = String.format(Locale.US, "$%.0fK\nTotal", totalValuation / 1_000.0);
+            centerText = String.format(Locale.US, "৳%.0fK\nTotal", totalValuation / 1_000.0);
         } else {
-            centerText = String.format(Locale.US, "$%.0f\nTotal", totalValuation);
+            centerText = String.format(Locale.US, "৳%.0f\nTotal", totalValuation);
         }
         pie.setCenterText(centerText);
         pie.setCenterTextColor(Color.parseColor("#F9F5EB"));
@@ -468,7 +471,7 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
 
         double pct = totalValuation > 0 ? (item.getValuation() / totalValuation * 100.0) : 0;
         TextView tvSub = new TextView(requireContext());
-        tvSub.setText(String.format(Locale.US, "%.1f%% • $ %s", pct, bdtFormat.format(Math.round(item.getValuation()))));
+        tvSub.setText(String.format(Locale.US, "%.1f%% • ৳ %s", pct, bdtFormat.format(Math.round(item.getValuation()))));
         tvSub.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_on_dark_muted));
         tvSub.setTextSize(10);
         textCol.addView(tvSub);
