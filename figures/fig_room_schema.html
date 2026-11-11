@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1400px;
+    height: 780px;
+    background: #F8FAF9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #223832;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    font-size: 14px;
+    color: #526B64;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .board {
+    width: 1340px;
+    height: 640px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(34, 56, 50, 0.08);
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .table-box {
+    flex: 1;
+    background: #FFFFFF;
+    border: 1.5px solid #2D4A43;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+  .table-hdr {
+    background: #2D4A43;
+    color: #FFFFFF;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .table-hdr .badge {
+    background: #F5C29B;
+    color: #223832;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+  .field-list {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 11.5px;
+    color: #223832;
+    background: #FAFBF9;
+    flex: 1;
+  }
+  .field {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .field.pk {
+    font-weight: 800;
+    color: #B9382C;
+  }
+  .field.fk {
+    font-weight: 700;
+    color: #2563EB;
+  }
+  .type {
+    color: #64748B;
+    font-family: monospace;
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>SiteSync Relational Room Database Entity Schema</h1>
+    <p>Foreign Key Constraints • Atomic Concurrency (@Transaction) • Multi-Site Project Segregation</p>
+  </div>
+  <div class="board">
+    <!-- Entity 1: ProjectSite -->
+    <div class="table-box">
+      <div class="table-hdr">
+        <span>ProjectSite</span>
+        <span class="badge">Parent Entity</span>
+      </div>
+      <div class="field-list">
+        <div class="field pk"><span>🔑 siteId</span><span class="type">TEXT [PK]</span></div>
+        <div class="field"><span>projectName</span><span class="type">TEXT</span></div>
+        <div class="field"><span>siteLocation</span><span class="type">TEXT</span></div>
+        <div class="field"><span>budgetBDT</span><span class="type">REAL</span></div>
+        <div class="field"><span>managerUid</span><span class="type">TEXT</span></div>
+        <div class="field"><span>createdAt</span><span class="type">INTEGER</span></div>
+        <div class="field"><span>status</span><span class="type">TEXT</span></div>
+      </div>
+    </div>
+
+    <!-- Entity 2: InventoryItem -->
+    <div class="table-box">
+      <div class="table-hdr">
+        <span>InventoryItem</span>
+        <span class="badge">1:N with Site</span>
+      </div>
+      <div class="field-list">
+        <div class="field pk"><span>🔑 itemId</span><span class="type">TEXT [PK]</span></div>
+        <div class="field fk"><span>🔗 siteId</span><span class="type">TEXT [FK]</span></div>
+        <div class="field"><span>materialName</span><span class="type">TEXT</span></div>
+        <div class="field"><span>category</span><span class="type">TEXT</span></div>
+        <div class="field"><span>currentStock</span><span class="type">REAL</span></div>
+        <div class="field"><span>unit</span><span class="type">TEXT (Ton,Bag)</span></div>
+        <div class="field"><span>reorderThreshold</span><span class="type">REAL</span></div>
+        <div class="field"><span>unitPriceBDT</span><span class="type">REAL</span></div>
+      </div>
+    </div>
+
+    <!-- Entity 3: StockTransaction -->
+    <div class="table-box">
+      <div class="table-hdr">
+        <span>StockTransaction</span>
+        <span class="badge">Atomic Ledger</span>
+      </div>
+      <div class="field-list">
+        <div class="field pk"><span>🔑 transactionId</span><span class="type">TEXT [PK]</span></div>
+        <div class="field fk"><span>🔗 itemId</span><span class="type">TEXT [FK]</span></div>
+        <div class="field fk"><span>🔗 siteId</span><span class="type">TEXT [FK]</span></div>
+        <div class="field"><span>type</span><span class="type">TEXT (IN/OUT)</span></div>
+        <div class="field"><span>quantity</span><span class="type">REAL</span></div>
+        <div class="field"><span>challanNumber</span><span class="type">TEXT</span></div>
+        <div class="field"><span>supplierName</span><span class="type">TEXT</span></div>
+        <div class="field"><span>billedRateBDT</span><span class="type">REAL</span></div>
+        <div class="field"><span>priceVariancePct</span><span class="type">REAL</span></div>
+      </div>
+    </div>
+
+    <!-- Entity 4: AttendanceRecord -->
+    <div class="table-box">
+      <div class="table-hdr">
+        <span>AttendanceRecord</span>
+        <span class="badge">Daily Ledger</span>
+      </div>
+      <div class="field-list">
+        <div class="field pk"><span>🔑 attendanceId</span><span class="type">TEXT [PK]</span></div>
+        <div class="field fk"><span>🔗 siteId</span><span class="type">TEXT [FK]</span></div>
+        <div class="field"><span>workerUid</span><span class="type">TEXT</span></div>
+        <div class="field"><span>workerName</span><span class="type">TEXT</span></div>
+        <div class="field"><span>role</span><span class="type">TEXT</span></div>
+        <div class="field"><span>checkInTime</span><span class="type">INTEGER</span></div>
+        <div class="field"><span>checkOutTime</span><span class="type">INTEGER</span></div>
+        <div class="field"><span>status</span><span class="type">TEXT</span></div>
+      </div>
+    </div>
+
+    <!-- Entity 5: SafetyIncident -->
+    <div class="table-box">
+      <div class="table-hdr">
+        <span>SafetyIncident</span>
+        <span class="badge">Sensory SOS</span>
+      </div>
+      <div class="field-list">
+        <div class="field pk"><span>🔑 incidentId</span><span class="type">TEXT [PK]</span></div>
+        <div class="field fk"><span>🔗 siteId</span><span class="type">TEXT [FK]</span></div>
+        <div class="field"><span>workerUid</span><span class="type">TEXT</span></div>
+        <div class="field"><span>incidentType</span><span class="type">TEXT (FALL)</span></div>
+        <div class="field"><span>impactGForce</span><span class="type">REAL</span></div>
+        <div class="field"><span>decibelLevel</span><span class="type">REAL</span></div>
+        <div class="field"><span>gpsLatitude</span><span class="type">REAL</span></div>
+        <div class="field"><span>gpsLongitude</span><span class="type">REAL</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1400px;
+    height: 820px;
+    background: #F8FAF9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #223832;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    font-size: 14px;
+    color: #526B64;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+  .board {
+    width: 1340px;
+    height: 680px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(34, 56, 50, 0.08);
+    position: relative;
+    padding: 35px 40px;
+  }
+  
+  /* Top Row Pipeline */
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin-top: 10px;
+  }
+  .stage-card {
+    width: 280px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1.5px solid #2D4A43;
+    position: relative;
+  }
+  .stage-badge {
+    position: absolute;
+    top: -12px;
+    left: 18px;
+    background: #2D4A43;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .stage-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #223832;
+    margin-top: 6px;
+    margin-bottom: 10px;
+  }
+  .stage-desc {
+    font-size: 12.5px;
+    color: #526B64;
+    line-height: 1.5;
+  }
+  .stage-desc li {
+    margin-left: 16px;
+    margin-top: 4px;
+  }
+
+  .arrow-right {
+    display: flex;
+    align-items: center;
+    color: #2D4A43;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  /* Mid Section */
+  .mid-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 45px;
+    position: relative;
+  }
+  .engine-box {
+    width: 480px;
+    background: #F4F5F0;
+    border: 1.5px solid #223832;
+    border-radius: 12px;
+    padding: 22px;
+    position: relative;
+  }
+  .engine-badge {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: #223832;
+    color: #F5C29B;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .engine-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #223832;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+  .formula-box {
+    background: #FFFFFF;
+    border: 1px dashed #526B64;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: "Courier New", monospace;
+    font-size: 12.5px;
+    font-weight: bold;
+    color: #223832;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .triage-container {
+    width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .triage-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border-left: 6px solid;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .triage-card.red {
+    background: #FEF2F2;
+    border-color: #B9382C;
+  }
+  .triage-card.green {
+    background: #F0FDF4;
+    border-color: #10B981;
+  }
+  .triage-card.blue {
+    background: #EFF6FF;
+    border-color: #2563EB;
+  }
+  .triage-name {
+    font-size: 14.5px;
+    font-weight: 800;
+  }
+  .triage-card.red .triage-name { color: #B9382C; }
+  .triage-card.green .triage-name { color: #065F46; }
+  .triage-card.blue .triage-name { color: #1E40AF; }
+
+  .triage-desc {
+    font-size: 12px;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  /* Bottom Bar */
+  .bottom-bar {
+    margin-top: 35px;
+    background: #2D4A43;
+    color: #FFFFFF;
+    border-radius: 10px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .bottom-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #F5C29B;
+  }
+  .bottom-details {
+    font-size: 12.5px;
+    color: #E2E8F0;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>SiteSync 2-Tier Challan OCR & Market Price Anti-Corruption Pipeline</h1>
+    <p>Zero-Latency On-Device Geometry Extraction • Multimodal Bilingual LLM • Live Brave Search Market Auditing</p>
+  </div>
+  <div class="board">
+    <!-- Top Row -->
+    <div class="top-row">
+      <div class="stage-card">
+        <div class="stage-badge">Input Capture</div>
+        <div class="stage-title">📷 CameraX Viewfinder</div>
+        <div class="stage-desc">
+          <ul>
+            <li>Tap-to-Focus & Auto-Torch</li>
+            <li>Skew & Glare Rectification</li>
+            <li>Internal FileProvider URI Cache</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arrow-right">➔</div>
+
+      <div class="stage-card">
+        <div class="stage-badge">Tier 1: On-Device</div>
+        <div class="stage-title">⚡ Google ML Kit</div>
+        <div class="stage-desc">
+          <ul>
+            <li>Zero Cloud Latency (&lt; 48 ms)</li>
+            <li>Text Boundary Detection</li>
+            <li>Challan #, Date & Supplier</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arrow-right">➔</div>
+
+      <div class="stage-card">
+        <div class="stage-badge">Tier 2: Multimodal</div>
+        <div class="stage-title">🧠 Gemini 1.5 / Groq</div>
+        <div class="stage-desc">
+          <ul>
+            <li>Bilingual Bengali + Eng Line Items</li>
+            <li>Cursive & Damaged Carbon Parsing</li>
+            <li>Structured JSON Material Ledger</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arrow-right">➔</div>
+
+      <div class="stage-card">
+        <div class="stage-badge">Live Intelligence</div>
+        <div class="stage-title">🌐 Brave Search API</div>
+        <div class="stage-desc">
+          <ul>
+            <li>api.search.brave.com Query</li>
+            <li>"Material + market price BD BDT"</li>
+            <li>Real-time benchmark rate index</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mid Section -->
+    <div class="mid-section">
+      <div class="engine-box">
+        <div class="engine-badge">Audit Algorithm</div>
+        <div class="engine-title">Empirical Price Variance Calculator</div>
+        <p style="font-size: 12.5px; color: #526B64; line-height: 1.4;">
+          Computes deviation between scanned billed unit price and live Bangladesh market benchmark:
+        </p>
+        <div class="formula-box">
+          Variance % (Δ) = [ ( R_billed - R_bench ) / R_bench ] × 100%
+        </div>
+      </div>
+
+      <div class="triage-container">
+        <div class="triage-card red">
+          <div>
+            <div class="triage-name">⚠️ OVER_BILLED (Δ &gt; +8.0%)</div>
+            <div class="triage-desc">Inflated billing detected. Manager alerted; prevents unauthorized margin contractor fraud.</div>
+          </div>
+          <div style="font-size: 20px; font-weight: 800; color: #B9382C;">FLAGGED</div>
+        </div>
+
+        <div class="triage-card green">
+          <div>
+            <div class="triage-name">✓ FAIR_MARKET (-8.0% ≤ Δ ≤ +8.0%)</div>
+            <div class="triage-desc">Price perfectly aligns with current spot market rates in Bangladesh. Verified checkmark rendered.</div>
+          </div>
+          <div style="font-size: 20px; font-weight: 800; color: #10B981;">PASSED</div>
+        </div>
+
+        <div class="triage-card blue">
+          <div>
+            <div class="triage-name">★ DISCOUNTED_BULK (Δ &lt; -8.0%)</div>
+            <div class="triage-desc">Wholesale or supplier bulk negotiated rate confirmed. Substantial project savings logged.</div>
+          </div>
+          <div style="font-size: 20px; font-weight: 800; color: #2563EB;">SAVINGS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <div>
+        <div class="bottom-title">ROOM DATABASE ENGINE (@Transaction Atomic Commit)</div>
+        <div class="bottom-details">Stock IN Ledger Entry • Material Current Stock Increment • Automatic Low-Stock Threshold Trigger</div>
+      </div>
+      <div style="background: #223832; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; color: #F5C29B;">
+        Firebase Cloud Synced
+      </div>
+    </div>
+  </div>
+</body>
+</html>
