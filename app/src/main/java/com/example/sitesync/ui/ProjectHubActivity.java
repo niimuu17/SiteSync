@@ -44,8 +44,8 @@ public class ProjectHubActivity extends AppCompatActivity implements ProjectCard
 
         projectRepository = ProjectRepository.getInstance(this);
 
-        setupUserInfo();
         setupRecyclerView();
+        setupUserInfo();
         setupActions();
 
         // Seed realistic BD projects on cold start if empty
@@ -80,12 +80,16 @@ public class ProjectHubActivity extends AppCompatActivity implements ProjectCard
             binding.btnCreateNewProjectHub.setText("+ JOIN PROJECT WITH CODE");
             binding.btnToggleShowAllProjects.setVisibility(View.GONE);
             binding.tvRecentProjectsHeader.setText("Your Authorized Projects");
-            adapter.setAllowOptions(false);
+            if (adapter != null) {
+                adapter.setAllowOptions(false);
+            }
         } else {
             binding.btnCreateNewProjectHub.setText("+ CREATE NEW PROJECT");
             binding.btnToggleShowAllProjects.setVisibility(View.VISIBLE);
             binding.tvRecentProjectsHeader.setText(isShowingAll ? "All Tracked Projects" : "Recently Opened Projects");
-            adapter.setAllowOptions(true);
+            if (adapter != null) {
+                adapter.setAllowOptions(true);
+            }
         }
     }
 
