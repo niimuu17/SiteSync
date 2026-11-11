@@ -272,7 +272,7 @@ public class FallAlertCountdownDialog extends DialogFragment {
 
             db.siteChatMessageDao().insert(chatMsg);
 
-            // Sync with Firebase Firestore
+            // 3. Sync with Firebase Firestore
             try {
                 java.util.Map<String, Object> map = new java.util.HashMap<>();
                 map.put("id", chatMsg.getId());
@@ -290,6 +290,38 @@ public class FallAlertCountdownDialog extends DialogFragment {
                         .collection("site_chat_messages")
                         .document(chatMsg.getId())
                         .set(map);
+            } catch (Exception ignored) {}
+
+            // 4. Dispatch Instant Emergency Broadcast to Firebase Realtime Database
+            try {
+                String cleanCode = finalProjectCode.replaceAll("[.#$\\[\\]/]", "_");
+                if (cleanCode.isEmpty()) cleanCode = "metro_central";
+
+                java.util.Map<String, Object> rtdbMap = new java.util.HashMap<>();
+                rtdbMap.put("action", "BROADCAST");
+                rtdbMap.put("type", "Worker Fall & Impact Emergency");
+                rtdbMap.put("status", "ACTIVE");
+                rtdbMap.put("workerName", finalWorkerName);
+                rtdbMap.put("workerId", finalWorkerId);
+                rtdbMap.put("impactG", (double) impactG);
+                rtdbMap.put("latitude", finalLat);
+                rtdbMap.put("longitude", finalLng);
+                rtdbMap.put("mapsUrl", mapsUrl);
+                rtdbMap.put("timestamp", now);
+                rtdbMap.put("updatedAt", now);
+
+                com.google.firebase.database.FirebaseDatabase.getInstance()
+                        .getReference("projects")
+                        .child(cleanCode)
+                        .child("emergency_broadcast")
+                        .setValue(rtdbMap);
+
+                // Also publish to default metro_central demo node if different
+                if (!"metro_central".equals(cleanCode)) {
+                    com.google.firebase.database.FirebaseDatabase.getInstance()
+                            .getReference("projects/metro_central/emergency_broadcast")
+                            .setValue(rtdbMap);
+                }
             } catch (Exception ignored) {}
         });
 

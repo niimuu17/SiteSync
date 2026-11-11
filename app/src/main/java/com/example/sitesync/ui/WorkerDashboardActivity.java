@@ -57,6 +57,7 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     private LiveData<WorkerAttendanceEntity> attendanceLiveData;
     private ActivityResultLauncher<String> workerPhotoPickerLauncher;
     private ActivityResultLauncher<Intent> overlayPermissionLauncher;
+    private ActivityResultLauncher<String> audioPermissionLauncher;
     private AudioDecibelManager decibelManager;
     private FallDetectionManager fallDetectionManager;
 
@@ -87,6 +88,17 @@ public class WorkerDashboardActivity extends AppCompatActivity {
                         sessionManager.setFloatingVoiceAlerterEnabled(true);
                     }
                     updateVoiceAlerterBubbleUi();
+                }
+        );
+
+        audioPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        startDecibelSampling();
+                    } else if (binding != null) {
+                        binding.tvWorkerNoiseWarning.setText("Microphone permission required for decibel acoustic monitoring.");
+                    }
                 }
         );
 
@@ -513,6 +525,12 @@ public class WorkerDashboardActivity extends AppCompatActivity {
 
     private void startDecibelSampling() {
         if (decibelManager == null) return;
+
+        if (!AudioDecibelManager.hasMicrophonePermission(this)) {
+            audioPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO);
+            return;
+        }
+
         decibelManager.startMonitoring(new AudioDecibelManager.OnNoiseLevelListener() {
             @Override
             public void onNoiseLevelUpdated(double decibels, boolean isHazardous) {
@@ -526,13 +544,21 @@ public class WorkerDashboardActivity extends AppCompatActivity {
                             ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red)));
                     binding.tvWorkerNoiseWarning.setText("Hazardous noise (>85 dB). Hearing protection mandatory.");
                     binding.tvWorkerNoiseWarning.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red));
+                } else if (decibels >= 75.0) {
+                    binding.tvWorkerNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Elevated)", decibels));
+                    binding.tvWorkerNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_medium);
+                    binding.tvWorkerNoiseStatusBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.brand_amber));
+                    binding.pbWorkerDecibelLevel.setProgressTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(WorkerDashboardActivity.this, R.color.brand_amber)));
+                    binding.tvWorkerNoiseWarning.setText("Elevated jobsite noise. PPE recommended above 85 dB.");
+                    binding.tvWorkerNoiseWarning.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.brand_amber));
                 } else {
                     binding.tvWorkerNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Safe)", decibels));
                     binding.tvWorkerNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
                     binding.tvWorkerNoiseStatusBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_green));
                     binding.pbWorkerDecibelLevel.setProgressTintList(ColorStateList.valueOf(
                             ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_green)));
-                    binding.tvWorkerNoiseWarning.setText("Nominal background sound level. Hearing protection mandatory above 85 dB.");
+                    binding.tvWorkerNoiseWarning.setText("Nominal background sound level. Safe without PPE.");
                     binding.tvWorkerNoiseWarning.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.forest_muted));
                 }
             }

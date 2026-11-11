@@ -595,6 +595,49 @@ Content-Type: application/json
     t_syl = doc.add_table(rows=len(syllabus_data) + 1, cols=3)
     format_academic_table(doc, t_syl, syllabus_widths, syllabus_headers, syllabus_data, alternate=True)
 
+    add_sec_h2("6.2", "Demonstration Key Points & Live Presentation Compliance Matrix")
+    add_body(
+        "Table 2 formally maps each core evaluation area mandated in the live demonstration and video presentation rubric to its concrete implementation and live demonstration actions:"
+    )
+
+    demo_widths = [1.6, 2.3, 2.9]
+    demo_headers = ["Demonstration Core Area", "SiteSync Implementation (Files / Architecture)", "Live Demonstration & Verification Steps"]
+    demo_data = [
+        [
+            "1. Overview & Features\n(App purpose & feature walkthrough)",
+            "MainActivity.java, WorkerDashboardActivity.java, CameraScanActivity.java, SiteChatActivity.java",
+            "Demonstrate dual-dashboard architecture: Executive Manager view (inventory, budget, approvals, evidence dump) vs. Field Worker view (safety telemetry, task progress, SOS chat, geotagged photo capture)."
+        ],
+        [
+            "2. Architecture & Navigation\n(Multi-Activity, Intents, View Binding)",
+            "18 Activities, Explicit/Implicit Intents, View Binding enabled across all screens",
+            "Show explicit transitions (Login -> Project Hub -> Dashboards). Show implicit intent dispatching Google Maps turn-by-turn navigation (geo:lat,lng) for fallen worker rescue. Verify ViewBinding elimination of null references."
+        ],
+        [
+            "3. UI & Lists\n(Layouts, RecyclerView, Adapters & ViewHolders)",
+            "ConstraintLayout, RelativeLayout, LinearLayout, CoordinatorLayout, 8 RecyclerView Adapters",
+            "Display smooth list scrolling and ViewHolder recycling across InventoryAdapter, SiteChatAdapter (text, voice, fall cards), EvidenceAdapter (2-column photo grid), and WorkerApprovalAdapter."
+        ],
+        [
+            "4. Android Components\n(Permissions, System Broadcasts, Content Providers, Services)",
+            "SystemEventBroadcastReceiver.java, FloatingVoiceAlerterService.java, ProjectPeopleActivity.java, FileProvider",
+            "• System Broadcast: Toggle Airplane Mode / Battery Low to trigger automated system notifications and Room offline queueing.\n• Content Provider: Query ContactsContract to invite subcontractors; FileProvider for secure media sharing.\n• Foreground Service: Launch FloatingVoiceAlerterService with persistent notification tray widget."
+        ],
+        [
+            "5. Networking & Firebase\n(REST APIs, JSON Parsing, Auth, RTDB, Firestore, Media)",
+            "BraveSearchManager.java, FirebaseAuth, FirebaseDatabase (RTDB), FirebaseFirestore, Local Scoped Storage",
+            "• REST API: Live Brave Search HTTPS GET and JSON parsing for spot market prices.\n• Firebase Auth: Multi-role authentication (Image 4).\n• Realtime DB: Instant emergency broadcast node /projects/metro_central/emergency_broadcast (Image 2).\n• Firestore: Real-time activities document ACT-1794194386248 (Image 3).\n• Media Storage: Geotagged site evidence photos and voice notes."
+        ],
+        [
+            "6. Layout Responsiveness\n(Dynamic UI scaling & auto-rotation)",
+            "dimens.xml, ConstraintLayout ratio/guidelines, NestedScrollView",
+            "Demonstrate dynamic multi-density DPI scaling, auto-wrapping across compact and large screen viewports, and orientation preservation during blueprint inspection."
+        ]
+    ]
+
+    t_demo = doc.add_table(rows=len(demo_data) + 1, cols=3)
+    format_academic_table(doc, t_demo, demo_widths, demo_headers, demo_data, alternate=True)
+
     # =======================================================================
     # SECTION 7: VERIFICATION, TECHNICAL BENCHMARKS & CONCLUSION
     # =======================================================================
@@ -627,18 +670,26 @@ Content-Type: application/json
         "procurement overbilling, and safeguard human lives across high-risk jobsites."
     )
 
-    # Save to primary output
-    out_name = "SITESYNC_PROJECT_REPORT_UKIL_BHAI_STYLE.docx"
-    doc.save(out_name)
-    print(f"Generated {out_name} successfully!")
-
-    # Attempt to overwrite the other files if unlocked
-    for fallback in ["SITESYNC_PROJECT_REPORT.docx", "SITESYNC_PROJECT_REPORT_UPDATED.docx"]:
+    # Save to outputs handling locks gracefully
+    saved_any = False
+    targets = [
+        "SITESYNC_PROJECT_REPORT_FINAL.docx",
+        "SITESYNC_PROJECT_REPORT.docx",
+        "SITESYNC_PROJECT_REPORT_UKIL_BHAI_STYLE.docx",
+        "SITESYNC_PROJECT_REPORT_UPDATED.docx"
+    ]
+    for target in targets:
         try:
-            doc.save(fallback)
-            print(f"Also updated {fallback}!")
+            doc.save(target)
+            print(f"Successfully saved: {target}")
+            saved_any = True
         except Exception as e:
-            print(f"Note: {fallback} locked by viewer. Kept primary {out_name}")
+            print(f"File {target} is locked by an open application, skipping.")
+
+    if not saved_any:
+        fallback = f"SITESYNC_PROJECT_REPORT_NEW_{int(time.time())}.docx"
+        doc.save(fallback)
+        print(f"Saved to emergency fallback: {fallback}")
 
 if __name__ == '__main__':
     build_report()

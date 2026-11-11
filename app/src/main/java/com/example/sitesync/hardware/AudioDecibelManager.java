@@ -18,9 +18,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Feature: Acoustic Jobsite Safety Decibel Meter Subsystem.
- * Continuous 16-bit PCM AudioRecord stream calculating Root-Mean-Square (RMS) amplitude
- * and converting to calibrated sound pressure level (dB SPL).
- * Flags hazardous acoustic environments (>85 dB OSHA threshold) requiring hearing protection PPE.
+ * Continuous 16-bit PCM AudioRecord stream calculating Root-Mean-Square (RMS) amplitude,
+ * converting to calibrated sound pressure level (dB SPL) with fast-attack / slow-decay smoothing.
+ * Flags hazardous acoustic environments (>= 85.0 dB OSHA threshold) requiring hearing protection PPE.
  */
 public class AudioDecibelManager {
 
@@ -36,6 +36,12 @@ public class AudioDecibelManager {
     private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
 
+    // Acoustic calibration: standard mobile MEMS microphone Acoustic Overload Point ~105 dB SPL.
+    // dB_SPL = 20 * log10(RMS / 32767) + 105.0 = 20 * log10(RMS) + 14.69 dB.
+    private static final double CALIBRATION_OFFSET_DB = 16.0;
+    private static final double MIN_DB_SPL = 32.0;
+    private static final double MAX_DB_SPL = 120.0;
+
     private final Context context;
     private final ExecutorService audioExecutor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -45,6 +51,8 @@ public class AudioDecibelManager {
     private int bufferSize;
     private OnNoiseLevelListener activeListener;
 
+    private double smoothedDb = 45.0; // Nominal indoor baseline
+
     public AudioDecibelManager(Context context) {
         this.context = context.getApplicationContext();
         this.bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT);
@@ -53,18 +61,22 @@ public class AudioDecibelManager {
         }
     }
 
+    public static boolean hasMicrophonePermission(Context context) {
+        if (context == null) return false;
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+    }
+
     /**
      * Starts background microphone capture and continuous RMS dB computation.
      */
     public synchronized void startMonitoring(OnNoiseLevelListener listener) {
+        this.activeListener = listener;
+
         if (isMonitoring.get()) {
-            this.activeListener = listener;
             return;
         }
 
-        this.activeListener = listener;
-
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+        if (!hasMicrophonePermission(context)) {
             if (activeListener != null) {
                 activeListener.onError("Microphone permission required for decibel acoustic monitoring.");
             }
@@ -108,13 +120,14 @@ public class AudioDecibelManager {
 
     private void recordingLoop() {
         short[] audioBuffer = new short[bufferSize / 2];
+        long lastUiPostTime = 0;
 
         while (isMonitoring.get() && audioRecord != null) {
             int readCount = audioRecord.read(audioBuffer, 0, audioBuffer.length);
 
             if (readCount <= 0) {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -122,23 +135,36 @@ public class AudioDecibelManager {
                 continue;
             }
 
-            if (readCount > 0) {
-                // Calculate RMS: sqrt( (1/N) * sum(x_i^2) )
-                double sumOfSquares = 0.0;
-                for (int i = 0; i < readCount; i++) {
-                    sumOfSquares += (double) audioBuffer[i] * audioBuffer[i];
-                }
-                double rms = Math.sqrt(sumOfSquares / readCount);
+            // Calculate RMS: sqrt( (1/N) * sum(x_i^2) )
+            double sumOfSquares = 0.0;
+            for (int i = 0; i < readCount; i++) {
+                sumOfSquares += (double) audioBuffer[i] * audioBuffer[i];
+            }
+            double rms = Math.sqrt(sumOfSquares / readCount);
 
-                // Convert RMS to dB (Reference amplitude = 1.0)
-                // Offset by +18dB baseline calibration for standard construction mic sensitivity
-                double db = 0.0;
-                if (rms > 1.0) {
-                    db = 20.0 * Math.log10(rms) + 18.0;
-                }
+            // Convert RMS to dB SPL with physical MEMS microphone reference
+            double instantDb;
+            if (rms > 1.0) {
+                instantDb = 20.0 * Math.log10(rms) + CALIBRATION_OFFSET_DB;
+            } else {
+                instantDb = MIN_DB_SPL;
+            }
 
-                // Clamp values realistically between 30 dB (whisper/quiet site) and 125 dB (jackhammer/air horn)
-                final double finalDb = Math.max(32.0, Math.min(125.0, Math.round(db * 10.0) / 10.0));
+            // Clamp instant value
+            instantDb = Math.max(MIN_DB_SPL, Math.min(MAX_DB_SPL, instantDb));
+
+            // Fast-attack (alpha=0.45), Slow-decay (alpha=0.18) filtering
+            if (instantDb > smoothedDb) {
+                smoothedDb = 0.45 * instantDb + 0.55 * smoothedDb;
+            } else {
+                smoothedDb = 0.18 * instantDb + 0.82 * smoothedDb;
+            }
+
+            long now = System.currentTimeMillis();
+            // Throttle UI callbacks to ~150ms intervals to eliminate lag and prevent UI thread thrashing
+            if (now - lastUiPostTime >= 150) {
+                lastUiPostTime = now;
+                final double finalDb = Math.round(smoothedDb * 10.0) / 10.0;
                 final boolean isHazardous = finalDb >= OSHA_HAZARD_THRESHOLD_DB;
 
                 mainHandler.post(() -> {
@@ -146,14 +172,6 @@ public class AudioDecibelManager {
                         activeListener.onNoiseLevelUpdated(finalDb, isHazardous);
                     }
                 });
-
-                try {
-                    // Sample every ~200ms to balance responsiveness and UI thread overhead
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
             }
         }
     }

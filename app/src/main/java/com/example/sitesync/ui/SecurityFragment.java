@@ -50,9 +50,25 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
     private AudioDecibelManager decibelManager;
     private FallDetectionManager fallDetectionManager;
     private boolean isShowingResolved = false;
+    private androidx.activity.result.ActivityResultLauncher<String> audioPermissionLauncher;
 
     public static SecurityFragment newInstance() {
         return new SecurityFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        audioPermissionLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        startDecibelSampling();
+                    } else if (binding != null) {
+                        binding.tvNoisePpeWarning.setText("Microphone permission required for live noise monitoring.");
+                    }
+                }
+        );
     }
 
     @Nullable
@@ -174,6 +190,12 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
 
     private void startDecibelSampling() {
         if (decibelManager == null) return;
+
+        if (!AudioDecibelManager.hasMicrophonePermission(requireContext())) {
+            audioPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO);
+            return;
+        }
+
         decibelManager.startMonitoring(new AudioDecibelManager.OnNoiseLevelListener() {
             @Override
             public void onNoiseLevelUpdated(double decibels, boolean isHazardous) {
@@ -189,6 +211,14 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
                             ContextCompat.getColor(requireContext(), R.color.status_red)));
                     binding.tvNoisePpeWarning.setText("Hazardous noise (>85 dB). Hearing protection required.");
                     binding.tvNoisePpeWarning.setTextColor(ContextCompat.getColor(requireContext(), R.color.status_red));
+                } else if (decibels >= 75.0) {
+                    binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Elevated)", decibels));
+                    binding.tvNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_medium);
+                    binding.tvNoiseStatusBadge.setTextColor(ContextCompat.getColor(requireContext(), R.color.brand_amber));
+                    binding.pbDecibelLevel.setProgressTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(requireContext(), R.color.brand_amber)));
+                    binding.tvNoisePpeWarning.setText("Elevated jobsite noise. Hearing protection recommended.");
+                    binding.tvNoisePpeWarning.setTextColor(ContextCompat.getColor(requireContext(), R.color.brand_amber));
                 } else {
                     binding.tvNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Safe)", decibels));
                     binding.tvNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_optimal);

@@ -13,10 +13,12 @@ import android.os.Looper;
  *
  * Mathematical Model:
  * Vector Magnitude = sqrt(ax^2 + ay^2 + az^2)
- * 1. Free-Fall Phase: Magnitude drops below FREE_FALL_THRESHOLD (< 2.5 m/s²).
- * 2. Impact Spike: Magnitude spikes above IMPACT_THRESHOLD (> 26.0 m/s² ≈ 2.8G).
- * 3. Post-Impact Immobility: Magnitude settles below IMMOBILITY_THRESHOLD for >= 1.5s,
- *    indicating the worker is immobilized or unconscious.
+ * 1. Free-Fall Phase: Gravitational normal force drops (< 4.2 m/s²).
+ * 2. Impact Spike: Impact deceleration spikes (> 21.0 m/s² ≈ 2.15G) within 1.5s of free fall,
+ *    or severe shock (> 25.0 m/s² ≈ 2.55G).
+ * 3. Physical Damping Window: Ignores phone bouncing / shockwave vibrations for 500ms.
+ * 4. Post-Impact Immobility: Verifies the subject remains stationary for 1.5s post-impact.
+ *    If worker stands up and moves vigorously, false alarm is cancelled.
  */
 public class FallDetectionManager implements SensorEventListener {
 
@@ -28,11 +30,12 @@ public class FallDetectionManager implements SensorEventListener {
         void onAccelerationMagnitude(float magnitudeMps2, String stateDescription);
     }
 
-    private static final float FREE_FALL_THRESHOLD = 4.0f;      // Free-fall threshold (m/s² < 0.4G)
-    private static final float IMPACT_THRESHOLD = 22.0f;        // Impact spike threshold (m/s² > 2.25G)
-    private static final float SEVERE_IMPACT_THRESHOLD = 26.5f; // Severe instant shock threshold
-    private static final long IMPACT_WINDOW_MS = 1500;          // Impact must follow free fall within 1.5s
-    private static final long IMMOBILITY_DURATION_MS = 1200;    // Immobility verification duration
+    private static final float FREE_FALL_THRESHOLD = 4.2f;       // Free-fall threshold (m/s² < 0.43G)
+    private static final float IMPACT_THRESHOLD = 21.0f;         // Impact spike threshold (m/s² > 2.14G)
+    private static final float SEVERE_IMPACT_THRESHOLD = 25.0f;  // Severe instant shock threshold
+    private static final long IMPACT_WINDOW_MS = 1500;           // Impact must follow free fall within 1.5s
+    private static final long DAMPING_WINDOW_MS = 500;           // Post-impact shockwave settling window
+    private static final long IMMOBILITY_DURATION_MS = 1500;     // Post-impact immobility verification duration
 
     private final Context context;
     private final SensorManager sensorManager;
@@ -128,18 +131,21 @@ public class FallDetectionManager implements SensorEventListener {
                 break;
 
             case IMPACT_DETECTED:
-                // If worker moves violently post-impact (standing up / moving), cancel false alarm
-                if (Math.abs(totalMag - SensorManager.GRAVITY_EARTH) > 7.0f) {
-                    if (immobilityChecker != null) {
-                        mainHandler.removeCallbacks(immobilityChecker);
-                        immobilityChecker = null;
+                // Only evaluate motion AFTER the initial impact shockwave and phone bounce have settled (500ms)
+                if (now - impactTimestamp > DAMPING_WINDOW_MS) {
+                    // If worker moves vigorously post-impact (standing up / walking), cancel false alarm
+                    if (Math.abs(totalMag - SensorManager.GRAVITY_EARTH) > 6.5f) {
+                        if (immobilityChecker != null) {
+                            mainHandler.removeCallbacks(immobilityChecker);
+                            immobilityChecker = null;
+                        }
+                        currentState = State.IDLE;
                     }
-                    currentState = State.IDLE;
                 }
                 break;
         }
 
-        if (telemetryListener != null && (now - lastTelemetryPost > 250)) {
+        if (telemetryListener != null && (now - lastTelemetryPost > 200)) {
             lastTelemetryPost = now;
             final float currentMag = totalMag;
             final String stateStr = currentState.name();
