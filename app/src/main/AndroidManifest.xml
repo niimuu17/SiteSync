@@ -68,6 +68,7 @@
         <activity
             android:name=".ui.WorkerDashboardActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize" />
 
         <!-- Worker & Manager Real-Time Project Chat -->

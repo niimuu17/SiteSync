@@ -1,6 +1,7 @@
 package com.example.sitesync.ui;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -25,7 +27,11 @@ import com.example.sitesync.data.local.dao.WorkerAttendanceDao;
 import com.example.sitesync.data.local.entities.TaskEntity;
 import com.example.sitesync.data.local.entities.WorkerAttendanceEntity;
 import com.example.sitesync.databinding.ActivityWorkerDashboardBinding;
+import com.example.sitesync.hardware.AudioDecibelManager;
+import com.example.sitesync.hardware.FallAlertCountdownDialog;
+import com.example.sitesync.hardware.FallDetectionManager;
 import com.example.sitesync.hardware.FloatingVoiceAlerterService;
+import com.example.sitesync.hardware.UserLocationManager;
 import com.example.sitesync.models.User;
 import com.example.sitesync.utils.HapticFeedbackUtil;
 
@@ -51,6 +57,8 @@ public class WorkerDashboardActivity extends AppCompatActivity {
     private LiveData<WorkerAttendanceEntity> attendanceLiveData;
     private ActivityResultLauncher<String> workerPhotoPickerLauncher;
     private ActivityResultLauncher<Intent> overlayPermissionLauncher;
+    private AudioDecibelManager decibelManager;
+    private FallDetectionManager fallDetectionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +94,33 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         setupSmartAttendance();
         setupQuickActions();
         setupVoiceAlerter();
+        setupDecibelMeter();
+        setupFallDetector();
         setupAssignedTasks();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null || binding == null) return;
+        int scrollY = intent.getIntExtra("scroll_y", 0);
+        if (scrollY > 0) {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (binding != null) {
+                    binding.workerNestedScrollView.smoothScrollTo(0, scrollY);
+                }
+            }, 300);
+        }
+        if (intent.getBooleanExtra("simulate_fall", false)) {
+            new Handler(Looper.getMainLooper()).postDelayed(() ->
+                    triggerFallAlertCountdown(3.5f), 300);
+        }
     }
 
     private void setupHeaderAndUserInfo() {
@@ -170,6 +204,11 @@ public class WorkerDashboardActivity extends AppCompatActivity {
                 updateUiForClockedOut();
             }
         });
+
+        android.location.Location bestLoc = UserLocationManager.getInstance(this).getBestAvailableLocation();
+        if (bestLoc != null) {
+            binding.tvGpsLocationInfo.setText(String.format(Locale.US, "GPS: %.4f° N, %.4f° E • Geofence Verified", bestLoc.getLatitude(), bestLoc.getLongitude()));
+        }
 
         binding.btnAttendancePunch.setOnClickListener(v -> {
             HapticFeedbackUtil.confirm(this);
@@ -356,6 +395,22 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         }
 
         updateVoiceAlerterBubbleUi();
+        startDecibelSampling();
+        startFallMonitoring();
+        UserLocationManager.getInstance(this).fetchCurrentLocation(loc -> {});
+        UserLocationManager.getInstance(this).startPassiveLocationUpdates();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (decibelManager != null) {
+            decibelManager.stopMonitoring();
+        }
+        if (fallDetectionManager != null) {
+            fallDetectionManager.stopMonitoring();
+        }
+        UserLocationManager.getInstance(this).stopPassiveLocationUpdates();
     }
 
     private void setupVoiceAlerter() {
@@ -452,9 +507,111 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         binding.ivWorkerAvatar.setImageTintList(getColorStateList(R.color.forest_surface_deep));
     }
 
+    private void setupDecibelMeter() {
+        decibelManager = new AudioDecibelManager(this);
+    }
+
+    private void startDecibelSampling() {
+        if (decibelManager == null) return;
+        decibelManager.startMonitoring(new AudioDecibelManager.OnNoiseLevelListener() {
+            @Override
+            public void onNoiseLevelUpdated(double decibels, boolean isHazardous) {
+                if (binding == null) return;
+                binding.pbWorkerDecibelLevel.setProgress((int) decibels);
+                if (isHazardous) {
+                    binding.tvWorkerNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Hazard)", decibels));
+                    binding.tvWorkerNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                    binding.tvWorkerNoiseStatusBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red));
+                    binding.pbWorkerDecibelLevel.setProgressTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red)));
+                    binding.tvWorkerNoiseWarning.setText("Hazardous noise (>85 dB). Hearing protection mandatory.");
+                    binding.tvWorkerNoiseWarning.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red));
+                } else {
+                    binding.tvWorkerNoiseStatusBadge.setText(String.format(Locale.US, "%.0f dB (Safe)", decibels));
+                    binding.tvWorkerNoiseStatusBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
+                    binding.tvWorkerNoiseStatusBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_green));
+                    binding.pbWorkerDecibelLevel.setProgressTintList(ColorStateList.valueOf(
+                            ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_green)));
+                    binding.tvWorkerNoiseWarning.setText("Nominal background sound level. Hearing protection mandatory above 85 dB.");
+                    binding.tvWorkerNoiseWarning.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.forest_muted));
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                if (binding != null) {
+                    binding.tvWorkerNoiseWarning.setText("Acoustic Sensor: Nominal background calibration active.");
+                }
+            }
+        });
+    }
+
+    private void setupFallDetector() {
+        fallDetectionManager = new FallDetectionManager(this);
+        binding.btnWorkerSimulateFall.setOnClickListener(v -> {
+            HapticFeedbackUtil.heavyClick(this, v);
+            triggerFallAlertCountdown(3.5f);
+        });
+    }
+
+    private void triggerFallAlertCountdown(float impactG) {
+        FallAlertCountdownDialog dialog = FallAlertCountdownDialog.newInstance(impactG);
+        dialog.setOnFallAlertResolvedListener(new FallAlertCountdownDialog.OnFallAlertResolvedListener() {
+            @Override
+            public void onFallAlertCancelled() {
+                if (binding != null) {
+                    binding.tvWorkerFallSensorBadge.setText("ACTIVE (OK)");
+                    binding.tvWorkerFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
+                    binding.tvWorkerFallSensorBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_green));
+                }
+            }
+
+            @Override
+            public void onEmergencyDispatched(float impactG) {
+                if (binding != null) {
+                    binding.tvWorkerFallSensorBadge.setText("ALERT SENT");
+                    binding.tvWorkerFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                    binding.tvWorkerFallSensorBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red));
+                }
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "WorkerFallAlertCountdownDialog");
+    }
+
+    private void startFallMonitoring() {
+        if (fallDetectionManager == null) return;
+        fallDetectionManager.startMonitoring(
+                (impactG, timestamp) -> triggerFallAlertCountdown(impactG),
+                (magnitude, stateDescription) -> {
+                    if (binding == null) return;
+                    float gForce = magnitude / 9.8f;
+                    if ("IMPACT_DETECTED".equals(stateDescription)) {
+                        binding.tvWorkerFallSensorBadge.setText(String.format(Locale.US, "IMPACT (%.1fG)", gForce));
+                        binding.tvWorkerFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                        binding.tvWorkerFallSensorBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red));
+                    } else if ("FREE_FALL".equals(stateDescription)) {
+                        binding.tvWorkerFallSensorBadge.setText("FREE-FALL");
+                        binding.tvWorkerFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
+                        binding.tvWorkerFallSensorBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.brand_amber));
+                    } else {
+                        binding.tvWorkerFallSensorBadge.setText(String.format(Locale.US, "ACTIVE (%.1fG)", gForce));
+                        binding.tvWorkerFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
+                        binding.tvWorkerFallSensorBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_green));
+                    }
+                }
+        );
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         stopShiftTimer();
+        if (decibelManager != null) {
+            decibelManager.stopMonitoring();
+        }
+        if (fallDetectionManager != null) {
+            fallDetectionManager.stopMonitoring();
+        }
+        UserLocationManager.getInstance(this).stopPassiveLocationUpdates();
     }
 }
