@@ -409,6 +409,10 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         updateVoiceAlerterBubbleUi();
         startDecibelSampling();
         startFallMonitoring();
+
+        // Start Persistent Background Safety Guardian Foreground Service (Pocket Mode Protection)
+        com.example.sitesync.hardware.WorkerSafetyGuardianService.startGuardian(this);
+
         UserLocationManager.getInstance(this).fetchCurrentLocation(loc -> {});
         UserLocationManager.getInstance(this).startPassiveLocationUpdates();
     }
@@ -576,32 +580,16 @@ public class WorkerDashboardActivity extends AppCompatActivity {
         fallDetectionManager = new FallDetectionManager(this);
         binding.btnWorkerSimulateFall.setOnClickListener(v -> {
             HapticFeedbackUtil.heavyClick(this, v);
-            triggerFallAlertCountdown(3.5f);
+            Intent alertIntent = new Intent(this, EmergencyFallAlertActivity.class);
+            alertIntent.putExtra("impact_g", 3.5f);
+            startActivity(alertIntent);
         });
     }
 
     private void triggerFallAlertCountdown(float impactG) {
-        FallAlertCountdownDialog dialog = FallAlertCountdownDialog.newInstance(impactG);
-        dialog.setOnFallAlertResolvedListener(new FallAlertCountdownDialog.OnFallAlertResolvedListener() {
-            @Override
-            public void onFallAlertCancelled() {
-                if (binding != null) {
-                    binding.tvWorkerFallSensorBadge.setText("ACTIVE (OK)");
-                    binding.tvWorkerFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
-                    binding.tvWorkerFallSensorBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_green));
-                }
-            }
-
-            @Override
-            public void onEmergencyDispatched(float impactG) {
-                if (binding != null) {
-                    binding.tvWorkerFallSensorBadge.setText("ALERT SENT");
-                    binding.tvWorkerFallSensorBadge.setBackgroundResource(R.drawable.bg_badge_urgent);
-                    binding.tvWorkerFallSensorBadge.setTextColor(ContextCompat.getColor(WorkerDashboardActivity.this, R.color.status_red));
-                }
-            }
-        });
-        dialog.show(getSupportFragmentManager(), "WorkerFallAlertCountdownDialog");
+        Intent alertIntent = new Intent(this, EmergencyFallAlertActivity.class);
+        alertIntent.putExtra("impact_g", impactG);
+        startActivity(alertIntent);
     }
 
     private void startFallMonitoring() {

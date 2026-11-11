@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
@@ -283,6 +284,25 @@
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Floating construction site safety emergency alerter widget" />
+        </service>
+
+        <!-- Full-Screen Emergency Fall Alert Activity (Wakes up device and shows over lockscreen) -->
+        <activity
+            android:name=".ui.EmergencyFallAlertActivity"
+            android:exported="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.SiteSync" />
+
+        <!-- Autonomous Worker Safety Guardian Foreground Service (Background Fall & Hazard Protection) -->
+        <service
+            android:name=".hardware.WorkerSafetyGuardianService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Autonomous background worker fall impact detection and emergency rescue dispatch" />
         </service>
 
         <!-- Firebase Cloud Messaging High-Priority Critical Hazard Service -->

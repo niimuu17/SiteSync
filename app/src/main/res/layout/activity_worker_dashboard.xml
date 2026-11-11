@@ -792,7 +792,7 @@
                         android:id="@+id/tvWorkerFallSensorSubtitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Monitors sudden free-fall (&lt;2.8 m/s²) and impact spike (&gt;25 m/s²). Immobility initiates rescue countdown."
+                        android:text="Continuous 3-phase physics: Free-fall + Impact spike + Immobility. Active in background (Pocket Mode) even if screen is locked."
                         android:textColor="@color/forest_muted"
                         android:textSize="12sp"
                         android:layout_marginBottom="12dp" />
