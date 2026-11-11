@@ -135,6 +135,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onResume() {
         super.onResume();
+        String activePName = sessionManager.getActiveProjectName();
+        if (activePName != null && !activePName.isEmpty()) {
+            currentProjectTitle = activePName;
+            binding.tvProjectTitle.setText(currentProjectTitle);
+        }
         loadProfilePhotoIntoViews();
 
         if (sessionManager.isFloatingVoiceAlerterEnabled()) {

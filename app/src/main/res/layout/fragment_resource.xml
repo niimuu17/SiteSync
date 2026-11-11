@@ -45,6 +45,7 @@
                         android:letterSpacing="0.08" />
 
                     <TextView
+                        android:id="@+id/tvResourceProjectTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Metro Central Tower"
@@ -55,6 +56,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tvResourceSiteBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Site A"

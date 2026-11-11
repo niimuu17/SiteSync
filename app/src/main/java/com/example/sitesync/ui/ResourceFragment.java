@@ -70,6 +70,10 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
     private List<InventoryItem> currentInventory = new ArrayList<>();
     private List<StockTransaction> allTransactions = new ArrayList<>();
 
+    private androidx.lifecycle.LiveData<List<InventoryItem>> itemsLiveData;
+    private androidx.lifecycle.LiveData<List<StockTransaction>> txLiveData;
+    private androidx.lifecycle.LiveData<List<com.example.sitesync.data.local.entities.RequiredMaterialItemEntity>> reqLiveData;
+
     private Uri cameraCaptureUri;
     private ActivityResultLauncher<Uri> takePictureLauncher;
     private ActivityResultLauncher<String> pickImageLauncher;
@@ -127,6 +131,7 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
         setupAdapters();
         setupActionButtons();
         setupFilterChips();
+        updateProjectHeader();
         observeDatabaseData();
 
         // Only seed initial materials if it's the cold-start demo project (PRJ-DHAKA-101 or MCT-2026).
@@ -246,10 +251,45 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
         ledgerAdapter.setTransactions(filtered);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateProjectHeader();
+        if (sessionManager != null) {
+            String latestCode = sessionManager.getActiveProjectCode();
+            if (latestCode != null && !latestCode.equals(activeProjectCode)) {
+                activeProjectCode = latestCode;
+                observeDatabaseData();
+            }
+        }
+    }
+
+    private void updateProjectHeader() {
+        if (binding == null || getContext() == null) return;
+        if (sessionManager == null) sessionManager = new SessionManager(requireContext());
+        String pName = sessionManager.getActiveProjectName();
+        String pCode = sessionManager.getActiveProjectCode();
+        if (pName != null && !pName.trim().isEmpty()) {
+            binding.tvResourceProjectTitle.setText(pName);
+        } else {
+            binding.tvResourceProjectTitle.setText("Site Project");
+        }
+        if (pCode != null && !pCode.trim().isEmpty()) {
+            binding.tvResourceSiteBadge.setText(pCode);
+        } else {
+            binding.tvResourceSiteBadge.setText("Site A");
+        }
+    }
+
     private void observeDatabaseData() {
         String pCode = activeProjectCode != null ? activeProjectCode : "PRJ-DHAKA-101";
 
-        repository.getItemsForProject(pCode).observe(getViewLifecycleOwner(), items -> {
+        if (itemsLiveData != null) itemsLiveData.removeObservers(getViewLifecycleOwner());
+        if (txLiveData != null) txLiveData.removeObservers(getViewLifecycleOwner());
+        if (reqLiveData != null) reqLiveData.removeObservers(getViewLifecycleOwner());
+
+        itemsLiveData = repository.getItemsForProject(pCode);
+        itemsLiveData.observe(getViewLifecycleOwner(), items -> {
             if (items == null) return;
             currentInventory = items;
             stockAdapter.setItems(items);
@@ -259,7 +299,8 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
             updatePieChart();
         });
 
-        repository.getTransactionsForProject(pCode).observe(getViewLifecycleOwner(), transactions -> {
+        txLiveData = repository.getTransactionsForProject(pCode);
+        txLiveData.observe(getViewLifecycleOwner(), transactions -> {
             if (transactions == null) return;
             allTransactions = transactions;
 
@@ -276,7 +317,8 @@ public class ResourceFragment extends Fragment implements InventoryStockAdapter.
         });
 
         // Observe required items count to update badge on Required Items button
-        repository.getPendingRequiredMaterials(pCode).observe(getViewLifecycleOwner(), requiredItems -> {
+        reqLiveData = repository.getPendingRequiredMaterials(pCode);
+        reqLiveData.observe(getViewLifecycleOwner(), requiredItems -> {
             int count = (requiredItems != null) ? requiredItems.size() : 0;
             if (binding.btnRequiredMaterialsMenu != null) {
                 if (count > 0) {

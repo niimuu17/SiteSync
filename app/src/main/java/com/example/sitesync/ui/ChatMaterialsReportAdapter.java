@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sitesync.R;
+import com.example.sitesync.data.network.MaterialImageResolver;
 import com.example.sitesync.data.local.entities.RequiredMaterialItemEntity;
 import com.example.sitesync.databinding.ItemChatExtractedMaterialBinding;
 
@@ -114,17 +115,8 @@ public class ChatMaterialsReportAdapter extends RecyclerView.Adapter<ChatMateria
                 binding.tvRawSentence.setVisibility(android.view.View.GONE);
             }
 
-            // Thumbnail Image
-            if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
-                File file = new File(item.getImageUrl());
-                if (file.exists()) {
-                    Glide.with(context).load(file).into(binding.ivMaterialThumbnail);
-                } else {
-                    Glide.with(context).load(item.getImageUrl()).into(binding.ivMaterialThumbnail);
-                }
-            } else {
-                binding.ivMaterialThumbnail.setImageResource(R.drawable.ic_construction);
-            }
+            // Thumbnail Image: Enterprise Multi-Tier Product Icon Resolver
+            MaterialImageResolver.loadProductIcon(binding.ivMaterialThumbnail, item.getItemName(), item.getCategory(), item.getImageUrl());
 
             binding.cbSelectMaterial.setOnCheckedChangeListener(null);
             binding.cbSelectMaterial.setChecked(selectedIds.contains(item.getId()));

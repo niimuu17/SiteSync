@@ -130,9 +130,12 @@ public class RecordStockOutBottomSheetDialog extends BottomSheetDialogFragment {
 
         binding.btnConfirmStockOut.setEnabled(false);
 
+        com.example.sitesync.data.SessionManager sm = new com.example.sitesync.data.SessionManager(requireContext());
+        String siteLoc = sm.getActiveProjectName() + " (" + sm.getActiveProjectCode() + ")";
+
         InventoryRepository.getInstance(requireContext()).recordStockOut(
                 inventoryItem.getId(),
-                "Metro Central Tower - Site A",
+                siteLoc,
                 qty,
                 receiver,
                 purpose,
