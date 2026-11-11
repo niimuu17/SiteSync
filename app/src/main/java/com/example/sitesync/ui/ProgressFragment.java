@@ -73,7 +73,13 @@ public class ProgressFragment extends Fragment {
             dialog.show(getChildFragmentManager(), "SiteEvidenceDialog");
         });
 
-        // Mini Card 3: Audit Trail & Report Export
+        // Mini Card 3: Employee Attendance Table
+        binding.cardMiniAttendanceTable.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(requireContext(), v);
+            startActivity(new android.content.Intent(requireContext(), AttendanceTableActivity.class));
+        });
+
+        // Mini Card 4: Audit Trail & Report Export
         binding.cardMiniAuditExport.setOnClickListener(v -> {
             HapticFeedbackUtil.lightClick(requireContext(), v);
             ReportExportBottomSheetDialog dialog = ReportExportBottomSheetDialog.newInstance();

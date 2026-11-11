@@ -532,6 +532,77 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Mini Card 3: Employee Attendance Table -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardMiniAttendanceTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/forest_card_dark"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/forest_stroke"
+                app:strokeWidth="1dp"
+                app:rippleColor="@color/peach_alpha">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_squircle_brand"
+                        android:backgroundTint="@color/forest_card_inset">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_table"
+                            app:tint="@color/peach_accent"
+                            android:contentDescription="Attendance Table icon" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginEnd="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Employee Attendance Table"
+                            android:textColor="@color/text_on_dark_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daily worker check-ins • Shift hours • GPS audit"
+                            android:textColor="@color/text_on_dark_muted"
+                            android:textSize="12sp"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_diagonal"
+                        app:tint="@color/peach_accent"
+                        android:contentDescription="Open attendance table" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Mini Card 3: Audit Trail & Report Export -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardMiniAuditExport"

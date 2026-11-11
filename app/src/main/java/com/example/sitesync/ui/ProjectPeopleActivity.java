@@ -71,6 +71,11 @@ public class ProjectPeopleActivity extends AppCompatActivity implements ProjectP
             HapticFeedbackUtil.lightClick(this, v);
             showAddWorkerDialog();
         });
+
+        binding.btnViewAttendanceTable.setOnClickListener(v -> {
+            HapticFeedbackUtil.lightClick(this, v);
+            startActivity(new Intent(this, AttendanceTableActivity.class));
+        });
     }
 
     private void seedDefaultPersonnelIfEmpty() {
