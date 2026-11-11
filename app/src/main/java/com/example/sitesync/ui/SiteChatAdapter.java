@@ -233,22 +233,27 @@ public class SiteChatAdapter extends RecyclerView.Adapter<SiteChatAdapter.ChatVi
         }
 
         private static double[] extractCoordinates(String text, String url) {
-            double defaultLat = 23.8103;
-            double defaultLng = 90.4125;
+            double defaultLat = 22.899164;
+            double defaultLng = 89.501812;
             try {
                 if (url != null && url.contains("query=")) {
                     String part = url.substring(url.indexOf("query=") + 6);
+                    if (part.contains("&")) part = part.substring(0, part.indexOf("&"));
+                    if (part.contains("(")) part = part.substring(0, part.indexOf("("));
                     String[] split = part.split(",");
                     return new double[]{Double.parseDouble(split[0].trim()), Double.parseDouble(split[1].trim())};
                 }
                 if (url != null && url.contains("?q=")) {
                     String part = url.substring(url.indexOf("?q=") + 3);
+                    if (part.contains("&")) part = part.substring(0, part.indexOf("&"));
+                    if (part.contains("(")) part = part.substring(0, part.indexOf("("));
                     String[] split = part.split(",");
                     return new double[]{Double.parseDouble(split[0].trim()), Double.parseDouble(split[1].trim())};
                 }
                 if (text != null && text.contains("📍 Location:")) {
                     String sub = text.substring(text.indexOf("📍 Location:") + 12).trim();
                     String line = sub.split("\n")[0].trim();
+                    if (line.contains("(")) line = line.substring(0, line.indexOf("("));
                     String[] split = line.split(",");
                     return new double[]{Double.parseDouble(split[0].trim()), Double.parseDouble(split[1].trim())};
                 }

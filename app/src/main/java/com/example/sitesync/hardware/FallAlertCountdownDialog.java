@@ -1,9 +1,11 @@
 package com.example.sitesync.hardware;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -11,10 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.sitesync.R;
 import com.example.sitesync.data.local.AppDatabase;
 import com.example.sitesync.data.local.entities.HazardTicketEntity;
 import com.example.sitesync.data.local.entities.PendingSyncEntity;
@@ -28,6 +34,7 @@ import java.util.concurrent.Executors;
 /**
  * Worker Safety Alert Dialog: Displays a 15-second emergency countdown
  * when extreme impact / free-fall is registered by the hardware accelerometer.
+ * Dispatches real-time GPS coordinates of the fallen crew directly into the chat room.
  */
 public class FallAlertCountdownDialog extends DialogFragment {
 
@@ -35,6 +42,11 @@ public class FallAlertCountdownDialog extends DialogFragment {
     private CountDownTimer countDownTimer;
     private float impactG = 3.2f;
     private OnFallAlertResolvedListener listener;
+
+    private double currentLatitude = UserLocationManager.DEFAULT_FALLBACK_LAT;
+    private double currentLongitude = UserLocationManager.DEFAULT_FALLBACK_LNG;
+    private boolean isGpsLocked = false;
+    private ActivityResultLauncher<String[]> locationPermissionLauncher;
 
     public interface OnFallAlertResolvedListener {
         void onFallAlertCancelled();
@@ -60,6 +72,16 @@ public class FallAlertCountdownDialog extends DialogFragment {
             impactG = getArguments().getFloat("impact_g", 3.2f);
         }
         setCancelable(false);
+
+        locationPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
+                result -> {
+                    Context ctx = getContext();
+                    if (ctx != null) {
+                        acquireRealLocation(ctx);
+                    }
+                }
+        );
     }
 
     @Override
@@ -85,6 +107,15 @@ public class FallAlertCountdownDialog extends DialogFragment {
 
         binding.tvImpactMagnitude.setText(String.format(Locale.US, "Peak Impact: %.1fG | Status: Immobility Flagged", impactG));
 
+        // Start real-time GPS acquisition immediately
+        if (!UserLocationManager.hasLocationPermission(requireContext())) {
+            locationPermissionLauncher.launch(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            });
+        }
+        acquireRealLocation(requireContext());
+
         // Start 15s Countdown
         startCountdown();
 
@@ -100,6 +131,40 @@ public class FallAlertCountdownDialog extends DialogFragment {
             HapticFeedbackUtil.heavyClick(requireContext(), v);
             if (countDownTimer != null) countDownTimer.cancel();
             dispatchRescueTeam();
+        });
+    }
+
+    private void acquireRealLocation(@NonNull Context context) {
+        Location cached = UserLocationManager.getInstance(context).getBestAvailableLocation();
+        if (cached != null) {
+            currentLatitude = cached.getLatitude();
+            currentLongitude = cached.getLongitude();
+            updateLocationPreview(cached, false);
+        }
+
+        UserLocationManager.getInstance(context).fetchCurrentLocation(location -> {
+            if (location != null && isAdded() && binding != null) {
+                currentLatitude = location.getLatitude();
+                currentLongitude = location.getLongitude();
+                isGpsLocked = true;
+                updateLocationPreview(location, true);
+            }
+        });
+    }
+
+    private void updateLocationPreview(@NonNull Location location, boolean locked) {
+        if (binding == null || !isAdded()) return;
+        requireActivity().runOnUiThread(() -> {
+            if (binding == null) return;
+            if (locked) {
+                binding.tvFallGpsStatus.setText(String.format(Locale.US, "GPS Lock: %.5f° N, %.5f° E", location.getLatitude(), location.getLongitude()));
+                binding.layoutGpsStatusBadge.setBackgroundResource(R.drawable.bg_badge_optimal);
+                binding.ivGpsLockIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.status_green));
+            } else {
+                binding.tvFallGpsStatus.setText(String.format(Locale.US, "Cached GPS: %.5f° N, %.5f° E", location.getLatitude(), location.getLongitude()));
+                binding.layoutGpsStatusBadge.setBackgroundResource(R.drawable.bg_badge_medium);
+                binding.ivGpsLockIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.brand_amber));
+            }
         });
     }
 
@@ -144,25 +209,9 @@ public class FallAlertCountdownDialog extends DialogFragment {
         String workerName = user != null ? user.getFullName() : "Site Worker";
         String workerId = user != null ? user.getUid() : "fall_sensor";
 
-        // Query best available GPS coordinates (or fallback to Metro Central Tower location)
-        double lat = 23.8103;
-        double lng = 90.4125;
-        try {
-            android.location.LocationManager lm = (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            if (lm != null && androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                android.location.Location loc = lm.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER);
-                if (loc == null) {
-                    loc = lm.getLastKnownLocation(android.location.LocationManager.NETWORK_PROVIDER);
-                }
-                if (loc != null) {
-                    lat = loc.getLatitude();
-                    lng = loc.getLongitude();
-                }
-            }
-        } catch (Exception ignored) {}
-
-        final double finalLat = lat;
-        final double finalLng = lng;
+        // Real Physical Coordinates from UserLocationManager
+        final double finalLat = currentLatitude;
+        final double finalLng = currentLongitude;
         final String finalProjectCode = projectCode;
         final String finalWorkerName = workerName;
         final String finalWorkerId = workerId;
@@ -179,7 +228,7 @@ public class FallAlertCountdownDialog extends DialogFragment {
                     "CRITICAL: Sudden Impact / Worker Fall Detected (" + String.format(Locale.US, "%.1fG", impactG) + ")",
                     "URGENT",
                     "OPEN",
-                    String.format(Locale.US, "GPS: %.4f° N, %.4f° E", finalLat, finalLng),
+                    String.format(Locale.US, "GPS: %.5f° N, %.5f° E", finalLat, finalLng),
                     null,
                     "Automated Fall Sensor",
                     now,
@@ -195,7 +244,7 @@ public class FallAlertCountdownDialog extends DialogFragment {
                     "HAZARD",
                     ticketId,
                     "CREATE",
-                    "{\"type\":\"FALL_HAZARD\",\"magnitude\":" + impactG + ",\"timestamp\":" + now + "}",
+                    "{\"type\":\"FALL_HAZARD\",\"magnitude\":" + impactG + ",\"lat\":" + finalLat + ",\"lng\":" + finalLng + ",\"timestamp\":" + now + "}",
                     now
             );
             db.pendingSyncDao().insert(syncItem);

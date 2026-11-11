@@ -25,6 +25,7 @@ import com.example.sitesync.hardware.AudioDecibelManager;
 import com.example.sitesync.hardware.CheckLevelDialog;
 import com.example.sitesync.hardware.FallAlertCountdownDialog;
 import com.example.sitesync.hardware.FallDetectionManager;
+import com.example.sitesync.hardware.UserLocationManager;
 import com.example.sitesync.notifications.SiteSyncFirebaseMessagingService;
 import com.example.sitesync.utils.HapticFeedbackUtil;
 import com.example.sitesync.utils.NetworkMonitor;
@@ -213,6 +214,10 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         super.onResume();
         startDecibelSampling();
         startFallMonitoring();
+        if (getContext() != null) {
+            UserLocationManager.getInstance(requireContext()).fetchCurrentLocation(loc -> {});
+            UserLocationManager.getInstance(requireContext()).startPassiveLocationUpdates();
+        }
     }
 
     @Override
@@ -223,6 +228,9 @@ public class SecurityFragment extends Fragment implements HazardTicketAdapter.On
         }
         if (fallDetectionManager != null) {
             fallDetectionManager.stopMonitoring();
+        }
+        if (getContext() != null) {
+            UserLocationManager.getInstance(requireContext()).stopPassiveLocationUpdates();
         }
     }
 

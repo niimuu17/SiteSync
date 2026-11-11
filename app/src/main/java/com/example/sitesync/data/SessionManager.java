@@ -159,6 +159,37 @@ public class SessionManager {
         return pref.getStringSet("worker_joined_project_codes", new HashSet<>());
     }
 
+    public void setLastKnownLocation(double latitude, double longitude) {
+        editor.putString("last_known_latitude", String.valueOf(latitude));
+        editor.putString("last_known_longitude", String.valueOf(longitude));
+        editor.putLong("last_known_location_time", System.currentTimeMillis());
+        editor.apply();
+    }
+
+    public double getLastKnownLatitude(double defaultLat) {
+        String latStr = pref.getString("last_known_latitude", null);
+        if (latStr != null) {
+            try { return Double.parseDouble(latStr); } catch (Exception ignored) {}
+        }
+        return defaultLat;
+    }
+
+    public double getLastKnownLongitude(double defaultLng) {
+        String lngStr = pref.getString("last_known_longitude", null);
+        if (lngStr != null) {
+            try { return Double.parseDouble(lngStr); } catch (Exception ignored) {}
+        }
+        return defaultLng;
+    }
+
+    public double getLastKnownLatitude() {
+        return getLastKnownLatitude(22.899164);
+    }
+
+    public double getLastKnownLongitude() {
+        return getLastKnownLongitude(89.501812);
+    }
+
     public boolean isOverlayPermissionPrompted() {
         return pref.getBoolean("overlay_permission_prompted", false);
     }

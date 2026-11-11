@@ -39,7 +39,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import com.example.sitesync.hardware.UserLocationManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private boolean isCurrentlyOnline = true;
     private AlertDialog activeProjectDialog;
     private ActivityResultLauncher<String> profilePhotoPickerLauncher;
+    private ActivityResultLauncher<String[]> appPermissionsLauncher;
     private DialogUserProfileInfoBinding activeProfileDialogBinding;
 
     @Override
@@ -70,6 +74,27 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         if (!sessionManager.isLoggedIn()) {
             redirectToLogin();
             return;
+        }
+
+        appPermissionsLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
+                result -> {
+                    if (UserLocationManager.hasLocationPermission(this)) {
+                        UserLocationManager.getInstance(this).fetchCurrentLocation(loc -> {});
+                        UserLocationManager.getInstance(this).startPassiveLocationUpdates();
+                    }
+                }
+        );
+
+        if (!UserLocationManager.hasLocationPermission(this) ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            appPermissionsLauncher.launch(new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.RECORD_AUDIO
+            });
+        } else {
+            UserLocationManager.getInstance(this).startPassiveLocationUpdates();
         }
 
         profilePhotoPickerLauncher = registerForActivityResult(
@@ -103,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         if (getIntent() != null && "worker_requests".equals(getIntent().getStringExtra("open_dialog"))) {
             showWorkerRequestsDialog();
         }
+
+        handleTabIntent(getIntent());
     }
 
     @Override
@@ -535,6 +562,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     SiteEvidenceBottomSheetDialog dialog = SiteEvidenceBottomSheetDialog.newInstance();
                     dialog.show(getSupportFragmentManager(), "SiteEvidenceDialog");
                 }, 400);
+            } else if ("fall_alert".equalsIgnoreCase(openDialog)) {
+                binding.bottomNavigationView.setSelectedItemId(R.id.nav_security);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    com.example.sitesync.hardware.FallAlertCountdownDialog.newInstance(3.6f)
+                            .show(getSupportFragmentManager(), "FallAlertCountdownDialog");
+                }, 400);
             }
         }
 
@@ -592,6 +625,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
 
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            UserLocationManager.getInstance(this).stopPassiveLocationUpdates();
+        } catch (Exception ignored) {}
     }
 
     private void redirectToLogin() {

@@ -87,6 +87,36 @@
             android:textColor="@color/text_oxide_primary"
             android:fontFamily="monospace"
             android:textSize="13sp" />
+
+        <LinearLayout
+            android:id="@+id/layoutGpsStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_badge_medium"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp">
+
+            <ImageView
+                android:id="@+id/ivGpsLockIcon"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_location"
+                app:tint="@color/brand_amber"
+                android:contentDescription="GPS Status" />
+
+            <TextView
+                android:id="@+id/tvFallGpsStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Acquiring GPS fix..."
+                android:textColor="@color/text_oxide_primary"
+                android:textSize="12sp"
+                android:fontFamily="monospace" />
+        </LinearLayout>
     </LinearLayout>
 
     <View

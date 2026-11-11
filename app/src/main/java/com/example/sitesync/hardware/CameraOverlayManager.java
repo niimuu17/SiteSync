@@ -127,19 +127,24 @@ public class CameraOverlayManager {
         boolean hasFineLoc = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         boolean hasCoarseLoc = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
+        // Retrieve best available location from UserLocationManager
+        Location loc = UserLocationManager.getInstance(context).getBestAvailableLocation();
+        double fallbackLat = loc != null ? loc.getLatitude() : UserLocationManager.DEFAULT_FALLBACK_LAT;
+        double fallbackLng = loc != null ? loc.getLongitude() : UserLocationManager.DEFAULT_FALLBACK_LNG;
+
         if (hasFineLoc || hasCoarseLoc) {
             try {
                 fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
-                    double lat = 40.7128;
-                    double lng = -74.0060;
+                    double lat = fallbackLat;
+                    double lng = fallbackLng;
                     double alt = 42.5;
 
                     if (task.isSuccessful() && task.getResult() != null) {
-                        Location loc = task.getResult();
-                        lat = loc.getLatitude();
-                        lng = loc.getLongitude();
-                        if (loc.hasAltitude()) {
-                            alt = loc.getAltitude();
+                        Location resultLoc = task.getResult();
+                        lat = resultLoc.getLatitude();
+                        lng = resultLoc.getLongitude();
+                        if (resultLoc.hasAltitude()) {
+                            alt = resultLoc.getAltitude();
                         }
                     }
 
@@ -150,8 +155,8 @@ public class CameraOverlayManager {
             }
         }
 
-        // Fallback with nominal project coordinates
-        capturePhotoWithForensicWatermark(inspectorId, projectName, 40.7128, -74.0060, 42.5, callback);
+        // Fallback with user's real location
+        capturePhotoWithForensicWatermark(inspectorId, projectName, fallbackLat, fallbackLng, 42.5, callback);
     }
 
     public void capturePhotoWithForensicWatermark(String userName, String taskLocation,

@@ -196,8 +196,9 @@ public class WorkerDashboardActivity extends AppCompatActivity {
                 // Clock In
                 String id = UUID.randomUUID().toString();
                 long now = System.currentTimeMillis();
-                double siteLat = 23.8103;
-                double siteLng = 90.4125;
+                android.location.Location userLoc = com.example.sitesync.hardware.UserLocationManager.getInstance(this).getBestAvailableLocation();
+                double siteLat = userLoc != null ? userLoc.getLatitude() : sessionManager.getLastKnownLatitude();
+                double siteLng = userLoc != null ? userLoc.getLongitude() : sessionManager.getLastKnownLongitude();
                 WorkerAttendanceEntity newAttendance = new WorkerAttendanceEntity(
                         id, workerId, workerName, pCode, now, siteLat, siteLng
                 );

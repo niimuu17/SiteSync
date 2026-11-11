@@ -209,8 +209,9 @@ public class SiteEvidenceBottomSheetDialog extends BottomSheetDialogFragment {
         } else {
             engineer = engineer + " (Lead / Manager)";
         }
-        double lat = 23.8103;
-        double lng = 90.4125;
+        android.location.Location userLoc = com.example.sitesync.hardware.UserLocationManager.getInstance(requireContext()).getBestAvailableLocation();
+        double lat = userLoc != null ? userLoc.getLatitude() : sessionManager.getLastKnownLatitude();
+        double lng = userLoc != null ? userLoc.getLongitude() : sessionManager.getLastKnownLongitude();
         double elev = 14.5;
 
         storageManager.processAndStoreEvidence(file, pCode, lat, lng, elev,
